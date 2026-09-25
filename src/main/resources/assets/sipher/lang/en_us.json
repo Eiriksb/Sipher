@@ -1,0 +1,29 @@
+{
+  "key.categories.sipher": "Sipher",
+  "key.sipher.settings": "Open Sipher settings",
+
+  "sipher.settings.title": "Sipher — Live captions",
+  "sipher.settings.captions": "Caption my voice",
+  "sipher.settings.share": "Share my captions",
+  "sipher.settings.live": "Live captions",
+  "sipher.settings.transcript": "Transcript box",
+  "sipher.settings.own_bubbles": "My caption bubbles",
+  "sipher.settings.other_bubbles": "Others' caption bubbles",
+  "sipher.settings.bubble_scale": "Bubble size: %s%%",
+  "sipher.settings.bubble_width": "Bubble width: %s px",
+  "sipher.settings.bubble_background": "Background: %s%%",
+  "sipher.settings.bubble_time": "Show for: %s s",
+  "sipher.settings.languages": "Languages…",
+  "sipher.settings.languages.soon": "Language packs are coming in the next update. English works out of the box.",
+
+  "sipher.status.starting": "Speech: starting…",
+  "sipher.status.ready": "Speech: ready",
+  "sipher.status.failed": "Speech: unavailable (%s)",
+  "sipher.status.relay_on": "Server shares captions",
+  "sipher.status.relay_off": "Captions stay on your screen (server has no Sipher)",
+
+  "sipher.transcript.title": "Captions",
+  "sipher.transcript.listening": "Listening…",
+
+  "sipher.configuration.title": "Sipher"
+}

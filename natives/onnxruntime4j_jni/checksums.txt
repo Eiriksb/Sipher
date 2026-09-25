@@ -1,0 +1,8 @@
+# ONNX Runtime JNI glue built by natives/onnxruntime4j_jni/build.sh
+# onnxruntime source: v1.28.0 (MIT), linked against sherpa-onnx v1.13.8's libonnxruntime; zig 0.16.0
+cc5e4d490ccca7c6fd5d7f7d6f4a0357524f3f752edb21d386b6042be13d1b96  linux-aarch64/libonnxruntime4j_jni.so
+67ebf7d7ae603d19ca91d0947a8e2d7e7ddfe5c393ec0940485c8a54da30c55e  linux-x64/libonnxruntime4j_jni.so
+35860b145e2858082f42100e79a398accb1c2b1f07dc6c3a5bdcda1d57d0f543  osx-aarch64/libonnxruntime4j_jni.dylib
+c4c3c8c02e817ee9f29a93bba635d1832db9da994dc134cd26e9b2ee66752186  osx-x64/libonnxruntime4j_jni.dylib
+0b0d8aa87e6880f57c55cc451a2c20f3680b38c1768c5048f9ce9e9ba4ef66c6  win-arm64/onnxruntime4j_jni.dll
+4ae01fe6e5499efd5ab3b8f4e0cb6c0890de54cff20a9679760693f3dabe4d6d  win-x64/onnxruntime4j_jni.dll

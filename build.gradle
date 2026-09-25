@@ -1,0 +1,280 @@
+import sipher.build.NativeIndex
+import sipher.build.StripOnnxRuntimeNatives
+import sipher.build.VerifiedDownload
+import sipher.build.VerifyChecksums
+
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.147'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Max Henkel'
+                url = 'https://maven.maxhenkel.de/repository/public'
+            }
+        }
+        filter { includeGroup 'de.maxhenkel.voicechat' }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        filter { includeGroup 'maven.modrinth' }
+    }
+    // sherpa-onnx is not published to Maven Central; resolve its release jars straight from GitHub releases.
+    // Checksums are pinned in gradle/third-party-checksums.txt and checked by verifyThirdPartyJars.
+    exclusiveContent {
+        forRepository {
+            ivy {
+                name = 'sherpa-onnx GitHub releases'
+                url = 'https://github.com/k2-fsa/sherpa-onnx/releases/download/'
+                patternLayout { artifact 'v[revision]/[module]-[revision].[ext]' }
+                metadataSources { artifact() }
+            }
+        }
+        filter { includeGroup 'com.k2fsa.sherpa.onnx' }
+    }
+    mavenCentral()
+}
+
+// Platforms Sipher ships natives for. Names follow sherpa-onnx's native-lib jars.
+def nativePlatforms = ['linux-x64', 'linux-aarch64', 'osx-x64', 'osx-aarch64', 'win-x64', 'win-arm64']
+
+configurations {
+    sherpaNatives {
+        canBeConsumed = false
+        canBeResolved = true
+        transitive = false
+    }
+    // The original (unstripped) jars that end up inside Sipher, for checksum verification.
+    thirdPartyJars {
+        canBeConsumed = false
+        canBeResolved = true
+        transitive = false
+    }
+}
+
+neoForge {
+    version = neo_version
+
+    parchment {
+        mappingsVersion = parchment_mappings_version
+        minecraftVersion = parchment_minecraft_version
+    }
+
+    runs {
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+
+    unitTest {
+        enable()
+        testedMod = mods."${mod_id}"
+    }
+}
+
+def nativesStripped = Attribute.of('sipher.onnxruntime-natives-stripped', Boolean)
+
+dependencies {
+    attributesSchema { attribute(nativesStripped) }
+    artifactTypes.getByName('jar').attributes.attribute(nativesStripped, false)
+    registerTransform(StripOnnxRuntimeNatives) {
+        from.attribute(nativesStripped, false).attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, 'jar')
+        to.attribute(nativesStripped, true).attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, 'jar')
+    }
+
+    compileOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
+    runtimeOnly "maven.modrinth:simple-voice-chat:${voicechat_runtime_version}"
+
+    jarJar(implementation("com.k2fsa.sherpa.onnx:sherpa-onnx-jvm")) {
+        version { strictly "[${sherpa_onnx_version}]" }
+    }
+    jarJar(implementation("com.microsoft.onnxruntime:onnxruntime")) {
+        version { strictly "[${onnxruntime_java_version}]" }
+    }
+    additionalRuntimeClasspath "com.k2fsa.sherpa.onnx:sherpa-onnx-jvm:${sherpa_onnx_version}"
+    additionalRuntimeClasspath "com.microsoft.onnxruntime:onnxruntime:${onnxruntime_java_version}"
+
+    nativePlatforms.each { platform ->
+        sherpaNatives "com.k2fsa.sherpa.onnx:sherpa-onnx-native-lib-${platform}:${sherpa_onnx_version}"
+    }
+    thirdPartyJars "com.k2fsa.sherpa.onnx:sherpa-onnx-jvm:${sherpa_onnx_version}"
+    thirdPartyJars "com.microsoft.onnxruntime:onnxruntime:${onnxruntime_java_version}"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// Embed and run ONNX Runtime Java without its own natives: Sipher loads the libonnxruntime shipped by sherpa-onnx.
+configurations.named('jarJar') { attributes { attribute(nativesStripped, true) } }
+configurations.named('additionalRuntimeClasspath') { attributes { attribute(nativesStripped, true) } }
+configurations.named('testRuntimeClasspath') { attributes { attribute(nativesStripped, true) } }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Natives: sherpa-onnx (+ its libonnxruntime) for every platform, plus our ONNX Runtime JNI glue built against it.
+// ---------------------------------------------------------------------------------------------------------------
+
+def verifyThirdPartyJars = tasks.register('verifyThirdPartyJars', VerifyChecksums) {
+    group = 'sipher'
+    description = 'Checks third-party jars packaged into Sipher against gradle/third-party-checksums.txt.'
+    files.from(configurations.sherpaNatives, configurations.thirdPartyJars)
+    checksums = layout.projectDirectory.file('gradle/third-party-checksums.txt')
+}
+
+tasks.named('compileJava') { dependsOn verifyThirdPartyJars }
+tasks.named('jarJar') { dependsOn verifyThirdPartyJars }
+
+def nativesStaging = layout.buildDirectory.dir('generated/sipher/natives')
+
+def stageNatives = tasks.register('stageNatives', Sync) {
+    group = 'sipher'
+    description = 'Collects the native libraries for every supported platform.'
+    dependsOn verifyThirdPartyJars
+    into nativesStaging.map { it.dir('sipher/natives') }
+    nativePlatforms.each { platform ->
+        from({ zipTree(configurations.sherpaNatives.files.find { it.name.contains("native-lib-${platform}-") }) }) {
+            include "sherpa-onnx/native/${platform}/*"
+            eachFile { path = "${platform}/${name}" }
+            includeEmptyDirs = false
+        }
+        from("natives/onnxruntime4j_jni/${platform}") {
+            exclude '*.txt', '*.md'
+            into platform
+        }
+    }
+}
+
+def indexNatives = tasks.register('indexNatives', NativeIndex) {
+    group = 'sipher'
+    dependsOn stageNatives
+    nativesDirectory = nativesStaging.map { it.dir('sipher/natives') }
+    indexFile = layout.buildDirectory.file('generated/sipher/natives-index/sipher/natives/index.txt')
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Built-in models: English speech recognition (Moonshine Tiny, MIT) and voice activity detection (Silero, MIT).
+// Everything else is an opt-in download made from inside the game.
+// ---------------------------------------------------------------------------------------------------------------
+
+def builtinModels = [
+        [dir: 'moonshine-tiny-en', file: 'encoder_model.ort',
+         url: 'https://huggingface.co/csukuangfj2/sherpa-onnx-moonshine-tiny-en-quantized-2026-02-27/resolve/d1e6c30921780b8508d04b492dfb3ce8a51605d4/encoder_model.ort',
+         sha256: '94e90a4654fc45cdfedb77c4c08e1739f48862998e58fada384b25118134f221'],
+        [dir: 'moonshine-tiny-en', file: 'decoder_model_merged.ort',
+         url: 'https://huggingface.co/csukuangfj2/sherpa-onnx-moonshine-tiny-en-quantized-2026-02-27/resolve/d1e6c30921780b8508d04b492dfb3ce8a51605d4/decoder_model_merged.ort',
+         sha256: 'cf524c4862d36e9e5ab032eddc73637efd822d70e868ac575cf1a46e1e4708a0'],
+        [dir: 'moonshine-tiny-en', file: 'tokens.txt',
+         url: 'https://huggingface.co/csukuangfj2/sherpa-onnx-moonshine-tiny-en-quantized-2026-02-27/resolve/d1e6c30921780b8508d04b492dfb3ce8a51605d4/tokens.txt',
+         sha256: '2870d843e14c1e187bf1913a521562a63b53933814bd7f2145120468f494a049'],
+        [dir: 'moonshine-tiny-en', file: 'LICENSE',
+         url: 'https://huggingface.co/csukuangfj2/sherpa-onnx-moonshine-tiny-en-quantized-2026-02-27/resolve/d1e6c30921780b8508d04b492dfb3ce8a51605d4/LICENSE',
+         sha256: '6148d7574a6554b7379b633cfd4c4fe5840c3f548d13bc83e00b52dc6fa00abd'],
+        [dir: 'silero-vad', file: 'silero_vad.onnx',
+         url: 'https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/silero_vad.onnx',
+         sha256: '9e2449e1087496d8d4caba907f23e0bd3f78d91fa552479bb9c23ac09cbb1fd6'],
+]
+
+def modelDownloads = builtinModels.collect { model ->
+    def taskName = 'download_' + (model.dir + '_' + model.file).replaceAll('[^A-Za-z0-9]', '_')
+    tasks.register(taskName, VerifiedDownload) {
+        group = 'sipher'
+        url = model.url
+        sha256 = model.sha256
+        destination = layout.buildDirectory.file("downloads/models/${model.dir}/${model.file}")
+    }
+}
+
+def indexBuiltinModels = tasks.register('indexBuiltinModels', NativeIndex) {
+    group = 'sipher'
+    dependsOn modelDownloads
+    nativesDirectory = layout.buildDirectory.dir('downloads/models')
+    indexFile = layout.buildDirectory.file('generated/sipher/models-index/sipher/models/index.txt')
+}
+
+sourceSets.main.resources.srcDir(stageNatives.map { nativesStaging.get() })
+sourceSets.main.resources.srcDir(indexNatives.map { layout.buildDirectory.dir('generated/sipher/natives-index').get() })
+sourceSets.main.resources.srcDir(indexBuiltinModels.map { layout.buildDirectory.dir('generated/sipher/models-index').get() })
+
+tasks.named('processResources', ProcessResources) {
+    dependsOn modelDownloads
+    from(layout.buildDirectory.dir('downloads/models')) {
+        into 'sipher/models'
+    }
+
+    def replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            voicechat_api_version_range: voicechat_api_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+            sherpa_onnx_version    : sherpa_onnx_version,
+            onnxruntime_java_version: onnxruntime_java_version,
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/neoforge.mods.toml', 'sipher/build.properties']) {
+        expand replaceProperties
+    }
+}
+
+tasks.named('jar', Jar) {
+    from('LICENSE') { into 'META-INF' rename { "LICENSE_${mod_id}" } }
+    from('THIRD_PARTY_NOTICES.md') { into 'META-INF' }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    // Integration tests that need the natives read them from the processed resources.
+    dependsOn 'processResources'
+    systemProperty 'sipher.test.dir', layout.buildDirectory.dir('test-sipher').get().asFile.absolutePath
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
