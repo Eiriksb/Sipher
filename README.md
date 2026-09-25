@@ -62,6 +62,9 @@ translation. [They Will Talk](https://github.com/Eiriksb/they-will-talk) uses it
 
 ## Building
 
+The newest jar from `main` is always on the [Development build](https://github.com/Eiriksb/Sipher/releases/tag/dev)
+pre-release: CI replaces it after every merge that passes on all six platforms. To build it yourself:
+
 ```bash
 ./gradlew build
 ```

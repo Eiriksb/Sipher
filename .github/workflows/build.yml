@@ -56,3 +56,41 @@ jobs:
         with:
           name: test-report-${{ matrix.platform }}
           path: build/reports/tests
+
+  # Every push to main (including merged pull requests) that passes on all platforms replaces the rolling
+  # "Development build" pre-release, so the newest jar is always one click away on the Releases page.
+  dev-release:
+    name: Publish development build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build, natives]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: dev-release
+      cancel-in-progress: true
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: sipher-jar
+          path: dist
+      - name: Replace the development build release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          short="${GITHUB_SHA::7}"
+          for jar in dist/*.jar; do mv "$jar" "${jar%.jar}-${short}.jar"; done
+          {
+            echo "Automatic build of \`main\` at ${GITHUB_SHA}, replaced on every merge. For testing, not a release."
+            echo
+            echo "Install the same jar on clients and (optionally) servers, together with Simple Voice Chat."
+            echo
+            echo "Latest change:"
+            echo
+            printf '%s\n' "$COMMIT_MESSAGE" | head -n 1 | sed 's/^/> /'
+          } > notes.md
+          gh release delete dev --cleanup-tag --yes || true
+          gh release create dev dist/*.jar --prerelease --latest=false --target "$GITHUB_SHA" \
+            --title "Development build (${short})" --notes-file notes.md
