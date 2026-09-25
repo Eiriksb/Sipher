@@ -278,6 +278,10 @@ tasks.named('test', Test) {
     if (project.hasProperty('marianTestModel')) {
         systemProperty 'sipher.test.marian', file(project.property('marianTestModel')).absolutePath
     }
+    // Optional: -PliveDownload=<language> installs that pack from the published GitHub release.
+    if (project.hasProperty('liveDownload')) {
+        systemProperty 'sipher.test.liveDownload', project.property('liveDownload')
+    }
     // Optional: -PpacksDir=.cache/packs/out [-PpacksAudio=.cache/packs/work] runs every locally built language pack.
     if (project.hasProperty('packsDir')) {
         systemProperty 'sipher.test.packs', file(project.property('packsDir')).absolutePath
