@@ -49,6 +49,8 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v5
       - run: ./gradlew test --tests '*SpeechPipelineTest' --tests '*SharedOnnxRuntimeTest'
+        env:
+          SIPHER_REQUIRE_NATIVES: 'true'
       - uses: actions/upload-artifact@v5
         if: failure()
         with:

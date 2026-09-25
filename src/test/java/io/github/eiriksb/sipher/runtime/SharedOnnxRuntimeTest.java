@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * ONNX Runtime Java (used for translation) must run on the libonnxruntime that sherpa-onnx loaded, through the JNI
@@ -25,8 +24,8 @@ class SharedOnnxRuntimeTest {
     @Test
     void onnxRuntimeJavaRunsOnSherpasRuntime() throws Exception {
         NativeRuntime.Status natives = NativeRuntime.load(TestDirectories.sipher());
-        assumeTrue(natives.ready(), "natives unavailable on this platform: " + natives.message());
-        assumeTrue(natives.translationSupported(), "no ONNX Runtime JNI glue for this platform");
+        TestDirectories.requireNatives(natives.ready(), "natives unavailable on this platform: " + natives.message());
+        TestDirectories.requireNatives(natives.translationSupported(), "no ONNX Runtime JNI glue for this platform");
 
         OrtEnvironment environment = OrtEnvironment.getEnvironment();
 

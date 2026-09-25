@@ -16,7 +16,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * End to end through the real natives and the bundled English model: a recording is fed in as Simple Voice Chat would
@@ -26,7 +25,7 @@ class SpeechPipelineTest {
     @Test
     void transcribesVoiceChatFrames() throws Exception {
         NativeRuntime.Status natives = NativeRuntime.load(TestDirectories.sipher());
-        assumeTrue(natives.ready(), "natives unavailable on this platform: " + natives.message());
+        TestDirectories.requireNatives(natives.ready(), "natives unavailable on this platform: " + natives.message());
         BuiltinModels models = BuiltinModels.extract(TestDirectories.sipher());
 
         List<String> partials = new CopyOnWriteArrayList<>();

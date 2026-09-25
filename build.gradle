@@ -267,9 +267,17 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.named('test', Test) {
     useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
+    }
     // Integration tests that need the natives read them from the processed resources.
     dependsOn 'processResources'
     systemProperty 'sipher.test.dir', layout.buildDirectory.dir('test-sipher').get().asFile.absolutePath
+    // Optional: -PmarianTestModel=<dir> runs the translation test against an exported OPUS-MT model.
+    if (project.hasProperty('marianTestModel')) {
+        systemProperty 'sipher.test.marian', file(project.property('marianTestModel')).absolutePath
+    }
 }
 
 idea {

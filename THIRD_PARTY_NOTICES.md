@@ -13,7 +13,8 @@ Sipher bundles the following components. Each keeps its own licence.
 Optional language packs downloaded from the in-game Languages screen list their models, sources and licences in the
 game before download and in `<game>/sipher/models/<pack>/LICENSE` afterwards.
 
-The test suite uses a short excerpt of John F. Kennedy's 1961 inaugural address (public domain); it is not part of the
-mod jar.
+The test suite (not part of the mod jar) uses a short excerpt of John F. Kennedy's 1961 inaugural address (public
+domain) and the SentencePiece model of Helsinki-NLP's `opus-mt_tiny_eng-spa` (Apache-2.0,
+https://huggingface.co/Helsinki-NLP/opus-mt_tiny_eng-spa).
 
 Simple Voice Chat is a separate mod and is not bundled.
