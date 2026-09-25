@@ -6,8 +6,8 @@ Sipher turns what players say on voice chat into captions: bubbles above their h
 runs on your own computer. English works out of the box; other languages are optional packs you download from inside
 the game.
 
-> **Status:** early development (0.1). English captions work end to end. Translation and language packs are next —
-> see [docs/PLAN.md](docs/PLAN.md).
+> **Status:** early development (0.1). English captions, translation and 15 downloadable language packs work end to
+> end in tests; in-game testing is ongoing — see [docs/PLAN.md](docs/PLAN.md).
 
 ## Features
 
@@ -48,8 +48,8 @@ your microphone (Simple Voice Chat, 48 kHz)
   → caption text to the server → players who can hear you
 ```
 
-Speech recognition uses [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx). Translation (coming next) uses ONNX
-Runtime Java on the *same* ONNX Runtime library that ships with sherpa-onnx, through a small JNI glue library built from
+Speech recognition uses [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx). Translation uses OPUS-MT/Marian models
+on ONNX Runtime Java, running on the *same* ONNX Runtime library that ships with sherpa-onnx, through a small JNI glue library built from
 ONNX Runtime's sources ([natives/onnxruntime4j_jni](natives/onnxruntime4j_jni)). That keeps the jar at ~90 MB for six
 platforms.
 

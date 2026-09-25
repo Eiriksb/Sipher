@@ -1,0 +1,23 @@
+# Environment for convert_nemo.py and convert_whisper.py (Python 3.12, CPU only).
+# Install with uv (or pip) into a venv under .cache/packs/work/speech-convert/:
+#
+#   uv venv --python 3.12 .cache/packs/work/speech-convert/venv
+#   VIRTUAL_ENV=.cache/packs/work/speech-convert/venv uv pip install \
+#       --index-strategy unsafe-best-match -r tools/packs/speech/requirements-convert.txt
+#
+# torch stays below 2.9: newer releases default torch.onnx.export to the dynamo exporter, which the sherpa-onnx
+# export scripts (TorchScript tracing with dynamic_axes) are not written for.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.8.0+cpu
+torchaudio==2.8.0+cpu
+nemo_toolkit[asr]==2.5.3
+onnx==1.18.0
+onnxruntime==1.22.1
+sherpa-onnx==1.13.8
+openai-whisper==20250625
+transformers==4.53.3
+safetensors==0.8.0
+huggingface-hub==0.36.2
+numpy==1.26.4
+scipy==1.17.1
+soundfile==0.14.0

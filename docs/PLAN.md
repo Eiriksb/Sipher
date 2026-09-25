@@ -47,7 +47,7 @@ Before the first public release: open a CurseForge support ticket describing the
 | 0 | Spikes: shared ONNX Runtime, Moonshine latency, OPUS-MT tiny export, model catalogue | done |
 | 1 | English base mod: natives loader, VAD + Moonshine pipeline, bubbles, transcript, settings | done |
 | 2 | Server relay: optional channel, voice-chat-aware routing, rate limits, server config | done |
-| 3 | Language packs: catalogue, downloader + Languages screen, SentencePiece + Marian decoder in Java, English pivot | next |
+| 3 | Language packs: catalogue, downloader + Languages screen, SentencePiece + Marian decoder in Java, English pivot | done (15 languages, `models-v1`) |
 | 4 | Captions for players without Sipher (listener-side ASR), English HQ pack, CurseForge/Modrinth pages | later |
 
 ## Phase 3 findings
@@ -65,15 +65,22 @@ GigaAM-v3 (ru, MIT), NB-Whisper base (nb, Apache-2.0), KB-Whisper base (sv), Sen
 Parakeet-TDT-0.6B-v3 (670 MB, CC-BY-4.0, 25 European languages) as an optional "European all-in-one" pack and the only
 redistributable option for pt and fi.
 
-**Open decisions (need sign-off):**
+**Decisions taken (2026-09-25):**
 
-- Japanese translation: ElanMT (CC-BY-SA-4.0) vs HPLT v2 (CC-BY-4.0, needs Marian conversion) vs M2M100-418M (MIT, 636 MB).
-- Danish speech: NVIDIA parakeet-rnnt-110m-da-dk (NVIDIA Open Model License: redistribution allowed with notice).
-- Korean: `opus-mt_tiny_kor-eng` declares no licence — ask Helsinki-NLP or use `opus-mt-tc-big` (CC-BY-4.0, ~280 MB).
-- Where packs are hosted: GitHub releases of this repository (preferred; converted models live there) with Hugging Face
-  as a mirror.
+- Japanese translation: ElanMT-BT (CC-BY-SA-4.0; applies to the model files only, not the mod).
+- Danish speech: NVIDIA parakeet-rnnt-110m-da-dk (NVIDIA Open Model License, notice shipped).
+- Korean translation: opus-mt-tc-big (CC-BY-4.0). Its upstream vocab.json is the target vocabulary only; the build
+  rebuilds the source vocabulary from source.spm.
+- Italian, Dutch and Polish use the shared Parakeet-TDT-0.6B-v3 model (measured on the same FLEURS clips: it 5.3% vs
+  11.3%, nl 9.9% vs 34.5%, pl 14.3% vs 19.1% WER); French and Danish keep their dedicated models, which beat it.
+- Norwegian and Swedish use Whisper base fine-tunes (NB-Whisper, KB-Whisper); tiny was less accurate.
+- Packs are hosted on this repository's `models-v1` GitHub release; the tooling is in `tools/packs/`.
 
 ## Known limitations
 
 - Moonshine in sherpa-onnx 1.13.8 returns empty text for >9.2 s of audio; segments are capped at 8 s until the fix ships.
 - Only the speaker's own microphone is transcribed; players without Sipher are not captioned yet (phase 4).
+- The shared European speech model uses about 1 GB of native memory while in use.
+- Swedish loses some accuracy in int8 (13.7% vs 8.9% WER fp32 on 10 clips); an fp32 Swedish pack is an option.
+- The SenseVoice (zh/ja/ko) FunASR model licence has a no-denigration clause and auto-applying revisions (§6); review
+  before a commercial use of the packs.

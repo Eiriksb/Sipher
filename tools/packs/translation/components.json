@@ -1,0 +1,356 @@
+{
+  "licenses": {
+    "Apache-2.0": {
+      "name": "Apache License 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "CC-BY-4.0": {
+      "name": "Creative Commons Attribution 4.0 International",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "CC-BY-SA-4.0": {
+      "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+      "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "englishSamples": [
+    "Hey, can you come over here?",
+    "I found diamonds near the lava lake.",
+    "Watch out, there's a creeper behind you!",
+    "Do you have any spare iron?",
+    "Follow me, the village is this way.",
+    "Thanks, that was really helpful.",
+    "Where did you put the chest with the food?",
+    "Can you hear me? My microphone might be broken.",
+    "Don't attack the villagers.",
+    "Good game everyone, see you later."
+  ],
+  "manifestSamples": [0, 1, 2, 7, 9],
+  "components": [
+    {
+      "id": "mt-en-es",
+      "source": "en",
+      "target": "es",
+      "repo": "Helsinki-NLP/opus-mt_tiny_eng-spa",
+      "revision": "691fd47381a57d0de256a0e0b201bd83d1f48ba0",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-es-en",
+      "source": "es",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt_tiny_spa-eng",
+      "revision": "ca15fbd0a8412a473b95e010ad54429a7a34a7ba",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-es"
+    },
+    {
+      "id": "mt-en-de",
+      "source": "en",
+      "target": "de",
+      "repo": "Helsinki-NLP/opus-mt_tiny_eng-deu",
+      "revision": "e17f484673f8c5a3e665b8f9e62ef69d0358b67d",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-de-en",
+      "source": "de",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt_tiny_deu-eng",
+      "revision": "d120fdfccd7ba4fadabdc8aba72b86acd473e2b2",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-de"
+    },
+    {
+      "id": "mt-en-fr",
+      "source": "en",
+      "target": "fr",
+      "repo": "Helsinki-NLP/opus-mt_tiny_eng-fra",
+      "revision": "76f52e3bfce7d580e49dc69508c6c06c9c8fc562",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-fr-en",
+      "source": "fr",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt_tiny_fra-eng",
+      "revision": "2e635daccd920c96ead1e72aa7601595022317ee",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-fr"
+    },
+    {
+      "id": "mt-en-it",
+      "source": "en",
+      "target": "it",
+      "repo": "Helsinki-NLP/opus-mt_tiny_eng-ita",
+      "revision": "a57a1ff9699c611ecfa55a766f35f023d00806b9",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-it-en",
+      "source": "it",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt_tiny_ita-eng",
+      "revision": "ac17655796ab9cd2f5916e3f454c9d09d9ea3a87",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-it"
+    },
+    {
+      "id": "mt-en-nl",
+      "source": "en",
+      "target": "nl",
+      "repo": "Helsinki-NLP/opus-mt_tiny_eng-nld",
+      "revision": "c3303dc1c7a7aa1e622579013b5982dd87af53f0",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-nl-en",
+      "source": "nl",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt_tiny_nld-eng",
+      "revision": "1d00eacd4a5d93382a60444a4c0f0d2ab46c9ddc",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-nl"
+    },
+    {
+      "id": "mt-en-ru",
+      "source": "en",
+      "target": "ru",
+      "repo": "Helsinki-NLP/opus-mt_tiny_eng-rus",
+      "revision": "3172938c8acb3f54ab522db1aaca1f12bf168322",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-ru-en",
+      "source": "ru",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt_tiny_rus-eng",
+      "revision": "795b0b2fb13d17b917287421c15e0d70db9ba940",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-ru"
+    },
+    {
+      "id": "mt-zh-en",
+      "source": "zh",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt_tiny_zho-eng",
+      "revision": "4ee3a9342aae4ca6fbae82c930b5dccff5dd68dd",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-zh"
+    },
+    {
+      "id": "mt-en-pt",
+      "source": "en",
+      "target": "pt",
+      "repo": "Helsinki-NLP/opus-mt-en-ROMANCE",
+      "revision": "f8f3a28e8b6272d0ccc0290b832f699e154ae431",
+      "targetToken": ">>pt_BR<<",
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "notes": "Brazilian Portuguese. Tested >>pt<<, >>pt_BR<<, >>pt_br<< and >>pt_PT<<: >>pt_BR<< gives consistent Brazilian Portuguese (jogando, trem, ônibus, você) and the most complete output; >>pt<< gives European Portuguese but drops clauses; >>pt_br<< is Brazilian but less consistent; >>pt_PT<< produces a Spanish/Catalan/Italian mix."
+    },
+    {
+      "id": "mt-pt-en",
+      "source": "pt",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt-ROMANCE-en",
+      "revision": "e9ca9975e3972afd80732f08ce01d3a1339f47f8",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-pt",
+      "notes": "opus-mt-ROMANCE-en: multilingual Romance source, no token needed."
+    },
+    {
+      "id": "mt-en-pl",
+      "source": "en",
+      "target": "pl",
+      "repo": "Helsinki-NLP/opus-mt-en-zlw",
+      "revision": "92ffd5aa936924688bd715b26d6bb75393082c03",
+      "targetToken": ">>pol<<",
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "notes": "opus-mt-en-zlw (Czech, Kashubian, Upper Sorbian, Polish); >>pol<< selects Polish."
+    },
+    {
+      "id": "mt-pl-en",
+      "source": "pl",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt-pl-en",
+      "revision": "7f2bb874fdfb6139f9842b91a9b75c4a6c93401c",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-pl"
+    },
+    {
+      "id": "mt-en-nb",
+      "source": "en",
+      "target": "nb",
+      "repo": "Helsinki-NLP/opus-mt-en-gmq",
+      "revision": "1011a691a63e61b4beb68d47332790e072f685f0",
+      "targetToken": ">>nob<<",
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "notes": "opus-mt-en-gmq (North Germanic); >>nob<< selects Norwegian Bokmål."
+    },
+    {
+      "id": "mt-nb-en",
+      "source": "nb",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt-gmq-en",
+      "revision": "82e9a0a21f1393f58f3a12dfee196adf058d1236",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-nb",
+      "notes": "opus-mt-gmq-en: multilingual North Germanic source, no token needed."
+    },
+    {
+      "id": "mt-en-sv",
+      "source": "en",
+      "target": "sv",
+      "repo": "Helsinki-NLP/opus-mt-en-sv",
+      "revision": "cec444c9ac08a87fcfcd172f2e6be8e112fda53c",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-sv-en",
+      "source": "sv",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt-sv-en",
+      "revision": "202cf6240046bd8b6d08c207ee751ffd630d7ba8",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-sv"
+    },
+    {
+      "id": "mt-en-da",
+      "source": "en",
+      "target": "da",
+      "repo": "Helsinki-NLP/opus-mt-en-da",
+      "revision": "55d88cdf73ba0a7fe1e38f4bcf33ddbc26333ea5",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-da-en",
+      "source": "da",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt-da-en",
+      "revision": "0960cff506758772cf23186b941305e0afeb43c5",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-da"
+    },
+    {
+      "id": "mt-en-fi",
+      "source": "en",
+      "target": "fi",
+      "repo": "Helsinki-NLP/opus-mt-en-fi",
+      "revision": "2f68f12519005b50f9e1afe6fd57b13add55e156",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)"
+    },
+    {
+      "id": "mt-fi-en",
+      "source": "fi",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt-fi-en",
+      "revision": "c4d8fff0f8f00b637f0578666f35cdacef354778",
+      "targetToken": null,
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-fi"
+    },
+    {
+      "id": "mt-en-zh",
+      "source": "en",
+      "target": "zh",
+      "repo": "Helsinki-NLP/opus-mt-en-zh",
+      "revision": "408d9bc410a388e1d9aef112a2daba955b945255",
+      "targetToken": ">>cmn_Hans<<",
+      "license": "Apache-2.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "notes": "opus-mt-en-zh; >>cmn_Hans<< selects Mandarin in simplified script."
+    },
+    {
+      "id": "mt-en-ja",
+      "source": "en",
+      "target": "ja",
+      "repo": "Mitsua/elan-mt-bt-en-ja",
+      "revision": "02c48e7031386cd2d41974b0ff1aaf52f010c5fa",
+      "targetToken": null,
+      "license": "CC-BY-SA-4.0",
+      "authors": "ELAN MITSUA Project / Abstract Engine"
+    },
+    {
+      "id": "mt-ja-en",
+      "source": "ja",
+      "target": "en",
+      "repo": "Mitsua/elan-mt-bt-ja-en",
+      "revision": "539f80eb05306e27a166b45e4264c7fa2eb4de97",
+      "targetToken": null,
+      "license": "CC-BY-SA-4.0",
+      "authors": "ELAN MITSUA Project / Abstract Engine",
+      "sampleInputsFrom": "mt-en-ja"
+    },
+    {
+      "id": "mt-en-ko",
+      "source": "en",
+      "target": "ko",
+      "repo": "Helsinki-NLP/opus-mt-tc-big-en-ko",
+      "revision": "ae8606b7b29a495f31ce679cee2007f536a3a5ce",
+      "targetToken": null,
+      "license": "CC-BY-4.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "notes": "Transformer-big. The upstream conversion of this separate-vocabulary (sepvoc) model ships only the target vocabulary as vocab.json (it covers 21% of source.spm's pieces), so the upstream MarianTokenizer feeds wrong ids and the model outputs nonsense, also in PyTorch. The encoder expects source.spm's own ids: vocab.json is rebuilt from source.spm and the upstream vocab.json ships as target_vocab.json. The model card's template text says a target token is required but lists none; no >>xxx<< tokens exist, so none is used.",
+      "sourceVocab": "source.spm"
+    },
+    {
+      "id": "mt-ko-en",
+      "source": "ko",
+      "target": "en",
+      "repo": "Helsinki-NLP/opus-mt-tc-big-ko-en",
+      "revision": "fa26583a41d95346933f26b4cb8f9b700da0d445",
+      "targetToken": null,
+      "license": "CC-BY-4.0",
+      "authors": "Language Technology Research Group at the University of Helsinki (Helsinki-NLP)",
+      "sampleInputsFrom": "mt-en-ko",
+      "notes": "Transformer-big. The upstream conversion of this separate-vocabulary (sepvoc) model ships only the target vocabulary as vocab.json (it covers 21% of source.spm's pieces), so the upstream MarianTokenizer feeds wrong ids and the model outputs nonsense, also in PyTorch. The encoder expects source.spm's own ids: vocab.json is rebuilt from source.spm and the upstream vocab.json ships as target_vocab.json.",
+      "sourceVocab": "source.spm"
+    }
+  ]
+}

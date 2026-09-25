@@ -18,15 +18,18 @@ REPOSITORY = "Eiriksb/Sipher"
 RELEASE = "models-v1"
 HOSTS = ["github.com", "release-assets.githubusercontent.com", "objects.githubusercontent.com"]
 
-# code, native name, English name, speech component, X->en component, en->X component
+# code, native name, English name, speech component, X->en component, en->X component.
+# Italian, Dutch and Polish use the shared Parakeet-v3 model: on the same FLEURS clips it made far fewer errors than the
+# per-language FastConformer models (it 5.3% vs 11.3%, nl 9.9% vs 34.5%, pl 14.3% vs 19.1% WER), while the dedicated
+# French and Danish models beat it (fr 6.4% vs 9.0%, da 7.3% vs 22.9%).
 LANGUAGES = [
     ("es", "Español", "Spanish", "stt-es", "mt-es-en", "mt-en-es"),
     ("de", "Deutsch", "German", "stt-de", "mt-de-en", "mt-en-de"),
     ("fr", "Français", "French", "stt-fr", "mt-fr-en", "mt-en-fr"),
-    ("it", "Italiano", "Italian", "stt-it", "mt-it-en", "mt-en-it"),
-    ("nl", "Nederlands", "Dutch", "stt-nl", "mt-nl-en", "mt-en-nl"),
+    ("it", "Italiano", "Italian", "stt-parakeet-v3", "mt-it-en", "mt-en-it"),
+    ("nl", "Nederlands", "Dutch", "stt-parakeet-v3", "mt-nl-en", "mt-en-nl"),
     ("pt", "Português", "Portuguese", "stt-parakeet-v3", "mt-pt-en", "mt-en-pt"),
-    ("pl", "Polski", "Polish", "stt-pl", "mt-pl-en", "mt-en-pl"),
+    ("pl", "Polski", "Polish", "stt-parakeet-v3", "mt-pl-en", "mt-en-pl"),
     ("ru", "Русский", "Russian", "stt-ru", "mt-ru-en", "mt-en-ru"),
     ("nb", "Norsk bokmål", "Norwegian", "stt-nb", "mt-nb-en", "mt-en-nb"),
     ("sv", "Svenska", "Swedish", "stt-sv", "mt-sv-en", "mt-en-sv"),

@@ -1,0 +1,205 @@
+{
+  "$comment": "Speech-recognition components that Sipher converts itself (no sherpa-onnx prebuilt exists). Consumed by convert_nemo.py and convert_whisper.py. Every upstream input is pinned by repo revision and sha256.",
+  "sherpaOnnx": {
+    "version": "1.13.8",
+    "repo": "https://github.com/k2-fsa/sherpa-onnx",
+    "tag": "v1.13.8",
+    "commit": "11afbd009a7f8c08f4bcf2fc1b265d0df4670fbf",
+    "scripts": {
+      "nemoTransducer": {
+        "path": "scripts/nemo/fast-conformer-hybrid-transducer-ctc/export-onnx-transducer-non-streaming.py",
+        "sha256": "e7933900395e72134a1b39e308f89776f491dd8846d93556e59a570ff7b9ed5f"
+      },
+      "whisper": {
+        "path": "scripts/whisper/export-onnx.py",
+        "sha256": "5e0ddabfac8330ee9aecaba4c1b4286d1cd9f88df4cd30e54706b011bf976e45"
+      }
+    }
+  },
+  "validation": {
+    "dataset": "google/fleurs",
+    "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+    "license": "CC-BY-4.0",
+    "split": "test",
+    "minSeconds": 5.0,
+    "maxSeconds": 8.0,
+    "clips": 10,
+    "manifestClips": 3,
+    "threads": 2
+  },
+  "licenses": {
+    "CC-BY-4.0": {
+      "name": "Creative Commons Attribution 4.0 International",
+      "url": "https://creativecommons.org/licenses/by/4.0/legalcode"
+    },
+    "Apache-2.0": {
+      "name": "Apache License 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "textFile": "../licenses/Apache-2.0.txt"
+    },
+    "NVIDIA-Open-Model-License": {
+      "name": "NVIDIA Open Model License Agreement (version released October 24, 2025)",
+      "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+      "textFile": "licenses/NVIDIA-Open-Model-License.txt",
+      "notice": "Licensed by NVIDIA Corporation under the NVIDIA Open Model License"
+    }
+  },
+  "components": [
+    {
+      "id": "stt-fr",
+      "converter": "nemo",
+      "asrKind": "nemo_transducer",
+      "language": "fr",
+      "fleurs": "fr_fr",
+      "upstream": {
+        "repo": "nvidia/stt_fr_fastconformer_hybrid_large_pc",
+        "revision": "c33feae0b85396ede1545f8aac5b3e78fa4371f0",
+        "file": "stt_fr_fastconformer_hybrid_large_pc.nemo",
+        "sha256": "965b9c612c90b747cfe9f83ae7f1637a9d08d3e116a873633c134d6fb7c81ba0"
+      },
+      "license": "CC-BY-4.0",
+      "authors": "NVIDIA (NeMo)",
+      "title": "STT Fr FastConformer Hybrid Transducer-CTC Large P&C"
+    },
+    {
+      "id": "stt-it",
+      "converter": "nemo",
+      "asrKind": "nemo_transducer",
+      "language": "it",
+      "fleurs": "it_it",
+      "upstream": {
+        "repo": "nvidia/stt_it_fastconformer_hybrid_large_pc",
+        "revision": "10f1a5a3614bc70e9c89b183a8a460b29e1a2521",
+        "file": "stt_it_fastconformer_hybrid_large_pc.nemo",
+        "sha256": "6db62aeda2dd05fe99e827f734e3b94f73b59f69f2a012e46668451f292baecb"
+      },
+      "license": "CC-BY-4.0",
+      "authors": "NVIDIA (NeMo)",
+      "title": "STT It FastConformer Hybrid Transducer-CTC Large P&C"
+    },
+    {
+      "id": "stt-nl",
+      "converter": "nemo",
+      "asrKind": "nemo_transducer",
+      "language": "nl",
+      "fleurs": "nl_nl",
+      "upstream": {
+        "repo": "nvidia/stt_nl_fastconformer_hybrid_large_pc",
+        "revision": "609f83107265ae2357dd90645f5ac885179cb15c",
+        "file": "stt_nl_fastconformer_hybrid_large_pc.nemo",
+        "sha256": "dec74cb2cb567dc242e8d93127eebedd8ab59c11addbbdcd8b91c365dc76c245"
+      },
+      "license": "CC-BY-4.0",
+      "authors": "NVIDIA (NeMo)",
+      "title": "STT Nl FastConformer Hybrid Transducer-CTC Large P&C"
+    },
+    {
+      "id": "stt-pl",
+      "converter": "nemo",
+      "asrKind": "nemo_transducer",
+      "language": "pl",
+      "fleurs": "pl_pl",
+      "upstream": {
+        "repo": "nvidia/stt_pl_fastconformer_hybrid_large_pc",
+        "revision": "90fc78a3d35d7140255f95d4c71cc5593f2d0c4e",
+        "file": "stt_pl_fastconformer_hybrid_large_pc.nemo",
+        "sha256": "a0f024f49d474d1a39d388ef0f07df6f28e47493864feea5067b877a8fe1335c"
+      },
+      "license": "CC-BY-4.0",
+      "authors": "NVIDIA (NeMo)",
+      "title": "STT Pl FastConformer Hybrid Transducer-CTC Large P&C"
+    },
+    {
+      "id": "stt-da",
+      "converter": "nemo",
+      "asrKind": "nemo_transducer",
+      "language": "da",
+      "fleurs": "da_dk",
+      "upstream": {
+        "repo": "nvidia/parakeet-rnnt-110m-da-dk",
+        "revision": "ea77aca1c88bf322d969312d58d77f5aebf832ed",
+        "file": "parakeet-rnnt-110m-da-dk.nemo",
+        "sha256": "e10ee7ef907f7472e446b4a1feba6741f9a724d8756ac06ca9c61faf7d6e53de"
+      },
+      "license": "NVIDIA-Open-Model-License",
+      "authors": "NVIDIA (NeMo)",
+      "title": "NVIDIA Parakeet-RNNT 110M (Danish)"
+    },
+    {
+      "id": "stt-nb",
+      "converter": "whisper",
+      "asrKind": "whisper",
+      "language": "nb",
+      "languageHint": "no",
+      "fleurs": "nb_no",
+      "whisperSize": "base",
+      "upstream": {
+        "repo": "NbAiLab/nb-whisper-base",
+        "revision": "2ab372b6baa181a22f54f18030cae3703402c59e",
+        "file": "model.safetensors",
+        "sha256": "8033df8c4c1b1a96c9e569ca645ba25d5a5cc0f604a431e4a72683d81fb60bb3"
+      },
+      "license": "Apache-2.0",
+      "authors": "National Library of Norway, NB AI-Lab (NB-Whisper), based on OpenAI Whisper",
+      "title": "NB-Whisper Base"
+    },
+    {
+      "id": "stt-sv",
+      "converter": "whisper",
+      "asrKind": "whisper",
+      "language": "sv",
+      "languageHint": "sv",
+      "fleurs": "sv_se",
+      "whisperSize": "base",
+      "upstream": {
+        "repo": "KBLab/kb-whisper-base",
+        "revision": "1499d2d2f0c7ed545bd6f2eec85287cf8d8c8b38",
+        "file": "model.safetensors",
+        "sha256": "1883cbed9d47a1a3e1ae12d221371957d1e898788a778c6adfa450e98ca1f7ed"
+      },
+      "license": "Apache-2.0",
+      "authors": "KBLab, National Library of Sweden (KB-Whisper), based on OpenAI Whisper",
+      "title": "KB-Whisper Base"
+    },
+    {
+      "id": "stt-nb-tiny",
+      "converter": "whisper",
+      "asrKind": "whisper",
+      "language": "nb",
+      "languageHint": "no",
+      "fleurs": "nb_no",
+      "whisperSize": "tiny",
+      "optional": true,
+      "packageAs": "stt-nb",
+      "upstream": {
+        "repo": "NbAiLab/nb-whisper-tiny",
+        "revision": "8b38492d0e4111d5d6ad825e979cb082a2da013a",
+        "file": "model.safetensors",
+        "sha256": "b7d21c4cf7c05c760cb0780e7e3b41241e6883f3bed73ced0166435b6487d9e6"
+      },
+      "license": "Apache-2.0",
+      "authors": "National Library of Norway, NB AI-Lab (NB-Whisper), based on OpenAI Whisper",
+      "title": "NB-Whisper Tiny"
+    },
+    {
+      "id": "stt-sv-tiny",
+      "converter": "whisper",
+      "asrKind": "whisper",
+      "language": "sv",
+      "languageHint": "sv",
+      "fleurs": "sv_se",
+      "whisperSize": "tiny",
+      "optional": true,
+      "packageAs": "stt-sv",
+      "upstream": {
+        "repo": "KBLab/kb-whisper-tiny",
+        "revision": "76d796af43a50fa34321efa562c9b9887a187463",
+        "file": "model.safetensors",
+        "sha256": "b8171b31c188c669d0ad9c635c9a1cfd0ea33fda8b313246a9aa13f578be4ba6"
+      },
+      "license": "Apache-2.0",
+      "authors": "KBLab, National Library of Sweden (KB-Whisper), based on OpenAI Whisper",
+      "title": "KB-Whisper Tiny"
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "comment": "Prebuilt sherpa-onnx speech recognisers packaged as Sipher speech components by prebuilt.py. Every file is pinned by sha256; Hugging Face sources are pinned to a commit, GitHub release tarballs to the tarball sha256. Runtime: sherpa-onnx 1.13.8.",
+  "sherpaOnnx": "1.13.8",
+  "validation": {
+    "dataset": "google/fleurs",
+    "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+    "split": "test",
+    "license": "CC-BY-4.0",
+    "minSeconds": 5.0,
+    "maxSeconds": 8.0,
+    "configs": {
+      "de": "de_de",
+      "es": "es_419",
+      "fi": "fi_fi",
+      "ja": "ja_jp",
+      "ko": "ko_kr",
+      "pt": "pt_br",
+      "ru": "ru_ru",
+      "zh": "cmn_hans_cn"
+    },
+    "metric": {
+      "ja": "cer",
+      "ko": "cer",
+      "zh": "cer"
+    }
+  },
+  "components": [
+    {
+      "id": "stt-es",
+      "asrKind": "nemo_transducer",
+      "languages": ["es"],
+      "languageHint": "",
+      "model": {
+        "name": "stt_es_fastconformer_hybrid_large_pc (FastConformer Hybrid Transducer-CTC Large, 115M, punctuation and capitalisation; transducer head)",
+        "authors": "NVIDIA NeMo team",
+        "url": "https://huggingface.co/nvidia/stt_es_fastconformer_hybrid_large_pc"
+      },
+      "attribution": "Spanish speech recognition: NVIDIA stt_es_fastconformer_hybrid_large_pc (CC-BY-4.0), ONNX int8 export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "changes": "The original NeMo model was exported to ONNX and int8-quantised (transducer head only) by the k2-fsa sherpa-onnx project. The Sipher project repackaged the runtime files unmodified.",
+      "upstream": {
+        "type": "github-release",
+        "page": "https://github.com/k2-fsa/sherpa-onnx/releases/tag/asr-models",
+        "archive": {
+          "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemo-fast-conformer-transducer-es-1424-int8.tar.bz2",
+          "sha256": "d6d29ffd560c366da1b177b71e79d8733a9a9910dd1ace282d9bfae94e056210",
+          "size": 107246685,
+          "root": "sherpa-onnx-nemo-fast-conformer-transducer-es-1424-int8"
+        }
+      },
+      "files": [
+        {"role": "encoder", "src": "encoder.int8.onnx", "path": "encoder.int8.onnx", "size": 131113475, "sha256": "17bde3c5005f7a9d0614336ea13db7d2c3c1c4efcacfa380e962b36d768b907e"},
+        {"role": "decoder", "src": "decoder.int8.onnx", "path": "decoder.int8.onnx", "size": 3955863, "sha256": "e759e0c04faa31526c34a96927bd8c69574e9b5e83360559b4f924be98f89f0e"},
+        {"role": "joiner", "src": "joiner.int8.onnx", "path": "joiner.int8.onnx", "size": 1408182, "sha256": "78f941bcda8d7e3d43b89a8fd805a8e77e99d06bde4c6ceedc9ec423ee4d04bd"},
+        {"role": "tokens", "src": "tokens.txt", "path": "tokens.txt", "size": 10871, "sha256": "6191b4853e3654f053c42f6fd184ca53b402987aefdd6ff6baa68034d803ee85"}
+      ],
+      "testWavs": [
+        {"src": "test_wavs/es-spanish.wav", "size": 78380, "sha256": "bed36caee67a120d3a8fe61abc0fd7b8aff49a06a25452eab07a17ccd967763b"}
+      ]
+    },
+    {
+      "id": "stt-de",
+      "asrKind": "nemo_transducer",
+      "languages": ["de"],
+      "languageHint": "",
+      "model": {
+        "name": "stt_de_fastconformer_hybrid_large_pc (FastConformer Hybrid Transducer-CTC Large, 115M, punctuation and capitalisation; transducer head)",
+        "authors": "NVIDIA NeMo team",
+        "url": "https://huggingface.co/nvidia/stt_de_fastconformer_hybrid_large_pc"
+      },
+      "attribution": "German speech recognition: NVIDIA stt_de_fastconformer_hybrid_large_pc (CC-BY-4.0), ONNX int8 export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "changes": "The original NeMo model was exported to ONNX and int8-quantised (transducer head only) by the k2-fsa sherpa-onnx project. The Sipher project repackaged the runtime files unmodified.",
+      "upstream": {
+        "type": "huggingface",
+        "repo": "csukuangfj/sherpa-onnx-nemo-transducer-stt_de_fastconformer_hybrid_large_pc-int8",
+        "revision": "df32693bc4328136c455af24035a5ee1ec708df0"
+      },
+      "files": [
+        {"role": "encoder", "src": "encoder.int8.onnx", "path": "encoder.int8.onnx", "size": 131114014, "sha256": "10fbb959c36c461afb02ea87c109119eb001f30e91a130663bd6d5bbcba74ba9"},
+        {"role": "decoder", "src": "decoder.int8.onnx", "path": "decoder.int8.onnx", "size": 3955863, "sha256": "4633a4b0a3f21f7ace4df02e772f5b5e63d45f84a71ee1e2660998fc4beb46ad"},
+        {"role": "joiner", "src": "joiner.int8.onnx", "path": "joiner.int8.onnx", "size": 1408183, "sha256": "80f493f2885f6ccbd9cf9c20f4b6c616c2eb6dae48df6a5d4a0653354f7fe66b"},
+        {"role": "tokens", "src": "tokens.txt", "path": "tokens.txt", "size": 10686, "sha256": "abb1136142604d6d1766ad5060bd4f4b1048d7a096cd094b2d40eec3e666be9f"}
+      ],
+      "testWavs": [
+        {"src": "test_wavs/de.wav", "size": 121388, "sha256": "36d3c4845b9808a1656a2a2e92d884590e2db94389e6fe559643291ae0cd3710"}
+      ]
+    },
+    {
+      "id": "stt-ru",
+      "asrKind": "nemo_transducer",
+      "languages": ["ru"],
+      "languageHint": "",
+      "model": {
+        "name": "GigaAM-v3 e2e RNN-T with punctuation and text normalisation (v3_e2e_rnnt)",
+        "authors": "GigaChat team, SaluteDevices (Sber)",
+        "url": "https://huggingface.co/ai-sage/GigaAM-v3 (code: https://github.com/salute-developers/GigaAM)"
+      },
+      "attribution": "Russian speech recognition: GigaAM-v3 e2e RNN-T by the GigaChat team, SaluteDevices (MIT), ONNX export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+      "license": {
+        "spdx": "MIT",
+        "name": "MIT License",
+        "url": "https://github.com/salute-developers/GigaAM/blob/main/LICENSE",
+        "text": {"src": "LICENSE", "size": 1070, "sha256": "f00de6715714c7a63d08639cdbfaa40224eefc407302614bd19f1a8b98c875aa"}
+      },
+      "changes": "The original PyTorch model was exported to ONNX (int8 encoder, float32 decoder and joiner) by the k2-fsa sherpa-onnx project. The Sipher project repackaged the runtime files unmodified.",
+      "upstream": {
+        "type": "huggingface",
+        "repo": "csukuangfj/sherpa-onnx-nemo-transducer-punct-giga-am-v3-russian-2025-12-16",
+        "revision": "a6039be7cee829a9044a69ac0ebaf1c191217c97"
+      },
+      "files": [
+        {"role": "encoder", "src": "encoder.int8.onnx", "path": "encoder.int8.onnx", "size": 224570820, "sha256": "369f35a71bf288d3b8e0391fabd8dba5f2314088d440bca474056b7b4b6e66bf"},
+        {"role": "decoder", "src": "decoder.onnx", "path": "decoder.onnx", "size": 4600132, "sha256": "38fc7475443ea2a26f63211ca350f73ac50fff824ab7a3876ee2bd610c53bbc4"},
+        {"role": "joiner", "src": "joiner.onnx", "path": "joiner.onnx", "size": 2712896, "sha256": "602ff7017a93311aad34df1437c8d7f49911353c13d6eae7a6ee7b041339465c"},
+        {"role": "tokens", "src": "tokens.txt", "path": "tokens.txt", "size": 13354, "sha256": "39abae20e692998290c574e606f11a9edef2902a1995463fcff63d1490cf22b7"}
+      ],
+      "testWavs": [
+        {"src": "test_wavs/example.wav", "size": 361324, "sha256": "d8aaaa18a5098d7c6de0595ae7ac1e64cacd0d4022af3595213bdaf23be77e69"}
+      ]
+    },
+    {
+      "id": "stt-sensevoice",
+      "asrKind": "sense_voice",
+      "languages": ["zh", "ja", "ko"],
+      "supportedLanguages": ["zh", "en", "ja", "ko", "yue"],
+      "languageHint": "",
+      "model": {
+        "name": "SenseVoiceSmall (2024-07-17 release, int8)",
+        "authors": "Tongyi Speech Team, Alibaba Group (FunAudioLLM)",
+        "url": "https://huggingface.co/FunAudioLLM/SenseVoiceSmall (code: https://github.com/FunAudioLLM/SenseVoice)"
+      },
+      "attribution": "Chinese/Japanese/Korean speech recognition: SenseVoiceSmall by FunAudioLLM, Tongyi Speech Team, Alibaba Group (FunASR Model License), ONNX int8 export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+      "license": {
+        "spdx": "LicenseRef-FunASR-Model-License-1.1",
+        "name": "FunASR Model Open Source License Agreement, version 1.1",
+        "url": "https://github.com/modelscope/FunASR/blob/main/MODEL_LICENSE",
+        "text": {
+          "url": "https://raw.githubusercontent.com/modelscope/FunASR/58830eca4012644aac0c3218c3ccc7d98f003fda/MODEL_LICENSE",
+          "file": "FunASR-MODEL_LICENSE",
+          "size": 5306,
+          "sha256": "7dba975a2069691db4992b0592d70828b330d2f8a30a71450f4e152a554e84f8"
+        }
+      },
+      "changes": "The original model (iic/SenseVoiceSmall) was exported to ONNX and int8-quantised by the k2-fsa sherpa-onnx project. The Sipher project repackaged the runtime files unmodified; the model name SenseVoiceSmall is retained as the licence requires.",
+      "upstream": {
+        "type": "huggingface",
+        "repo": "csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17",
+        "revision": "2365baeacb507f821a0c8120fcee3d484dba7a07"
+      },
+      "files": [
+        {"role": "model", "src": "model.int8.onnx", "path": "model.int8.onnx", "size": 239233841, "sha256": "c71f0ce00bec95b07744e116345e33d8cbbe08cef896382cf907bf4b51a2cd51"},
+        {"role": "tokens", "src": "tokens.txt", "path": "tokens.txt", "size": 315894, "sha256": "f449eb28dc567533d7fa59be34e2abca8784f771850c78a47fb731a31429a1dc"}
+      ],
+      "testWavs": [
+        {"src": "test_wavs/zh.wav", "size": 178988, "sha256": "b77f1794fe374a0ba1ee1dc458bfaf9349496cbbfc32780c50ba3c5a7ad8e373"},
+        {"src": "test_wavs/ja.wav", "size": 230444, "sha256": "460bd8dccb0d2a5f4e29c628f837be4082d13defc64c3fc21dd1b6bb0e119095"},
+        {"src": "test_wavs/ko.wav", "size": 147500, "sha256": "0dc797a5c81ed30fc339d91f3da718ab02854e17ffa37cb93c4c039ac5c6bb9c"}
+      ]
+    },
+    {
+      "id": "stt-parakeet-v3",
+      "asrKind": "nemo_transducer",
+      "languages": ["pt", "fi"],
+      "supportedLanguages": ["bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "hr", "hu", "it", "lt", "lv", "mt", "nl", "pl", "pt", "ro", "ru", "sk", "sl", "sv", "uk"],
+      "languageHint": "",
+      "model": {
+        "name": "parakeet-tdt-0.6b-v3 (FastConformer TDT, 600M, 25 European languages, punctuation and capitalisation)",
+        "authors": "NVIDIA NeMo team",
+        "url": "https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3"
+      },
+      "attribution": "Multilingual European speech recognition: NVIDIA parakeet-tdt-0.6b-v3 (CC-BY-4.0), ONNX int8 export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "changes": "The original NeMo model was exported to ONNX and int8-quantised by the k2-fsa sherpa-onnx project. The Sipher project repackaged the runtime files unmodified.",
+      "upstream": {
+        "type": "huggingface",
+        "repo": "csukuangfj/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8",
+        "revision": "2bda32ec70b097a55adaa07d9a7173915b43cc78"
+      },
+      "files": [
+        {"role": "encoder", "src": "encoder.int8.onnx", "path": "encoder.int8.onnx", "size": 652184281, "sha256": "acfc2b4456377e15d04f0243af540b7fe7c992f8d898d751cf134c3a55fd2247"},
+        {"role": "decoder", "src": "decoder.int8.onnx", "path": "decoder.int8.onnx", "size": 11845275, "sha256": "179e50c43d1a9de79c8a24149a2f9bac6eb5981823f2a2ed88d655b24248db4e"},
+        {"role": "joiner", "src": "joiner.int8.onnx", "path": "joiner.int8.onnx", "size": 6355277, "sha256": "3164c13fc2821009440d20fcb5fdc78bff28b4db2f8d0f0b329101719c0948b3"},
+        {"role": "tokens", "src": "tokens.txt", "path": "tokens.txt", "size": 93939, "sha256": "d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"}
+      ],
+      "testWavs": [
+        {"src": "test_wavs/es.wav", "size": 235052, "sha256": "49fd2cfa4b62db7068143c582b35de9d31ec2733495ece3611105131d21de06c"},
+        {"src": "test_wavs/de.wav", "size": 121388, "sha256": "36d3c4845b9808a1656a2a2e92d884590e2db94389e6fe559643291ae0cd3710"}
+      ]
+    }
+  ]
+}

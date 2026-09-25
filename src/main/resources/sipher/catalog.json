@@ -1,7 +1,2298 @@
 {
-  "schema": 1,
-  "release": "models-v1",
-  "hosts": ["github.com", "release-assets.githubusercontent.com", "objects.githubusercontent.com"],
-  "components": {},
-  "languages": []
+ "schema": 1,
+ "release": "models-v1",
+ "hosts": [
+  "github.com",
+  "release-assets.githubusercontent.com",
+  "objects.githubusercontent.com"
+ ],
+ "components": {
+  "stt-es": {
+   "type": "speech",
+   "license": "CC-BY-4.0",
+   "attribution": "Spanish speech recognition: NVIDIA stt_es_fastconformer_hybrid_large_pc (CC-BY-4.0), ONNX int8 export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-es__LICENSE",
+     "sha256": "ba8ba7c015c10e2a69db9ac73099de3f2d8004ca001f41935bba5e9288e240dd",
+     "size": 1084
+    },
+    {
+     "path": "decoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-es__decoder.int8.onnx",
+     "sha256": "e759e0c04faa31526c34a96927bd8c69574e9b5e83360559b4f924be98f89f0e",
+     "size": 3955863
+    },
+    {
+     "path": "encoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-es__encoder.int8.onnx",
+     "sha256": "17bde3c5005f7a9d0614336ea13db7d2c3c1c4efcacfa380e962b36d768b907e",
+     "size": 131113475
+    },
+    {
+     "path": "joiner.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-es__joiner.int8.onnx",
+     "sha256": "78f941bcda8d7e3d43b89a8fd805a8e77e99d06bde4c6ceedc9ec423ee4d04bd",
+     "size": 1408182
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-es__tokens.txt",
+     "sha256": "6191b4853e3654f053c42f6fd184ca53b402987aefdd6ff6baa68034d803ee85",
+     "size": 10871
+    }
+   ],
+   "asrKind": "nemo_transducer",
+   "roles": {
+    "encoder": "encoder.int8.onnx",
+    "decoder": "decoder.int8.onnx",
+    "joiner": "joiner.int8.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "es"
+   ],
+   "languageHint": ""
+  },
+  "mt-es-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_spa-eng by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-es-en__encoder_model.onnx",
+     "sha256": "ad1c130c576315499b7d2b4802cf0aab713239c93cc65189e0107ecf9f8ff7f3",
+     "size": 14980971
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-es-en__decoder_model_merged.onnx",
+     "sha256": "63f7c98249fc1a807fd9b0fe4f95fc4b89b1f217ae8cde862af0a00944d8a783",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-es-en__source.spm",
+     "sha256": "a40ad94d67f431248d5dec9c7f0ded19efce671568ff07c959ee58ca50590265",
+     "size": 819359
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-es-en__vocab.json",
+     "sha256": "a2efd26a550481379f0aafbf2b6252914fd20e537457a258f830d05dd7a8e2c2",
+     "size": 788609
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-es-en__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-es-en__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-es-en__LICENSE",
+     "sha256": "faa3e27b6d9e507ac6386d84856fb4b0b9eb542dab4191e0f8fcc315780742ba",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-es-en__README.md",
+     "sha256": "306df004a89c313323cfdbc22612d7f7ca143e110426d9f764a66f0cad05252f",
+     "size": 2222
+    }
+   ],
+   "source": "es",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-es": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_eng-spa by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-es__encoder_model.onnx",
+     "sha256": "f76bb26f958cb984d1cc6df4d1559776e32442b1a74e03e162a79349e64cb70d",
+     "size": 14980971
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-es__decoder_model_merged.onnx",
+     "sha256": "f27936039a55e84c0615e8e4717f63616a34d16fbe023f1cd1f695361673d103",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-es__source.spm",
+     "sha256": "a8aac80a036107c9c0b1e670f24045d869e39cec21c15936c4670d30676810d6",
+     "size": 819637
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-es__vocab.json",
+     "sha256": "27a12c7bbfa3bef11ad10285e4b991f666f7af4cea35bb95b3268a86e06b15e2",
+     "size": 788996
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-es__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-es__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-es__LICENSE",
+     "sha256": "22a031bc63719743fb25bb733e432490136da0c46faeaafbe35053f7a3e55e02",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-es__README.md",
+     "sha256": "88936524bb9f46dafe5d28d5a11815e309fd84d1136b2955485f5bea369ad3d9",
+     "size": 2205
+    }
+   ],
+   "source": "en",
+   "target": "es",
+   "targetToken": null
+  },
+  "stt-de": {
+   "type": "speech",
+   "license": "CC-BY-4.0",
+   "attribution": "German speech recognition: NVIDIA stt_de_fastconformer_hybrid_large_pc (CC-BY-4.0), ONNX int8 export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-de__LICENSE",
+     "sha256": "b170db27a5d3a6f81805f5604d81b7cccb7871a0d7c2b6be8e680d70fda5af5b",
+     "size": 949
+    },
+    {
+     "path": "decoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-de__decoder.int8.onnx",
+     "sha256": "4633a4b0a3f21f7ace4df02e772f5b5e63d45f84a71ee1e2660998fc4beb46ad",
+     "size": 3955863
+    },
+    {
+     "path": "encoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-de__encoder.int8.onnx",
+     "sha256": "10fbb959c36c461afb02ea87c109119eb001f30e91a130663bd6d5bbcba74ba9",
+     "size": 131114014
+    },
+    {
+     "path": "joiner.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-de__joiner.int8.onnx",
+     "sha256": "80f493f2885f6ccbd9cf9c20f4b6c616c2eb6dae48df6a5d4a0653354f7fe66b",
+     "size": 1408183
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-de__tokens.txt",
+     "sha256": "abb1136142604d6d1766ad5060bd4f4b1048d7a096cd094b2d40eec3e666be9f",
+     "size": 10686
+    }
+   ],
+   "asrKind": "nemo_transducer",
+   "roles": {
+    "encoder": "encoder.int8.onnx",
+    "decoder": "decoder.int8.onnx",
+    "joiner": "joiner.int8.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "de"
+   ],
+   "languageHint": ""
+  },
+  "mt-de-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_deu-eng by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-de-en__encoder_model.onnx",
+     "sha256": "30a67ee1df1bbf7806f412d994e4f9b4aa94faef3f0a48117d2c2c124a021416",
+     "size": 14980971
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-de-en__decoder_model_merged.onnx",
+     "sha256": "2bf2367e0eb733e59a7316165110c5fcfadbf7354422f315721e9984ab75d97d",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-de-en__source.spm",
+     "sha256": "b0c0d8de2d7f020afbfe2c9bd86c60cafc340b3d0cf45b969ab13313c462e0fb",
+     "size": 813654
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-de-en__vocab.json",
+     "sha256": "8983a5be7ba67df7e376c34a8041f65663f78517bbd270af0c9ad703e7169b1d",
+     "size": 774615
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-de-en__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-de-en__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-de-en__LICENSE",
+     "sha256": "da2cb0f8c00fc49dcf89c2db44f382d8c241a44ecd372d0ec638cd1802fe9e3f",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-de-en__README.md",
+     "sha256": "137eabaf065e348589c9e7eb652d05bae59f30811e3f27ed328deeac1f9fc5b9",
+     "size": 2082
+    }
+   ],
+   "source": "de",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-de": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_eng-deu by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-de__encoder_model.onnx",
+     "sha256": "318be18fe8e9c51682be25c33b14f9fd2d89824cb38a08d30f2d250021c35499",
+     "size": 14980971
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-de__decoder_model_merged.onnx",
+     "sha256": "7335c4186ac446b6ad68067f90555f972fffe84494afbd6e0377fbcc3b27f97e",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-de__source.spm",
+     "sha256": "84ce38d6b0dca4b60e3d3e098e68995220837e4c92a661dca0afb065fc8f732b",
+     "size": 813372
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-de__vocab.json",
+     "sha256": "edfb50e3fcec6c85fbdd97092c4fe7b34b2dbd6e8a28697b887ab47ac23f07be",
+     "size": 774215
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-de__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-de__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-de__LICENSE",
+     "sha256": "e7f700475dbfbf39c27c080706db26951ac52ca7dac548cf1dfdfb5ef85b2942",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-de__README.md",
+     "sha256": "85bd54546adada5ad025a96ccefbc31c307b7012d9966b0b3f09b2c440d02068",
+     "size": 2076
+    }
+   ],
+   "source": "en",
+   "target": "de",
+   "targetToken": null
+  },
+  "stt-fr": {
+   "type": "speech",
+   "license": "CC-BY-4.0",
+   "attribution": "STT Fr FastConformer Hybrid Transducer-CTC Large P&C by NVIDIA (NeMo) (https://huggingface.co/nvidia/stt_fr_fastconformer_hybrid_large_pc), Creative Commons Attribution 4.0 International; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-fr__LICENSE",
+     "sha256": "54a3d2b9357ace891c89f9a56ece46b196b61ae1105e44aaec6b3746bc11628f",
+     "size": 818
+    },
+    {
+     "path": "decoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-fr__decoder.int8.onnx",
+     "sha256": "08997769587bcade750faaecb3a491b4a069d3354ed32ac72153b2eefb158538",
+     "size": 3955863
+    },
+    {
+     "path": "encoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-fr__encoder.int8.onnx",
+     "sha256": "7ee610776e408f68f07d37fd6199f660cb84b4ada56759954c637712d5f0e00b",
+     "size": 131113900
+    },
+    {
+     "path": "joiner.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-fr__joiner.int8.onnx",
+     "sha256": "c091e598ec81e1c1507b986604143f4c2ea9ed3974c112b24a35626239202689",
+     "size": 1408182
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-fr__tokens.txt",
+     "sha256": "1b0a63466e3847115896e795fd64160e689c68efb63c0b648f7a85d33a9a0c1e",
+     "size": 10943
+    }
+   ],
+   "asrKind": "nemo_transducer",
+   "roles": {
+    "encoder": "encoder.int8.onnx",
+    "decoder": "decoder.int8.onnx",
+    "joiner": "joiner.int8.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "fr"
+   ],
+   "languageHint": ""
+  },
+  "mt-fr-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_fra-eng by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fr-en__encoder_model.onnx",
+     "sha256": "d551cb05ba036418bf94519f5c1e61aaf4c1107667a30218ca99c0245d133d9b",
+     "size": 14980970
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fr-en__decoder_model_merged.onnx",
+     "sha256": "36a9dd7b61e711baa427d5fc3fdf0bd6af7dfe379d24bb1ea3baffff35a7b754",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fr-en__source.spm",
+     "sha256": "878ba36f64bf4025f296526ce725521839008fb5b69566b10e859e8617601421",
+     "size": 817787
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fr-en__vocab.json",
+     "sha256": "4370436d3bcb91ca7f00b402a905248b9eb7535051af8ba54b8ba533b56e9f6c",
+     "size": 792743
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fr-en__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fr-en__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fr-en__LICENSE",
+     "sha256": "7e6ad2e2598f89fba5480294525868f2bed482ac7040f7cf5350851720753c5c",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fr-en__README.md",
+     "sha256": "ba1a71c66361456e78ade180ad0ddc0a93c62dfe8257cd711c456d1847a471a7",
+     "size": 2174
+    }
+   ],
+   "source": "fr",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-fr": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_eng-fra by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fr__encoder_model.onnx",
+     "sha256": "6595238c39f8bd8f48f5473967f80f964743e41abc4c9f6e084ef1379492373c",
+     "size": 14980971
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fr__decoder_model_merged.onnx",
+     "sha256": "d39d6d67d5f69e022e91198d36aaf618cbd6190fc1402813d6118ae37ec74eab",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fr__source.spm",
+     "sha256": "fe73acaf706d8f09cc32f9de0096ca59ab6bfe2ac4597705d1781233c51193fe",
+     "size": 817703
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fr__vocab.json",
+     "sha256": "26ac4dc7d3db12a4edd6b1a22cd26bc686a0ed6a04ad57350fde32327f583e41",
+     "size": 792468
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fr__config.json",
+     "sha256": "5a5197ed78573b2aa234b6b6de0ea4e420c621e390d65ca328ccf58667ca30dd",
+     "size": 963
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fr__generation_config.json",
+     "sha256": "3d4e1b7afd96c1af4bbf624d72ca547678c9cdcf1b4baf60563ecdce51e0b5f2",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fr__LICENSE",
+     "sha256": "dc7136c870d015b725d5687e080439029f35cb7626233aaf3045cf6215beda7f",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fr__README.md",
+     "sha256": "6beb53dfc562f800ff264d8d6e353fe524630a634d4a4ed462f9797ee493ee4e",
+     "size": 2087
+    }
+   ],
+   "source": "en",
+   "target": "fr",
+   "targetToken": null
+  },
+  "stt-parakeet-v3": {
+   "type": "speech",
+   "license": "CC-BY-4.0",
+   "attribution": "Multilingual European speech recognition: NVIDIA parakeet-tdt-0.6b-v3 (CC-BY-4.0), ONNX int8 export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-parakeet-v3__LICENSE",
+     "sha256": "1da8b7a861fa0e3de2d773b6c6156e365ec0e012640e602e6c7e6e7a98022503",
+     "size": 857
+    },
+    {
+     "path": "decoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-parakeet-v3__decoder.int8.onnx",
+     "sha256": "179e50c43d1a9de79c8a24149a2f9bac6eb5981823f2a2ed88d655b24248db4e",
+     "size": 11845275
+    },
+    {
+     "path": "encoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-parakeet-v3__encoder.int8.onnx",
+     "sha256": "acfc2b4456377e15d04f0243af540b7fe7c992f8d898d751cf134c3a55fd2247",
+     "size": 652184281
+    },
+    {
+     "path": "joiner.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-parakeet-v3__joiner.int8.onnx",
+     "sha256": "3164c13fc2821009440d20fcb5fdc78bff28b4db2f8d0f0b329101719c0948b3",
+     "size": 6355277
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-parakeet-v3__tokens.txt",
+     "sha256": "d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d",
+     "size": 93939
+    }
+   ],
+   "asrKind": "nemo_transducer",
+   "roles": {
+    "encoder": "encoder.int8.onnx",
+    "decoder": "decoder.int8.onnx",
+    "joiner": "joiner.int8.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "pt",
+    "fi"
+   ],
+   "languageHint": ""
+  },
+  "mt-it-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_ita-eng by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-it-en__encoder_model.onnx",
+     "sha256": "2e217dd91536aa95c7dd272010e1cca52b5bfa2d1303a7dbe798497d5e2996e0",
+     "size": 14980971
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-it-en__decoder_model_merged.onnx",
+     "sha256": "b54bed816fa52faa0ce03cbe6d1475522bba3645708507a114a66f087dccb575",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-it-en__source.spm",
+     "sha256": "41026f577bfdf1b448d1383910a7878eee9b202202c972f8f13d7a8c4d1352d7",
+     "size": 817363
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-it-en__vocab.json",
+     "sha256": "29025d02d70a44bb69283a58c7771648889d0431131aa36fc7b9d60eddaae165",
+     "size": 775633
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-it-en__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-it-en__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-it-en__LICENSE",
+     "sha256": "1b0ba40c0c16a207e64a49044149e82ed73dcad97639bcbe844641d1452a5bc3",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-it-en__README.md",
+     "sha256": "d0be1725109c6299774dd90451b2f4a67c7b383d7c84482376f8dd55ad096635",
+     "size": 1850
+    }
+   ],
+   "source": "it",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-it": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_eng-ita by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-it__encoder_model.onnx",
+     "sha256": "03b82c871b466e0211c10166fa966ca1bf540a222a74fdb872d3a44e3ab29a6c",
+     "size": 14980970
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-it__decoder_model_merged.onnx",
+     "sha256": "127cd66eab627acc0f15dc1ab7b23545e9ab48ec6fa0932e0f72b91b231445da",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-it__source.spm",
+     "sha256": "f56349a46f0f0ebcc0721d6bf966fa2ba130fe748ecf382172665544d6bd33e2",
+     "size": 817016
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-it__vocab.json",
+     "sha256": "692c602fffd9fd084227f1635bf04997071e111f846c46ec78e38d2ffe72354a",
+     "size": 775165
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-it__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-it__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-it__LICENSE",
+     "sha256": "b024b389d3ac924e1eaecdf4c34f8376df27d5627a5130fd588635c36fe0a327",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-it__README.md",
+     "sha256": "a977cd5174a6931123c61414e210a5af0cce403f5241998e3037f239d213afa9",
+     "size": 2259
+    }
+   ],
+   "source": "en",
+   "target": "it",
+   "targetToken": null
+  },
+  "mt-nl-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_nld-eng by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nl-en__encoder_model.onnx",
+     "sha256": "b288d928d8781a094543ca4c70c933d207a5d4734908a1a8df7b114c726223e2",
+     "size": 14980970
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nl-en__decoder_model_merged.onnx",
+     "sha256": "2ddc3dcd41a8a85239faea6a3d8ff0196f7781f7b54aca9e9b5c705f5422e25b",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nl-en__source.spm",
+     "sha256": "9d0fb485b5d5fa554d8c30192a6a94ad729ed4bbfa3ff820b55eeec4e8ca8855",
+     "size": 810940
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nl-en__vocab.json",
+     "sha256": "d9cb34092f3e7b04377b6429932a87347d9b1d9cda4ebdc34cdbadeb54a7379f",
+     "size": 765325
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nl-en__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nl-en__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nl-en__LICENSE",
+     "sha256": "5810e890c17b256f70ca174563f904dc6daacd81c806a08de3de1742e2126492",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nl-en__README.md",
+     "sha256": "955d0ab3b33b51437b781b2f190e8f4e746f4a270e368689fa93023bacfbef9c",
+     "size": 2107
+    }
+   ],
+   "source": "nl",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-nl": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_eng-nld by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nl__encoder_model.onnx",
+     "sha256": "4dd9355578ea70dd11dfb2f280c9e434d52de22ef0df9eb527d65f87171eb25c",
+     "size": 14980971
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nl__decoder_model_merged.onnx",
+     "sha256": "cd4c4488ed2ad5b5bd1ab66bc7b35c085ba1a2d2069c4ecb787f5b4cf7eb6f0b",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nl__source.spm",
+     "sha256": "e51e6327c73f871fe120025595215a03a68b58cde757ea510da9558acf79e07f",
+     "size": 810466
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nl__vocab.json",
+     "sha256": "a03f88c5d00f5538f0a9828525372e822d9d95bfab9f44c62cd8ad0ca77bf93c",
+     "size": 764526
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nl__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nl__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nl__LICENSE",
+     "sha256": "8344335b82e3123a87ab42d46a33322e8e79cea18a6f2f4c1184b4f936554c4c",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nl__README.md",
+     "sha256": "cc4786e90c9d3b090cb6de483c8106bf22cc4ddc1fb76263a1edd6d516cf8852",
+     "size": 2258
+    }
+   ],
+   "source": "en",
+   "target": "nl",
+   "targetToken": null
+  },
+  "mt-pt-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-ROMANCE-en by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pt-en__encoder_model.onnx",
+     "sha256": "d1beddb44ad59d0c1970921b6bd414615014d9bd9290b711be6214b662b6320c",
+     "size": 53507505
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pt-en__decoder_model_merged.onnx",
+     "sha256": "56e07620964beb9f65b0b4c1527b2eb6320f134f0dac2d3f2c542b8e6d1db758",
+     "size": 60660090
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pt-en__source.spm",
+     "sha256": "baeab21ec00d0b490382b82499ef0348235c5a8e75de28aec8290adf62b007c4",
+     "size": 800087
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pt-en__vocab.json",
+     "sha256": "1ffaf15a0b51f0774c1dc24a1a675859dc18fc7705ebe6a0ac45a9c560457c29",
+     "size": 1460304
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pt-en__config.json",
+     "sha256": "b11b54220c28a64966b51864dd4bf9688a935c3b6a18bbab73810d391d6ac39f",
+     "size": 1366
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pt-en__generation_config.json",
+     "sha256": "837839ed0534a27084f9b980fc33f47729052dd89cb26cca7ac830765ed30e49",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pt-en__LICENSE",
+     "sha256": "a8d77d91557913857e0af082c14f89c5a0b0b9c51fc8eebbeb9fa50ed2c2fda9",
+     "size": 12280
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pt-en__README.md",
+     "sha256": "9150c322db005f83bbb3c6794754b3896d94e88f2a938d8298f030ad07eef02b",
+     "size": 2155
+    }
+   ],
+   "source": "pt",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-pt": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-en-ROMANCE by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pt__encoder_model.onnx",
+     "sha256": "69cd70f80ff6d1c0c929c28eb8fa614be5aab3f6788e4c0cba4586f1fa552515",
+     "size": 53507505
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pt__decoder_model_merged.onnx",
+     "sha256": "a6f2c8756db494510628f52c7f2dc1e15fd45c764b2f620eb577fe6b22cd339c",
+     "size": 60660090
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pt__source.spm",
+     "sha256": "b1f89e7b05828846baf19109a61029a36838f1c4f3defc218e6aee0ee2787864",
+     "size": 779155
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pt__vocab.json",
+     "sha256": "f2ce5a92734a7859cb4e91dc9ccd823e4a71585efbe4bbfe25e96e3d4bf48f34",
+     "size": 1457360
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pt__config.json",
+     "sha256": "bcae8ed74fed77fb51c58462b62397fee6b1a1a34aece79183a0dd02ad329e71",
+     "size": 1403
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pt__generation_config.json",
+     "sha256": "837839ed0534a27084f9b980fc33f47729052dd89cb26cca7ac830765ed30e49",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pt__LICENSE",
+     "sha256": "1cd4a6b21a3493aa4a012590b582f4bcfcd616c082037520140ca11c79277b59",
+     "size": 12280
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pt__README.md",
+     "sha256": "329ee7a6989c814c82c82c0b4901a247f452674eb31ded4a4f2297b2e321f64a",
+     "size": 2259
+    }
+   ],
+   "source": "en",
+   "target": "pt",
+   "targetToken": ">>pt_BR<<"
+  },
+  "mt-pl-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-pl-en by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pl-en__encoder_model.onnx",
+     "sha256": "40ec1a9271cbd90dec8aae65f05f0e86b8ebbb6f904ae65af6fb76382c63bf31",
+     "size": 52703153
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pl-en__decoder_model_merged.onnx",
+     "sha256": "ad10969c3deb44a08e64f69114961a0124f5385d5bfdc53131194ef90f453a79",
+     "size": 59849454
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pl-en__source.spm",
+     "sha256": "86b3b5f9de4f5ed9c46321bab1f865e3aa9ddf63094e89b49dd515aeafa79ce4",
+     "size": 834921
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pl-en__vocab.json",
+     "sha256": "c639e34d77775532ecf8a733a0955e351bf31daab149fd75841a1afc7b11e1e2",
+     "size": 1515249
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pl-en__config.json",
+     "sha256": "5303cdec6232c476b46f1b63cc792c46efe4cb2a962e4cc25396c2c0100c1590",
+     "size": 1381
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pl-en__generation_config.json",
+     "sha256": "17b2b5da860667d07fff33de45ec7455d51183b665f3c33dcde5b12121adccc3",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pl-en__LICENSE",
+     "sha256": "60bd792328f08d02b81ba2719d6eda2f0ba3a55a3ddab0f1e592d190c6ff3385",
+     "size": 12270
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-pl-en__README.md",
+     "sha256": "3fb36ac316fc412aee8ddaca99822757295411584458b3288e46d2693b6cd222",
+     "size": 818
+    }
+   ],
+   "source": "pl",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-pl": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-en-zlw by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pl__encoder_model.onnx",
+     "sha256": "61c57332ee4df3aeb1e0b5ce7450ddc2d3a3ebd13923f4f1fa8ebea5c8d6a356",
+     "size": 49949617
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pl__decoder_model_merged.onnx",
+     "sha256": "592843984a5602bf7db8aee06a47886a82b81af101917a8c21e9da6bd2efb84b",
+     "size": 57074406
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pl__source.spm",
+     "sha256": "3140fe2eddedc897ca27aa2b539b8064f667f82298eb95b2701ee490bde33388",
+     "size": 788226
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pl__vocab.json",
+     "sha256": "2c10cc8737a03e84e1d4145c1e835ebacb930d8f62d81a5377fa6e3fac18b2b1",
+     "size": 1372196
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pl__config.json",
+     "sha256": "7448446c1991a49bd8056650f14f3ec79e350260061ba364500364f6b4c99885",
+     "size": 1395
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pl__generation_config.json",
+     "sha256": "b5957347f6a5e77d947af37d1b990f5299d4d33677d3d4f328dc2c934dcfc734",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pl__LICENSE",
+     "sha256": "46674f29435908a1f41bffe4242abbc6466daee5297a1932b978eeb872bd03ea",
+     "size": 12272
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-pl__README.md",
+     "sha256": "ef7a0fcc3c47e59657b08e1fb99ed474c4a0f74166f6204b4777ed2c6d3f90a7",
+     "size": 3138
+    }
+   ],
+   "source": "en",
+   "target": "pl",
+   "targetToken": ">>pol<<"
+  },
+  "stt-ru": {
+   "type": "speech",
+   "license": "MIT",
+   "attribution": "Russian speech recognition: GigaAM-v3 e2e RNN-T by the GigaChat team, SaluteDevices (MIT), ONNX export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-ru__LICENSE",
+     "sha256": "4faea087a5b1347efa68a4e43b840dfa26f4e8f6ad4674bb0736282fc49f14a1",
+     "size": 2059
+    },
+    {
+     "path": "decoder.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-ru__decoder.onnx",
+     "sha256": "38fc7475443ea2a26f63211ca350f73ac50fff824ab7a3876ee2bd610c53bbc4",
+     "size": 4600132
+    },
+    {
+     "path": "encoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-ru__encoder.int8.onnx",
+     "sha256": "369f35a71bf288d3b8e0391fabd8dba5f2314088d440bca474056b7b4b6e66bf",
+     "size": 224570820
+    },
+    {
+     "path": "joiner.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-ru__joiner.onnx",
+     "sha256": "602ff7017a93311aad34df1437c8d7f49911353c13d6eae7a6ee7b041339465c",
+     "size": 2712896
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-ru__tokens.txt",
+     "sha256": "39abae20e692998290c574e606f11a9edef2902a1995463fcff63d1490cf22b7",
+     "size": 13354
+    }
+   ],
+   "asrKind": "nemo_transducer",
+   "roles": {
+    "encoder": "encoder.int8.onnx",
+    "decoder": "decoder.onnx",
+    "joiner": "joiner.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "ru"
+   ],
+   "languageHint": ""
+  },
+  "mt-ru-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_rus-eng by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ru-en__encoder_model.onnx",
+     "sha256": "c1efd8421dacc0d4ba0dfbfb590b477b7aa5caf0bb2ae96f596e5bc89811fd25",
+     "size": 14980970
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ru-en__decoder_model_merged.onnx",
+     "sha256": "33caa797c9692bb2cb45848f6a6087c5b04f9cdfbe3c40f11d28b4c7f81527a2",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ru-en__source.spm",
+     "sha256": "e684e7edf0c2a134665ac393e09e342175c7f909549e7aa0cbf0ad27390729f1",
+     "size": 956176
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ru-en__vocab.json",
+     "sha256": "3dfeb79f213886598ff9dd61b1ac87f068f1f729f5a4536829c8468994f57eb4",
+     "size": 1455694
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ru-en__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ru-en__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ru-en__LICENSE",
+     "sha256": "4c1be51fd190014a2c2e81be50e586bd41337b3d67ccc4536380abaa2c420e05",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ru-en__README.md",
+     "sha256": "fc644025e5eb203b726ec1029f4c3600caf16ffca101dbae4e693501e2e3d735",
+     "size": 2270
+    }
+   ],
+   "source": "ru",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-ru": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_eng-rus by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ru__encoder_model.onnx",
+     "sha256": "a18e8b8321f2a1431bcc47e6b7634bf02512d45d54e4543b7126253ce97eb8c2",
+     "size": 14980970
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ru__decoder_model_merged.onnx",
+     "sha256": "c81c8140211ad953c69587a98c862d1c1577c3cb04674f4df26603aff109b48a",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ru__source.spm",
+     "sha256": "8282335e85cc36ac5ec1cba7ce18399ce948bf72f3c755b1aced54a13b373c02",
+     "size": 956510
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ru__vocab.json",
+     "sha256": "84bf1b5212f13a1f28df67ad0341e80547689a108d97767087b8711bb311ba36",
+     "size": 1457584
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ru__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ru__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ru__LICENSE",
+     "sha256": "002504d4b4ab3998e4561da7a1bf69c46840e69085b15b9aa663b798518760ca",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ru__README.md",
+     "sha256": "23f8b7264a8ec02c592d0f0e1eb7c231c6118d61b2b91209298f58e08c0c1a90",
+     "size": 2073
+    }
+   ],
+   "source": "en",
+   "target": "ru",
+   "targetToken": null
+  },
+  "stt-nb": {
+   "type": "speech",
+   "license": "Apache-2.0",
+   "attribution": "NB-Whisper Base by National Library of Norway, NB AI-Lab (NB-Whisper), based on OpenAI Whisper (https://huggingface.co/NbAiLab/nb-whisper-base), Apache License 2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-nb__LICENSE",
+     "sha256": "c7946e2f4a18262ccdf8109be8c5c0ad52051f06bed5fdd4a0b7a26c7a51e057",
+     "size": 12201
+    },
+    {
+     "path": "decoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-nb__decoder.int8.onnx",
+     "sha256": "de95cdd987d34ec237d89b56fb0af69d89453b09f2b40e511835dfa17b4b971c",
+     "size": 130659024
+    },
+    {
+     "path": "encoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-nb__encoder.int8.onnx",
+     "sha256": "dd87f3a1cd7217267ddfe3d701828729c0dff0bb66a9f17e26e2708b6baad283",
+     "size": 29104806
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-nb__tokens.txt",
+     "sha256": "b34b360dbb493e781e479794586d661700670d65564001f23024971d1f2fa126",
+     "size": 816730
+    }
+   ],
+   "asrKind": "whisper",
+   "roles": {
+    "encoder": "encoder.int8.onnx",
+    "decoder": "decoder.int8.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "nb"
+   ],
+   "languageHint": "no"
+  },
+  "mt-nb-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-gmq-en by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nb-en__encoder_model.onnx",
+     "sha256": "3b388acb764170a92983d10ccc8342a6a8bc171186dd9053fbd810188a6eb48b",
+     "size": 49609649
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nb-en__decoder_model_merged.onnx",
+     "sha256": "c43d7138d89ac193510d75c6efefc19dc40e179893da61f08c41a95d7de03ed6",
+     "size": 56731782
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nb-en__source.spm",
+     "sha256": "ecb3285be46e1047515fdc47ea65c7343f443cbe9b0b0cc41a9d3e0feb1113c5",
+     "size": 801911
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nb-en__vocab.json",
+     "sha256": "a2724efe6b99d87e7c513b26176216f2839ca6a706bc3799dea0180c75f97a14",
+     "size": 1298867
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nb-en__config.json",
+     "sha256": "081bf1e000c1f350da608b8d44e1bf3e7fc6bd944fa4377a3549bc0ef4e0b9d6",
+     "size": 1395
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nb-en__generation_config.json",
+     "sha256": "a399ae92881b4bf20087a10fc0b657c35dbe543dd80cb1a642122fd32df90061",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nb-en__LICENSE",
+     "sha256": "e91681543b9110f4a11dc6fa55175efe2560af34abeea2d8164653a71ac6b366",
+     "size": 12272
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-nb-en__README.md",
+     "sha256": "f8bb53415c7d164264ae1f0d1077c454a45ea0d7baff90c3a037f4c54cfb00e2",
+     "size": 2262
+    }
+   ],
+   "source": "nb",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-nb": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-en-gmq by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nb__encoder_model.onnx",
+     "sha256": "c5cdb2cf1b101986186234479cd636168646977929f2dd68eacb1a52af7d164d",
+     "size": 49445809
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nb__decoder_model_merged.onnx",
+     "sha256": "6a0d3e2f376dc96d1c3e832725542616274cb2593d4c475b2a84dba2ee568e93",
+     "size": 56566662
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nb__source.spm",
+     "sha256": "f0a2cf42e3ee550c8501bada732d720212ba0156167ca726afb8df552235be0f",
+     "size": 793878
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nb__vocab.json",
+     "sha256": "e0fbda57434e3cced84400c103b6a3989f5003a02f2a4921eb7ec9667bea3111",
+     "size": 1291906
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nb__config.json",
+     "sha256": "579992dffd230d28d73cc61ce878ff0dc33e4c931c23502874f691309ee8f482",
+     "size": 1395
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nb__generation_config.json",
+     "sha256": "72d1c076847ab2aff25483fe99ed684c0d165aed7f5167ddf994be33a0f2cb4d",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nb__LICENSE",
+     "sha256": "0d5af4ec8685e4e91386d937aebcf5a85e4f80eafc7ecefae941fed33a93584d",
+     "size": 12272
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-nb__README.md",
+     "sha256": "d2a1eb66d317e3a019b27f12ee8d150b4e31dfc99a784b664e289e742307568c",
+     "size": 2665
+    }
+   ],
+   "source": "en",
+   "target": "nb",
+   "targetToken": ">>nob<<"
+  },
+  "stt-sv": {
+   "type": "speech",
+   "license": "Apache-2.0",
+   "attribution": "KB-Whisper Base by KBLab, National Library of Sweden (KB-Whisper), based on OpenAI Whisper (https://huggingface.co/KBLab/kb-whisper-base), Apache License 2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-sv__LICENSE",
+     "sha256": "cb4a59c6b9be393ddf1a23682430609bf0e4b9acabdc31a9994b032125213ced",
+     "size": 12189
+    },
+    {
+     "path": "decoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-sv__decoder.int8.onnx",
+     "sha256": "76dab51f3f6ce45a40ede221da752b4246e7d72ad768d1b0bc4b074bbf1d50f9",
+     "size": 130659024
+    },
+    {
+     "path": "encoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-sv__encoder.int8.onnx",
+     "sha256": "26d9671d468a18c845905609e7e9982df15bf9ea25b2b58145cb28e7cfcc2ceb",
+     "size": 29104806
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-sv__tokens.txt",
+     "sha256": "b34b360dbb493e781e479794586d661700670d65564001f23024971d1f2fa126",
+     "size": 816730
+    }
+   ],
+   "asrKind": "whisper",
+   "roles": {
+    "encoder": "encoder.int8.onnx",
+    "decoder": "decoder.int8.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "sv"
+   ],
+   "languageHint": "sv"
+  },
+  "mt-sv-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-sv-en by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-sv-en__encoder_model.onnx",
+     "sha256": "94aa21b5471ecf9ca604491ef9fbed551c5d04d533917811d71eeeefdc65cf4a",
+     "size": 49121200
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-sv-en__decoder_model_merged.onnx",
+     "sha256": "63fb1e1f213c8e4bc5e55de7c93e445d0ffc32a442009bff59b94328c5ad4482",
+     "size": 56239518
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-sv-en__source.spm",
+     "sha256": "845278915ae2a708063110903d08c1e75ebb36607ef16ec9530955e1e95e62b8",
+     "size": 815294
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-sv-en__vocab.json",
+     "sha256": "24e474ba6c733601b3538b4ee05d9db7275caf45a2996c0cce9fb67c70b4a95b",
+     "size": 1291486
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-sv-en__config.json",
+     "sha256": "d47bbf76b7c3b746f3665a75f5da7f4e906cde98ef2c41f16dae46e00e0d2342",
+     "size": 1381
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-sv-en__generation_config.json",
+     "sha256": "c16477ca92f66d0c08b2b963eaf27d02b31945df2b223a61be1636e8fcbe0d23",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-sv-en__LICENSE",
+     "sha256": "c160cc83e0ac4dea085764e03d7e9a2089774cc5f79460b89a435655475fe5e3",
+     "size": 12270
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-sv-en__README.md",
+     "sha256": "1683b7fc7d2b9249d50400f9b775b9d8e5dd426835639bbc3f5c3825b7e4e0e3",
+     "size": 822
+    }
+   ],
+   "source": "sv",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-sv": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-en-sv by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-sv__encoder_model.onnx",
+     "sha256": "13e1c47b83632edd15b0c858ad37a7f409a6b3359e822f1a8bb251d8ead74007",
+     "size": 49121201
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-sv__decoder_model_merged.onnx",
+     "sha256": "d4c5022fc6244bf00cdfb68fa2c1c6e6e6a4711a07915ec8e86b2e0d965776ad",
+     "size": 56239518
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-sv__source.spm",
+     "sha256": "70d69a2c08a7a2c18e4529c8ff62886aad2f8fd0e94fedeafe4bafc47a5f0d69",
+     "size": 790085
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-sv__vocab.json",
+     "sha256": "24e474ba6c733601b3538b4ee05d9db7275caf45a2996c0cce9fb67c70b4a95b",
+     "size": 1291486
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-sv__config.json",
+     "sha256": "02c519c7bad6da35ddab8c0462826387dde4b2109d4f40b066dd4d008bc96259",
+     "size": 1381
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-sv__generation_config.json",
+     "sha256": "cd923f88e9cfd6c6ba4a96232cfd9b18bcf80eead6b478d66b6abe3a45f207db",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-sv__LICENSE",
+     "sha256": "3c48abadc7f3a442cab8e7e25573ef01e9c82e4c17e2d2532b9a5522403bbf7e",
+     "size": 12270
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-sv__README.md",
+     "sha256": "37d0b99b1aa9758a21cd78ace110fbf1ab53398347aab96a7176f0619e8c74c8",
+     "size": 818
+    }
+   ],
+   "source": "en",
+   "target": "sv",
+   "targetToken": null
+  },
+  "stt-da": {
+   "type": "speech",
+   "license": "LicenseRef-NVIDIA-Open-Model-License",
+   "attribution": "NVIDIA Parakeet-RNNT 110M (Danish) by NVIDIA (NeMo) (https://huggingface.co/nvidia/parakeet-rnnt-110m-da-dk), NVIDIA Open Model License Agreement (version released October 24, 2025); converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-da__LICENSE",
+     "sha256": "03f1fe1dce4e4c4eb67c10d63c31bbd22d246d2f0b4d47064471b14b91647857",
+     "size": 11301
+    },
+    {
+     "path": "NOTICE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-da__NOTICE",
+     "sha256": "5fc60716a9ba57f3792e71ed776b4065671c64d0c2db716698f4d646ad833eb1",
+     "size": 67
+    },
+    {
+     "path": "decoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-da__decoder.int8.onnx",
+     "sha256": "20a60b60f230d8e489c802e9d66d482332d30cb3bdf2dee691c1e97a8b58697b",
+     "size": 3328663
+    },
+    {
+     "path": "encoder.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-da__encoder.int8.onnx",
+     "sha256": "55d3d7c3b2ab3f276512dbac794a9468060a8e8d3f864d616db06462c3d0196a",
+     "size": 131201242
+    },
+    {
+     "path": "joiner.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-da__joiner.int8.onnx",
+     "sha256": "6f1cf518aa8215c0131f44b2e14cb8ce7ed57b184de05be6f65b5294128a5a62",
+     "size": 777056
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-da__tokens.txt",
+     "sha256": "f6240fdbb496236106174a08b086a1a59a209aea50c5468b5233f0da9e62780b",
+     "size": 231
+    }
+   ],
+   "asrKind": "nemo_transducer",
+   "roles": {
+    "encoder": "encoder.int8.onnx",
+    "decoder": "decoder.int8.onnx",
+    "joiner": "joiner.int8.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "da"
+   ],
+   "languageHint": ""
+  },
+  "mt-da-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-da-en by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-da-en__encoder_model.onnx",
+     "sha256": "bd607109c10abb6cf6b26f6af1df25beaefcd28a1a94cbc90929fcd05da111e0",
+     "size": 50399152
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-da-en__decoder_model_merged.onnx",
+     "sha256": "0d246c74852e54cc5f1718b24683e33efe3d72df45920f10361de80a879de1d1",
+     "size": 57527454
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-da-en__source.spm",
+     "sha256": "c97d12d35fe411947392d927f0be14985e2ea0e5cf258164db7f37780563ca15",
+     "size": 819654
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-da-en__vocab.json",
+     "sha256": "dda6d56f58cb917811730faaa9f81586ad9604b71b55890cdd3d99fb8376032d",
+     "size": 1382006
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-da-en__config.json",
+     "sha256": "f0ab60be8c9b8f3c09309f4c51fd28ac83568c9bc00b36966f5983d35c1a7e4d",
+     "size": 1381
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-da-en__generation_config.json",
+     "sha256": "65c12de853e579f10148afe4972d24e2e42904ae604c2b30fdcfdc58184c583a",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-da-en__LICENSE",
+     "sha256": "498abd1c17df2cd7509a27c5c8e46396555445c136c5ef0c5316d9f05ee2980a",
+     "size": 12270
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-da-en__README.md",
+     "sha256": "d490321b08fec6f4118a67588d421cc6d801711d0d15588a2d234853ee9ff11b",
+     "size": 818
+    }
+   ],
+   "source": "da",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-da": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-en-da by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-da__encoder_model.onnx",
+     "sha256": "f16c3835785b00d0c2b435f56d99e67351e42c68940e5d7ad5b50d7dcb892c6f",
+     "size": 50399152
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-da__decoder_model_merged.onnx",
+     "sha256": "10f6abda0130d4d04443959714038a7766783892678e898f180099d7bfd80a03",
+     "size": 57527454
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-da__source.spm",
+     "sha256": "08d1d21ea3f6f80f06484db753c1a60238b2acfe4aa0fafd496be869857f697f",
+     "size": 788462
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-da__vocab.json",
+     "sha256": "dda6d56f58cb917811730faaa9f81586ad9604b71b55890cdd3d99fb8376032d",
+     "size": 1382006
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-da__config.json",
+     "sha256": "926209674c35ccc61892ce2c026af4411233f534578add5133842ca0e9d7d943",
+     "size": 1381
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-da__generation_config.json",
+     "sha256": "65c12de853e579f10148afe4972d24e2e42904ae604c2b30fdcfdc58184c583a",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-da__LICENSE",
+     "sha256": "03df86ce804ec21561e1af42710c2139401c6363f2353584fb055dc031b5edf9",
+     "size": 12270
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-da__README.md",
+     "sha256": "b123902453d1d0ad61d0c8f1dbf032083a632fb91b7e93ba49c65a64c612ee0d",
+     "size": 818
+    }
+   ],
+   "source": "en",
+   "target": "da",
+   "targetToken": null
+  },
+  "mt-fi-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-fi-en by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fi-en__encoder_model.onnx",
+     "sha256": "c0a48fbfabc55c24692005ae382e95c9ce993b9610440bc0ab09177879f04002",
+     "size": 50772400
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fi-en__decoder_model_merged.onnx",
+     "sha256": "2591c8977ab6b66ff6594644554bbf4292bff9232105310ccb9702d25ca442eb",
+     "size": 57903618
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fi-en__source.spm",
+     "sha256": "82fcb74f79c5f5b5bf0fe73f7dfb6a646efa50ffb4b2a0cd564a1193c78a032e",
+     "size": 831865
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fi-en__vocab.json",
+     "sha256": "d57a7bc71f655a6d466feb7c5f547fdec978fce756a1b34b864197aa4fa168de",
+     "size": 1377921
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fi-en__config.json",
+     "sha256": "da465a0d1d835acb5a8fe4b9b91fac713c0ea4541d1acc55e7e6fe2387c1fdeb",
+     "size": 1394
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fi-en__generation_config.json",
+     "sha256": "055e5257f80d377f6b991e6e93ae7713ee634bda3ff5e8478903c35d1a8f5600",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fi-en__LICENSE",
+     "sha256": "8eb796d40ef23d7229a02997f47b85768b5b16a5167fc4a92560b43cf9b7a814",
+     "size": 12270
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-fi-en__README.md",
+     "sha256": "a52c9516e42613cf9d12db66d193db38748022ad4478b2e73b3591e7179f273a",
+     "size": 2557
+    }
+   ],
+   "source": "fi",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-fi": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-en-fi by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fi__encoder_model.onnx",
+     "sha256": "2bce8ecaaf64ce4df3121de3cd0a3c6265da8c1e9a2f0b8dc1cef063852db20d",
+     "size": 53507505
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fi__decoder_model_merged.onnx",
+     "sha256": "2955120bcf1894047910dc3fe216203bbce668527c12b6b0c1c74ac82db6e16b",
+     "size": 60660090
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fi__source.spm",
+     "sha256": "412535c7eb38271082f86d9574881af46057dddaf17be876da8021557104a488",
+     "size": 803110
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fi__vocab.json",
+     "sha256": "e54a6bc7501989cb88933482a43a51daf685360f824e9d26e23967e9252a688f",
+     "size": 1592256
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fi__config.json",
+     "sha256": "f574dd86fd2017768d1e24f9028b678a6bf838d34cf9066746e5786a698dedb0",
+     "size": 1361
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fi__generation_config.json",
+     "sha256": "837839ed0534a27084f9b980fc33f47729052dd89cb26cca7ac830765ed30e49",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fi__LICENSE",
+     "sha256": "72173110242b8a758e9a4d9a50f5d48e5fee5859046fd1ece01ebeaca481ccb9",
+     "size": 12270
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-fi__README.md",
+     "sha256": "9f048fc661ca3426ed1d40655ca97b8cc35765306d4d81d0add84ad8593d73dd",
+     "size": 878
+    }
+   ],
+   "source": "en",
+   "target": "fi",
+   "targetToken": null
+  },
+  "stt-sensevoice": {
+   "type": "speech",
+   "license": "LicenseRef-FunASR-Model-License-1.1",
+   "attribution": "Chinese/Japanese/Korean speech recognition: SenseVoiceSmall by FunAudioLLM, Tongyi Speech Team, Alibaba Group (FunASR Model License), ONNX int8 export by the k2-fsa sherpa-onnx project, repackaged by the Sipher project.",
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-sensevoice__LICENSE",
+     "sha256": "831b38d107aa1aa0ef6089016d7fa6d499163b5e026dea9c652eeb652c359d51",
+     "size": 6460
+    },
+    {
+     "path": "model.int8.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-sensevoice__model.int8.onnx",
+     "sha256": "c71f0ce00bec95b07744e116345e33d8cbbe08cef896382cf907bf4b51a2cd51",
+     "size": 239233841
+    },
+    {
+     "path": "tokens.txt",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/stt-sensevoice__tokens.txt",
+     "sha256": "f449eb28dc567533d7fa59be34e2abca8784f771850c78a47fb731a31429a1dc",
+     "size": 315894
+    }
+   ],
+   "asrKind": "sense_voice",
+   "roles": {
+    "model": "model.int8.onnx",
+    "tokens": "tokens.txt"
+   },
+   "languages": [
+    "zh",
+    "ja",
+    "ko"
+   ],
+   "languageHint": ""
+  },
+  "mt-zh-en": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt_tiny_zho-eng by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-zh-en__encoder_model.onnx",
+     "sha256": "9b92735d9418eef9607a62b8de6c38d53d3ce1c1b45ba217426fd1b3ceab6c01",
+     "size": 14980970
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-zh-en__decoder_model_merged.onnx",
+     "sha256": "966be77801908f3da4aa286c3768094a4a28706159a1e671ddf8d1572cc7df97",
+     "size": 11522798
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-zh-en__source.spm",
+     "sha256": "e5528a5c3685d08f8868902d31febeb763eea8519f9997f43b05964b02554640",
+     "size": 755175
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-zh-en__vocab.json",
+     "sha256": "13690d04e27310a43f0d879dfd38823c317e9ac69f436754baffbb0da6fc9dbe",
+     "size": 776356
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-zh-en__config.json",
+     "sha256": "480c811721f0a0dca0aa632ceb566570f06c46d15ad9bbdfcbec58af4734aef0",
+     "size": 957
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-zh-en__generation_config.json",
+     "sha256": "68e3e0677a3852008c48716deb2b498ab259eb824f7225c834c967a0eecdaf2c",
+     "size": 270
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-zh-en__LICENSE",
+     "sha256": "2879ba02be9be72cdf1d61a8dadba6cec560b8ecaabbade7e94438835234815d",
+     "size": 12284
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-zh-en__README.md",
+     "sha256": "682e703b97f590777420c4ce2c0f11bd42e15139fbeb933ce077506681f36950",
+     "size": 2019
+    }
+   ],
+   "source": "zh",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-zh": {
+   "type": "translation",
+   "license": "Apache-2.0",
+   "attribution": "Helsinki-NLP/opus-mt-en-zh by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under Apache-2.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-zh__encoder_model.onnx",
+     "sha256": "25bc148d0a9d4dc41b033f3128fbc22d0e4a5d7e8a948d4c39e8611ab31067da",
+     "size": 53507505
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-zh__decoder_model_merged.onnx",
+     "sha256": "972caa8cd7e50f7e34705597def9dffcb8e5d3a14ba87228852348d0109f81e4",
+     "size": 60660090
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-zh__source.spm",
+     "sha256": "5775ddc9e3ff2fae91554da56468ad35ff56edaba870fea74447bc7234bfdaa8",
+     "size": 806435
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-zh__vocab.json",
+     "sha256": "f1832ca38f7aa158b9a944ff583e4901e6b37d9d4ad9241f03838e636e9cfb03",
+     "size": 1617791
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-zh__config.json",
+     "sha256": "bcae8ed74fed77fb51c58462b62397fee6b1a1a34aece79183a0dd02ad329e71",
+     "size": 1403
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-zh__generation_config.json",
+     "sha256": "837839ed0534a27084f9b980fc33f47729052dd89cb26cca7ac830765ed30e49",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-zh__LICENSE",
+     "sha256": "bd4cee8c347fbc4cc55a185d35765f81fc91512b7047630473363be6a7744ab6",
+     "size": 12270
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-zh__README.md",
+     "sha256": "83eee2a6598751f746a057e10d5c9dfd71d6b0cf0146f9e6c1bb3ebd6e90959b",
+     "size": 2670
+    }
+   ],
+   "source": "en",
+   "target": "zh",
+   "targetToken": ">>cmn_Hans<<"
+  },
+  "mt-ja-en": {
+   "type": "translation",
+   "license": "CC-BY-SA-4.0",
+   "attribution": "Mitsua/elan-mt-bt-ja-en by ELAN MITSUA Project / Abstract Engine, licensed under CC-BY-SA-4.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ja-en__encoder_model.onnx",
+     "sha256": "03cee8abf4eec3e8ce3c3154487f08cd850ad4b537a8b03fb3ee0946cca84715",
+     "size": 36611504
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ja-en__decoder_model_merged.onnx",
+     "sha256": "2abf18574dfbab9e796e19e8cc3befc01a275b754c54db59aa61d1d057152a0a",
+     "size": 43632090
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ja-en__source.spm",
+     "sha256": "a6824c2996a4877cae8a0240f11a112ab0e4ea1f22e54cd42179376fe558f4ff",
+     "size": 792751
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ja-en__vocab.json",
+     "sha256": "f508b75734ee21cf16b3816b7b29dea400f1f5998f47b7695cef1979ca49e106",
+     "size": 881911
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ja-en__config.json",
+     "sha256": "78298efb7b70a119900886b41de089e2543c1234bb7d767defa09ea494cb7ab7",
+     "size": 1075
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ja-en__generation_config.json",
+     "sha256": "5d847b8f088fee7f2093601bdc7734e3204d37ad58dd3e8616e5ef0242774f36",
+     "size": 304
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ja-en__LICENSE",
+     "sha256": "e9feba6a1a5cb52d92934c49a63622ebbd2a4216c00a22a12174e25264864d49",
+     "size": 1023
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ja-en__README.md",
+     "sha256": "f4d4270c9f8f23f66e3fab9b25340d5d1963da2c4ef900fadffd7b9106eb59d0",
+     "size": 7628
+    }
+   ],
+   "source": "ja",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-ja": {
+   "type": "translation",
+   "license": "CC-BY-SA-4.0",
+   "attribution": "Mitsua/elan-mt-bt-en-ja by ELAN MITSUA Project / Abstract Engine, licensed under CC-BY-SA-4.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ja__encoder_model.onnx",
+     "sha256": "e7ead748c1b1e878583670656a46776d8360eda65e58b2f86593ec32ed644f53",
+     "size": 36611504
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ja__decoder_model_merged.onnx",
+     "sha256": "bb6472ac14da456ff4a5eecf2da321f0b478b5b1d796b8d997330f34f49d09d0",
+     "size": 43632090
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ja__source.spm",
+     "sha256": "a6824c2996a4877cae8a0240f11a112ab0e4ea1f22e54cd42179376fe558f4ff",
+     "size": 792751
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ja__vocab.json",
+     "sha256": "f508b75734ee21cf16b3816b7b29dea400f1f5998f47b7695cef1979ca49e106",
+     "size": 881911
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ja__config.json",
+     "sha256": "78298efb7b70a119900886b41de089e2543c1234bb7d767defa09ea494cb7ab7",
+     "size": 1075
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ja__generation_config.json",
+     "sha256": "5d847b8f088fee7f2093601bdc7734e3204d37ad58dd3e8616e5ef0242774f36",
+     "size": 304
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ja__LICENSE",
+     "sha256": "ebb206f957de78b1995e039a52983b6a0d7fa506a62c5d5a637e57b28c2f087b",
+     "size": 1023
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ja__README.md",
+     "sha256": "7363f549ae7ed1e5b3f98351eb902a7639ded56dbe3e69d891a33a58e62fca81",
+     "size": 7669
+    }
+   ],
+   "source": "en",
+   "target": "ja",
+   "targetToken": null
+  },
+  "mt-ko-en": {
+   "type": "translation",
+   "license": "CC-BY-4.0",
+   "attribution": "Helsinki-NLP/opus-mt-tc-big-ko-en by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under CC-BY-4.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__encoder_model.onnx",
+     "sha256": "fa873dc2578551b9f7753b1fb4ea85d3530bc14e3d3896c143aa00607cae9e98",
+     "size": 112923280
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__decoder_model_merged.onnx",
+     "sha256": "e8c9b366aa836f9895f8967ac39386ac6062f0762b8bbd69295cc83129fb095f",
+     "size": 138889760
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__source.spm",
+     "sha256": "bcf0b63c9685de766ab3e10571a9a7f4a38eb39da51a4d64462757051d1986c7",
+     "size": 815483
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__vocab.json",
+     "sha256": "4713a8e5c60395c764d915d2a6eefbf13eeeb3661fef6c2bd0d3025345ed1c9a",
+     "size": 694524
+    },
+    {
+     "path": "target_vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__target_vocab.json",
+     "sha256": "0a5fc83e442a6efed9bba9e0a6cad4542dbcdc182082d39253959bdd5f556c7b",
+     "size": 743503
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__config.json",
+     "sha256": "5364df1626882820628dec67310bb7ca14c8938e9f2b0b7766cf4f051d188413",
+     "size": 1068
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__generation_config.json",
+     "sha256": "95b6219063f279c3b0ee22a19981d1afe6f3f52c16a08453eaddadc51b0ce4ad",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__LICENSE",
+     "sha256": "4f08bc92533a36ee82680cd4fac2dab70c36ffc113dcb4c83db2c7be3963b508",
+     "size": 1071
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-ko-en__README.md",
+     "sha256": "a7128281573f5f758c292bc5bf4bd073c2ee48b21951e6e7368e86daf2fdfb00",
+     "size": 7866
+    }
+   ],
+   "source": "ko",
+   "target": "en",
+   "targetToken": null
+  },
+  "mt-en-ko": {
+   "type": "translation",
+   "license": "CC-BY-4.0",
+   "attribution": "Helsinki-NLP/opus-mt-tc-big-en-ko by Language Technology Research Group at the University of Helsinki (Helsinki-NLP), licensed under CC-BY-4.0; converted to ONNX/int8 by the Sipher project.",
+   "files": [
+    {
+     "path": "encoder_model.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__encoder_model.onnx",
+     "sha256": "947485e42f7589aad9524ca94f1de593463fc2910c8ad4c26bb480b76f0c7ed0",
+     "size": 112923280
+    },
+    {
+     "path": "decoder_model_merged.onnx",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__decoder_model_merged.onnx",
+     "sha256": "bdb457d63b9edfc4053bb4e72c098257e7aefb0b71f86575a3aef47a755e38ff",
+     "size": 138889760
+    },
+    {
+     "path": "source.spm",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__source.spm",
+     "sha256": "3d0591e65c49541d82f48df33d7b322c3d4ee7aa0ee8747f9a7f9355dbf22c95",
+     "size": 789870
+    },
+    {
+     "path": "vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__vocab.json",
+     "sha256": "5f483430a3cc4db5e480d3db2eb60fe31074eb16788be66fc7617f718ec47465",
+     "size": 668925
+    },
+    {
+     "path": "target_vocab.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__target_vocab.json",
+     "sha256": "9e03014979d240f6a6d1c5dc53cd14f4841351326d345d437d48d115eff67b5f",
+     "size": 958876
+    },
+    {
+     "path": "config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__config.json",
+     "sha256": "5364df1626882820628dec67310bb7ca14c8938e9f2b0b7766cf4f051d188413",
+     "size": 1068
+    },
+    {
+     "path": "generation_config.json",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__generation_config.json",
+     "sha256": "95b6219063f279c3b0ee22a19981d1afe6f3f52c16a08453eaddadc51b0ce4ad",
+     "size": 293
+    },
+    {
+     "path": "LICENSE",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__LICENSE",
+     "sha256": "0e1dbe5d69d5ef78cd0589431a4de542ce5c14079e45f45c38067ef21a35730d",
+     "size": 1071
+    },
+    {
+     "path": "README.md",
+     "url": "https://github.com/Eiriksb/Sipher/releases/download/models-v1/mt-en-ko__README.md",
+     "sha256": "6b2480ba58ec6c69d70ebec86dd93261b0a41e20ec816a479334de3606320bcf",
+     "size": 7656
+    }
+   ],
+   "source": "en",
+   "target": "ko",
+   "targetToken": null
+  }
+ },
+ "languages": [
+  {
+   "code": "es",
+   "name": "Español",
+   "englishName": "Spanish",
+   "speech": "stt-es",
+   "toEnglish": "mt-es-en",
+   "fromEnglish": "mt-en-es"
+  },
+  {
+   "code": "de",
+   "name": "Deutsch",
+   "englishName": "German",
+   "speech": "stt-de",
+   "toEnglish": "mt-de-en",
+   "fromEnglish": "mt-en-de"
+  },
+  {
+   "code": "fr",
+   "name": "Français",
+   "englishName": "French",
+   "speech": "stt-fr",
+   "toEnglish": "mt-fr-en",
+   "fromEnglish": "mt-en-fr"
+  },
+  {
+   "code": "it",
+   "name": "Italiano",
+   "englishName": "Italian",
+   "speech": "stt-parakeet-v3",
+   "toEnglish": "mt-it-en",
+   "fromEnglish": "mt-en-it"
+  },
+  {
+   "code": "nl",
+   "name": "Nederlands",
+   "englishName": "Dutch",
+   "speech": "stt-parakeet-v3",
+   "toEnglish": "mt-nl-en",
+   "fromEnglish": "mt-en-nl"
+  },
+  {
+   "code": "pt",
+   "name": "Português",
+   "englishName": "Portuguese",
+   "speech": "stt-parakeet-v3",
+   "toEnglish": "mt-pt-en",
+   "fromEnglish": "mt-en-pt"
+  },
+  {
+   "code": "pl",
+   "name": "Polski",
+   "englishName": "Polish",
+   "speech": "stt-parakeet-v3",
+   "toEnglish": "mt-pl-en",
+   "fromEnglish": "mt-en-pl"
+  },
+  {
+   "code": "ru",
+   "name": "Русский",
+   "englishName": "Russian",
+   "speech": "stt-ru",
+   "toEnglish": "mt-ru-en",
+   "fromEnglish": "mt-en-ru"
+  },
+  {
+   "code": "nb",
+   "name": "Norsk bokmål",
+   "englishName": "Norwegian",
+   "speech": "stt-nb",
+   "toEnglish": "mt-nb-en",
+   "fromEnglish": "mt-en-nb"
+  },
+  {
+   "code": "sv",
+   "name": "Svenska",
+   "englishName": "Swedish",
+   "speech": "stt-sv",
+   "toEnglish": "mt-sv-en",
+   "fromEnglish": "mt-en-sv"
+  },
+  {
+   "code": "da",
+   "name": "Dansk",
+   "englishName": "Danish",
+   "speech": "stt-da",
+   "toEnglish": "mt-da-en",
+   "fromEnglish": "mt-en-da"
+  },
+  {
+   "code": "fi",
+   "name": "Suomi",
+   "englishName": "Finnish",
+   "speech": "stt-parakeet-v3",
+   "toEnglish": "mt-fi-en",
+   "fromEnglish": "mt-en-fi"
+  },
+  {
+   "code": "zh",
+   "name": "中文",
+   "englishName": "Chinese",
+   "speech": "stt-sensevoice",
+   "toEnglish": "mt-zh-en",
+   "fromEnglish": "mt-en-zh"
+  },
+  {
+   "code": "ja",
+   "name": "日本語",
+   "englishName": "Japanese",
+   "speech": "stt-sensevoice",
+   "toEnglish": "mt-ja-en",
+   "fromEnglish": "mt-en-ja"
+  },
+  {
+   "code": "ko",
+   "name": "한국어",
+   "englishName": "Korean",
+   "speech": "stt-sensevoice",
+   "toEnglish": "mt-ko-en",
+   "fromEnglish": "mt-en-ko"
+  }
+ ]
 }

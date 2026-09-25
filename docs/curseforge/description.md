@@ -19,14 +19,20 @@ Everything runs **on your own computer**. No audio ever leaves your PC, and ther
 
 ## Languages
 
-| Language | Captions | Translation |
-|---|---|---|
-| English | built in | built in (pivot language) |
-| Español · Deutsch · Français · Italiano · Nederlands · Português · Polski · Русский | language pack | language pack |
-| Norsk bokmål · Svenska · Dansk · Suomi | language pack | language pack |
-| 中文 · 日本語 · 한국어 | language pack | language pack |
+| Language | Pack size | | Language | Pack size |
+|---|---|---|---|---|
+| English | built in | | Norsk bokmål | 377 MB |
+| Español | 193 MB | | Svenska | 376 MB |
+| Deutsch | 193 MB | | Dansk | 356 MB |
+| Français | 193 MB | | Suomi | 898 MB* |
+| Italiano | 727 MB* | | Русский | 290 MB |
+| Nederlands | 727 MB* | | 中文 | 384 MB |
+| Português | 903 MB* | | 日本語 | 403 MB |
+| Polski | 895 MB* | | 한국어 | 748 MB |
 
-A language pack contains everything you need to *speak* and *read* that language (speech recognition plus translation to and from English). You only need the pack for your own language — Sipher translates everyone else's captions through English. Packs are roughly 100–700 MB depending on the language; the exact size is shown before you download.
+A language pack contains everything you need to *speak* and *read* that language: speech recognition plus translation to and from English. You only need the pack for **your own** language — Sipher translates everyone else's captions through English. The size is shown again before you download.
+
+\* Italian, Dutch, Portuguese, Polish and Finnish share one larger, more accurate European speech model (about 670 MB, downloaded once for all of them). It uses around 1 GB of extra memory while you speak one of those languages.
 
 ## How to use
 
