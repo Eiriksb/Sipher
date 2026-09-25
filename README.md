@@ -53,6 +53,12 @@ on ONNX Runtime Java, running on the *same* ONNX Runtime library that ships with
 ONNX Runtime's sources ([natives/onnxruntime4j_jni](natives/onnxruntime4j_jni)). That keeps the jar at ~90 MB for six
 platforms.
 
+## For mod developers
+
+On the server, Sipher posts `io.github.eiriksb.sipher.api.PlayerCaptionEvent` on `NeoForge.EVENT_BUS` (server thread)
+for every caption a player shares, live and final. It carries the spoken language, the transcript and its English
+translation. [They Will Talk](https://github.com/Eiriksb/they-will-talk) uses it to let villagers hear players.
+
 ## Building
 
 ```bash

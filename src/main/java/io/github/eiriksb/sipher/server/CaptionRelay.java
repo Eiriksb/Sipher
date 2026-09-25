@@ -3,11 +3,13 @@ package io.github.eiriksb.sipher.server;
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
+import io.github.eiriksb.sipher.api.PlayerCaptionEvent;
 import io.github.eiriksb.sipher.config.SipherServerConfig;
 import io.github.eiriksb.sipher.net.CaptionPayload;
 import io.github.eiriksb.sipher.net.CaptionText;
 import io.github.eiriksb.sipher.net.CaptionUpdatePayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.LinkedHashSet;
@@ -23,7 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *     <li>In a group: the group's members. Open groups are also heard by nearby players outside any group.</li>
  *     <li>Otherwise: players in the same dimension within voice range (whisper range while whispering).</li>
  * </ul>
- * Captions are never broadcast to the whole server.
+ * Captions are never broadcast to the whole server. Every accepted caption is also posted as a
+ * {@link PlayerCaptionEvent} for other server mods.
  */
 public final class CaptionRelay {
     private static final Map<UUID, RateLimiter> LIMITERS = new ConcurrentHashMap<>();
@@ -32,9 +35,6 @@ public final class CaptionRelay {
     }
 
     public static void handle(ServerPlayer speaker, CaptionUpdatePayload update) {
-        if (!SipherServerConfig.RELAY_ENABLED.get() || (update.partial() && !SipherServerConfig.RELAY_PARTIALS.get())) {
-            return;
-        }
         RateLimiter limiter = LIMITERS.computeIfAbsent(speaker.getUUID(), id -> new RateLimiter());
         if (!limiter.tryAcquire(SipherServerConfig.MAX_UPDATES_PER_SECOND.get())) {
             return;
@@ -46,8 +46,14 @@ public final class CaptionRelay {
         if (text.isEmpty() && english.isEmpty() && update.partial()) {
             return;
         }
-        CaptionPayload caption = new CaptionPayload(speaker.getUUID(), update.line(), update.partial(),
-                CaptionText.language(update.language()), text, english);
+        String language = CaptionText.language(update.language());
+        // Other server mods get every accepted caption, even when relaying to players is switched off.
+        NeoForge.EVENT_BUS.post(new PlayerCaptionEvent(speaker, update.line(), update.partial(), language, text, english));
+
+        if (!SipherServerConfig.RELAY_ENABLED.get() || (update.partial() && !SipherServerConfig.RELAY_PARTIALS.get())) {
+            return;
+        }
+        CaptionPayload caption = new CaptionPayload(speaker.getUUID(), update.line(), update.partial(), language, text, english);
 
         for (ServerPlayer listener : listeners(speaker)) {
             PacketDistributor.sendToPlayer(listener, caption);
