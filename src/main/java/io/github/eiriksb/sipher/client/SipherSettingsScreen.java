@@ -50,11 +50,11 @@ public final class SipherSettingsScreen extends Screen {
         addRenderableWidget(new ConfigSlider(right, top + ROW * 3, 1000, 30000, SipherClientConfig.BUBBLE_DISPLAY_MS.get(),
                 value -> SipherClientConfig.BUBBLE_DISPLAY_MS.set((int) (Math.round(value / 500) * 500)),
                 value -> Component.translatable("sipher.settings.bubble_time", Math.round(value / 100) / 10.0)));
-        addRenderableWidget(Button.builder(Component.translatable("sipher.settings.languages"), button -> {
-                })
+        addRenderableWidget(Button.builder(Component.translatable("sipher.settings.languages"),
+                        button -> minecraft.setScreen(new LanguagesScreen(this)))
                 .bounds(right, top + ROW * 4, COLUMN_WIDTH, 20)
-                .tooltip(Tooltip.create(Component.translatable("sipher.settings.languages.soon")))
-                .build()).active = false;
+                .tooltip(Tooltip.create(Component.translatable("sipher.settings.languages.tooltip")))
+                .build());
 
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> onClose())
                 .bounds(width / 2 - 100, top + ROW * 7 + 6, 200, 20)
@@ -77,7 +77,8 @@ public final class SipherSettingsScreen extends Screen {
     private static Component status() {
         Component speech = switch (CaptionEngine.state()) {
             case STARTING -> Component.translatable("sipher.status.starting");
-            case READY -> Component.translatable("sipher.status.ready");
+            case READY -> Component.translatable("sipher.status.ready", CaptionEngine.message());
+            case NEEDS_PACK -> Component.translatable("sipher.status.needs_pack", CaptionEngine.message());
             case FAILED -> Component.translatable("sipher.status.failed", CaptionEngine.message());
         };
         Component relay = Component.translatable(CaptionEngine.serverRelays() ? "sipher.status.relay_on" : "sipher.status.relay_off");

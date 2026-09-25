@@ -10,6 +10,8 @@ displayName = "${mod_name}"
 displayURL = "https://github.com/Eiriksb/Sipher"
 authors = "${mod_authors}"
 description = '''${mod_description}'''
+logoFile = "sipher_logo.png"
+logoBlur = false
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"

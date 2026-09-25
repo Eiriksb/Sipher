@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "release": "models-v1",
+  "hosts": ["github.com", "release-assets.githubusercontent.com", "objects.githubusercontent.com"],
+  "components": {},
+  "languages": []
+}
