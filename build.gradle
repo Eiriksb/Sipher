@@ -87,9 +87,18 @@ neoForge {
             client()
             systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
+        // A second player for local multiplayer tests (join a runServer on localhost).
+        client2 {
+            client()
+            gameDirectory = project.file('runs/client2')
+            programArgument '--username'
+            programArgument 'Dev2'
+        }
         server {
             server()
             programArgument '--nogui'
+            // Separate folder so a dev server and a dev client can run side by side.
+            gameDirectory = project.file('runs/server')
         }
     }
 
