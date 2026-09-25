@@ -114,6 +114,7 @@ public final class SpeechPipeline implements AutoCloseable {
         detector.accept(samples);
 
         if (!inUtterance && detector.speaking()) {
+            Sipher.LOGGER.debug("Speech detected (utterance {})", utteranceId + 1);
             inUtterance = true;
             utteranceId++;
             utteranceLength = 0;

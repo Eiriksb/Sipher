@@ -82,7 +82,8 @@ public final class SipherSettingsScreen extends Screen {
             case FAILED -> Component.translatable("sipher.status.failed", CaptionEngine.message());
         };
         Component relay = Component.translatable(CaptionEngine.serverRelays() ? "sipher.status.relay_on" : "sipher.status.relay_off");
-        return Component.empty().append(speech).append(" · ").append(relay);
+        Component microphone = Component.translatable(CaptionEngine.hearingMicrophone() ? "sipher.status.mic_on" : "sipher.status.mic_off");
+        return Component.empty().append(speech).append(" · ").append(microphone).append(" · ").append(relay);
     }
 
     @Override

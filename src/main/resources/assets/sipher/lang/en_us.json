@@ -37,5 +37,7 @@
   "sipher.languages.downloads_off": "Downloads are turned off (allow_downloads in sipher-client.toml).",
   "sipher.languages.footer": "Packs come from %s (GitHub releases): model data only, checked with SHA-256.",
   "sipher.languages.confirm.title": "Download the %s language pack?",
-  "sipher.languages.confirm.body": "%s MB of speech recognition and translation models will be downloaded from %s. The pack contains data files only and is verified before use. Licences: %s."
+  "sipher.languages.confirm.body": "%s MB of speech recognition and translation models will be downloaded from %s. The pack contains data files only and is verified before use. Licences: %s.",
+  "sipher.status.mic_on": "§aHearing you",
+  "sipher.status.mic_off": "Mic silent (voice chat not transmitting)"
 }

@@ -2,6 +2,7 @@ package io.github.eiriksb.sipher.client;
 
 import io.github.eiriksb.sipher.Sipher;
 import io.github.eiriksb.sipher.asr.SpeechDetector;
+import io.github.eiriksb.sipher.audio.MicrophoneProbe;
 import io.github.eiriksb.sipher.asr.SpeechPipeline;
 import io.github.eiriksb.sipher.asr.SpeechRecognizer;
 import io.github.eiriksb.sipher.config.SipherClientConfig;
@@ -59,6 +60,7 @@ public final class CaptionEngine {
     private static volatile String readerLanguage = "en";
     private static BuiltinModels builtin;
     private static long lastPartialSentAt;
+    private static volatile long lastMicrophoneAudio;
 
     private record Speech(String language, SpeechPipeline pipeline, SpeechDetector detector, SpeechRecognizer recognizer,
                           MarianTranslator toEnglish) {
@@ -76,6 +78,11 @@ public final class CaptionEngine {
 
     public static String message() {
         return message;
+    }
+
+    /** Whether Simple Voice Chat delivered microphone audio in the last second (it only does while transmitting). */
+    public static boolean hearingMicrophone() {
+        return System.currentTimeMillis() - lastMicrophoneAudio < 1000;
     }
 
     /** Language packs, or {@code null} while the engine is still starting. */
@@ -116,7 +123,15 @@ public final class CaptionEngine {
             String version = ModList.get().getModContainerById(Sipher.MOD_ID)
                     .map(mod -> mod.getModInfo().getVersion().toString()).orElse("dev");
             packs = new LanguagePacks(catalog, Sipher.directory(), "Sipher/" + version);
+            MicrophoneProbe probe = MicrophoneProbe.create(Sipher.directory());
             SipherVoicechatPlugin.setLocalAudioSink((pcm, whispering) -> {
+                if (probe != null) {
+                    probe.accept(pcm);
+                }
+                if (lastMicrophoneAudio == 0) {
+                    Sipher.LOGGER.info("Receiving microphone audio from Simple Voice Chat ({} samples per frame)", pcm.length);
+                }
+                lastMicrophoneAudio = System.currentTimeMillis();
                 Speech current = speech;
                 if (current != null && SipherClientConfig.CAPTIONS_ENABLED.get()) {
                     current.pipeline().offer(pcm);
@@ -156,6 +171,7 @@ public final class CaptionEngine {
                 if (pack == null || !packs.installed(pack)) {
                     state = State.NEEDS_PACK;
                     message = pack == null ? "Unknown language " + language : pack.englishName() + " language pack not installed";
+                    Sipher.LOGGER.info("Captions paused: {}", message);
                     return;
                 }
                 recognizer = SpeechRecognizer.create(
@@ -182,6 +198,8 @@ public final class CaptionEngine {
             speech = new Speech(language, pipeline, detector, recognizer, toEnglish);
             state = State.READY;
             message = language.equals("en") ? "English" : catalog.language(language).map(Catalog.Language::englishName).orElse(language);
+            Sipher.LOGGER.info("Captions: speaking {} with {} ({}){}", language, recognizer.model().id(), recognizer.model().kind(),
+                    toEnglish == null ? "" : ", translating to English");
         } catch (Exception e) {
             Sipher.LOGGER.error("Could not load speech recognition for {}", language, e);
             fail(e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
@@ -258,15 +276,9 @@ public final class CaptionEngine {
         if (minecraft.player == null) {
             return;
         }
-        UUID self = minecraft.player.getUUID();
         Sipher.LOGGER.debug("Local caption {} ({}, {}): {} | {}", line, partial ? "live" : "final", language, text, english);
-        if (text.isEmpty()) {
-            CaptionStore.remove(self, line);
-            CaptionLog.remove(self, line);
-        } else {
-            CaptionStore.put(self, line, text, partial);
-            CaptionLog.put(self, minecraft.player.getGameProfile().getName(), line, text, partial);
-        }
+        // Our own captions follow the "Captions in" setting just like everyone else's.
+        display(new CaptionPayload(minecraft.player.getUUID(), line, partial, language, text, english));
 
         if (!SipherClientConfig.SHARE_MY_CAPTIONS.get() || !serverRelays()) {
             return;
@@ -288,10 +300,18 @@ public final class CaptionEngine {
         if (minecraft.player == null || caption.speaker().equals(minecraft.player.getUUID())) {
             return;
         }
+        Sipher.LOGGER.debug("Caption from {} line {} ({}, {}): {} | {}", caption.speaker(), caption.line(),
+                caption.partial() ? "live" : "final", caption.language(), caption.text(), caption.english());
+        display(caption);
+    }
+
+    /**
+     * Shows a caption in the reader's language: the original if it is already in that language, otherwise the English
+     * pivot right away, replaced by a translation from English once it is ready. Main thread.
+     */
+    private static void display(CaptionPayload caption) {
         LineKey key = new LineKey(caption.speaker(), caption.line());
         String shown = immediateText(caption);
-        Sipher.LOGGER.debug("Caption from {} line {} ({}, {}): {}", caption.speaker(), caption.line(),
-                caption.partial() ? "live" : "final", caption.language(), shown);
         if (shown.isEmpty()) {
             PENDING.remove(key);
             CaptionStore.remove(caption.speaker(), caption.line());
