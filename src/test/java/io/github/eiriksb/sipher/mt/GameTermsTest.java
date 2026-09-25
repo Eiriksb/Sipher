@@ -31,5 +31,6 @@ class GameTermsTest {
         assertEquals("気をつけて、Creeperが後ろにいるよ。", masked.restore("気をつけて、○1が後ろにいるよ。"));
         assertEquals("Creeperが後ろに", masked.restore("Ｘ１が後ろに"));
         assertEquals("Box1 stays", masked.restore("Box1 stays"));
+        assertEquals("小心,你后面有个Creeper", masked.restore("小心,你后面有个X1"));
     }
 }

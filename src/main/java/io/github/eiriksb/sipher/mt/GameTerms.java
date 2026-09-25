@@ -44,13 +44,14 @@ public final class GameTerms {
     public record Masked(String text, String prefix, List<String> names) {
         /**
          * Puts the names back. Some models rewrite the placeholder letter (ElanMT turns {@code X1} into {@code ○1}) or
-         * use full-width forms, so look-alikes are accepted too.
+         * use full-width forms, so look-alikes are accepted too. Only a Latin letter or digit right before the
+         * placeholder blocks a match ("Box1"), since Chinese and Japanese put no space before it ("有个X1").
          */
         public String restore(String translated) {
             if (names.isEmpty()) {
                 return translated;
             }
-            Matcher matcher = Pattern.compile("(?<![\\p{L}\\p{N}])(?:" + LOOK_ALIKES.get(prefix) + ")\\s?([0-9\uFF10-\uFF19]+)")
+            Matcher matcher = Pattern.compile("(?<![\\p{IsLatin}\\p{N}])(?:" + LOOK_ALIKES.get(prefix) + ")\\s?([0-9\uFF10-\uFF19]+)")
                     .matcher(translated);
             StringBuilder restored = new StringBuilder();
             while (matcher.find()) {
