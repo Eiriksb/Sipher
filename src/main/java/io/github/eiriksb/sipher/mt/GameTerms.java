@@ -3,6 +3,7 @@ package io.github.eiriksb.sipher.mt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +22,11 @@ public final class GameTerms {
             {"Shulker", "Shulkers"}, {"Hoglin", "Hoglins"}, {"Wither", "Withers"}, {"Minecraft", "Minecraft"},
     };
     private static final Pattern PATTERN;
+    private static final Map<String, String> LOOK_ALIKES = Map.of(
+            "X", "X|x|\uFF38|\uFF58|\u00D7|\u25CB|\u3007",
+            "Q", "Q|q|\uFF31|\uFF51",
+            "Z", "Z|z|\uFF3A|\uFF5A",
+            "K", "K|k|\uFF2B|\uFF4B");
 
     static {
         List<String> alternatives = new ArrayList<>();
@@ -36,12 +42,24 @@ public final class GameTerms {
 
     /** Text with game names replaced by placeholders, plus what each placeholder stands for. */
     public record Masked(String text, String prefix, List<String> names) {
+        /**
+         * Puts the names back. Some models rewrite the placeholder letter (ElanMT turns {@code X1} into {@code ○1}) or
+         * use full-width forms, so look-alikes are accepted too.
+         */
         public String restore(String translated) {
-            String result = translated;
-            for (int i = names.size() - 1; i >= 0; i--) {
-                result = result.replace(prefix + (i + 1), names.get(i));
+            if (names.isEmpty()) {
+                return translated;
             }
-            return result;
+            Matcher matcher = Pattern.compile("(?<![\\p{L}\\p{N}])(?:" + LOOK_ALIKES.get(prefix) + ")\\s?([0-9\uFF10-\uFF19]+)")
+                    .matcher(translated);
+            StringBuilder restored = new StringBuilder();
+            while (matcher.find()) {
+                int index = Integer.parseInt(toAsciiDigits(matcher.group(1))) - 1;
+                String replacement = index >= 0 && index < names.size() ? names.get(index) : matcher.group();
+                matcher.appendReplacement(restored, Matcher.quoteReplacement(replacement));
+            }
+            matcher.appendTail(restored);
+            return restored.toString();
         }
     }
 
@@ -67,6 +85,12 @@ public final class GameTerms {
         }
         matcher.appendTail(masked);
         return new Masked(masked.toString(), prefix, List.copyOf(names));
+    }
+
+    private static String toAsciiDigits(String digits) {
+        StringBuilder ascii = new StringBuilder();
+        digits.codePoints().forEach(c -> ascii.append((char) (c >= 0xFF10 && c <= 0xFF19 ? '0' + (c - 0xFF10) : c)));
+        return ascii.toString();
     }
 
     private static String canonical(String match) {

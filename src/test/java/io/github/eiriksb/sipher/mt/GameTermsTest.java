@@ -24,4 +24,12 @@ class GameTermsTest {
         assertEquals("X1 marks the Q1", masked.text());
         assertEquals("X1 marca el Creeper", masked.restore("X1 marca el Q1"));
     }
+
+    @Test
+    void restoresPlaceholdersThatAModelRewrote() {
+        GameTerms.Masked masked = GameTerms.protect("Watch out, there's a creeper behind you!");
+        assertEquals("気をつけて、Creeperが後ろにいるよ。", masked.restore("気をつけて、○1が後ろにいるよ。"));
+        assertEquals("Creeperが後ろに", masked.restore("Ｘ１が後ろに"));
+        assertEquals("Box1 stays", masked.restore("Box1 stays"));
+    }
 }
