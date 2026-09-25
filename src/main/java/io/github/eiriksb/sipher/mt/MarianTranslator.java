@@ -99,19 +99,21 @@ public final class MarianTranslator implements AutoCloseable {
     }
 
     /**
-     * Translates text sentence by sentence (OPUS-MT tends to drop sentences when given several at once).
+     * Translates text sentence by sentence (OPUS-MT tends to drop sentences when given several at once), keeping
+     * Minecraft names such as Creeper intact (see {@link GameTerms}).
      *
      * @param targetToken target language token for multilingual models, such as {@code >>nob<<}; {@code null} if none
      */
     public synchronized String translate(String text, String targetToken) throws OrtException {
+        GameTerms.Masked masked = GameTerms.protect(text);
         List<String> translated = new ArrayList<>();
-        for (String sentence : sentences(text)) {
+        for (String sentence : sentences(masked.text())) {
             String result = translateSentence(sentence, targetToken);
             if (!result.isEmpty()) {
                 translated.add(result);
             }
         }
-        return String.join(" ", translated);
+        return masked.restore(String.join(" ", translated));
     }
 
     /** Translates the text as a single unit, without sentence splitting. */
