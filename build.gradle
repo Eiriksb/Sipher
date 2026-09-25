@@ -278,6 +278,11 @@ tasks.named('test', Test) {
     if (project.hasProperty('marianTestModel')) {
         systemProperty 'sipher.test.marian', file(project.property('marianTestModel')).absolutePath
     }
+    // Optional: -PpacksDir=.cache/packs/out [-PpacksAudio=.cache/packs/work] runs every locally built language pack.
+    if (project.hasProperty('packsDir')) {
+        systemProperty 'sipher.test.packs', file(project.property('packsDir')).absolutePath
+        systemProperty 'sipher.test.packsAudio', file(project.findProperty('packsAudio') ?: project.property('packsDir')).absolutePath
+    }
 }
 
 idea {
