@@ -22,7 +22,8 @@ the game.
 ## Privacy and network use
 
 - **No audio ever leaves your computer.** Speech recognition runs locally; the server only ever receives caption text,
-  and only when *Share my captions* is on.
+  and only when *Share my captions* is on. Server mods can also receive the captions you share, for example to let
+  villagers hear you (see [For mod developers](#for-mod-developers)).
 - **Nothing is downloaded automatically.** The mod jar contains everything needed for English. Optional language packs
   (speech and translation models) are downloaded only when you click *Download* on a specific pack in the in-game
   *Languages* screen, which first shows the size, the source and the licence. Packs are data files only (model weights

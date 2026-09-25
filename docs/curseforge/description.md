@@ -47,6 +47,7 @@ Please read this — it is exactly what Sipher does.
 
 - **Your voice stays on your computer.** Audio is transcribed locally and never sent anywhere by Sipher.
 - **Caption text** is sent to the server you are playing on — only when the server has Sipher and *Share my captions* is on — and the server forwards it only to players who can hear you on voice chat.
+- **Server mods can also receive the captions you share**, for example to let villagers hear you. Turn off *Share my captions* to keep your captions on your own screen.
 - **Nothing is downloaded automatically.** The mod file contains everything needed for English. Language packs are downloaded **only when you click *Download*** on a specific pack. Before downloading, Sipher shows the pack's size, where it comes from and its licences.
 - **Language packs contain data only** — machine-learning model weights, vocabularies and licence texts. They never contain code or programs: all code, including native libraries, is inside the mod file you install from CurseForge. The downloader refuses any other kind of file.
 - Packs are downloaded over HTTPS from this project's GitHub releases and checked against SHA-256 checksums built into the mod before they are used. Files are stored in `.minecraft/sipher/models/`.
