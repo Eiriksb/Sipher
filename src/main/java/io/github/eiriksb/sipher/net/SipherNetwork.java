@@ -8,6 +8,10 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import java.util.function.Consumer;
 
 public final class SipherNetwork {
+    /**
+     * Never change this within a major version: NeoForge refuses the connection when both sides have the channel with
+     * different versions, even though it is optional. Add new payload types instead (see docs/COMPATIBILITY.md).
+     */
     private static final String PROTOCOL = "1";
 
     /** Set on the physical client; the dedicated server has no caption display. */
