@@ -30,13 +30,15 @@ checksum of every file.
   version. Older jars keep downloading from the release they know.
 - A pack's language code and component ids stay the same, so installed packs keep working after an update.
 
-## `PlayerCaptionEvent`
+## The API (`PlayerCaptionEvent`, `SipherCaptions`)
 
-`io.github.eiriksb.sipher.api.PlayerCaptionEvent` is Sipher's public API for server mods (for example
+The `io.github.eiriksb.sipher.api` package is Sipher's public API for server mods (for example
 [They Will Talk](https://github.com/Eiriksb/they-will-talk)).
 
-- Within 1.x, existing methods keep their names, types and meaning. When it's posted also stays the same: on the
-  server thread, for every caption the server accepts, whether or not relaying to players is enabled.
+- Within 1.x, existing methods keep their names, types and meaning. When `PlayerCaptionEvent` is posted also stays the
+  same: on the server thread, for every caption the server accepts, whether or not relaying to players is enabled.
+- `SipherCaptions.show` sends the existing `CaptionPayload` with the entity as the speaker, so it works with every 1.x
+  client: clients before bubbles for non-player entities keep the caption in their transcript only.
 - New information may be added as new methods. Nothing is removed or renamed before 2.0.
 - Everything outside the `api` package is internal and may change in any release.
 

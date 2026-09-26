@@ -11,14 +11,14 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.EntityAttachment;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** Draws caption lines above a player's name tag, in the name tag's coordinate space. */
+/** Draws caption lines above an entity's (usually a player's) name tag, in the name tag's coordinate space. */
 public final class BubbleRenderer {
     private static final int LINE_SPACING = 12;
     private static final int PADDING_X = 4;
@@ -29,15 +29,15 @@ public final class BubbleRenderer {
     private BubbleRenderer() {
     }
 
-    public static void render(PoseStack pose, MultiBufferSource buffers, Player player, List<CaptionStore.View> captions,
+    public static void render(PoseStack pose, MultiBufferSource buffers, Entity entity, List<CaptionStore.View> captions,
                               Font font, int packedLight, float partialTick) {
         List<RenderedLine> lines = layout(captions, font);
         if (lines.isEmpty()) {
             return;
         }
 
-        Vec3 anchor = player.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, player.getViewYRot(partialTick));
-        double y = anchor == null ? player.getBbHeight() + 0.5 : anchor.y + 0.5;
+        Vec3 anchor = entity.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, entity.getViewYRot(partialTick));
+        double y = anchor == null ? entity.getBbHeight() + 0.5 : anchor.y + 0.5;
 
         pose.pushPose();
         pose.translate(anchor == null ? 0 : anchor.x, y, anchor == null ? 0 : anchor.z);
