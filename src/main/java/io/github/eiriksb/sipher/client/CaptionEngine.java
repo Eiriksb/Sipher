@@ -280,7 +280,8 @@ public final class CaptionEngine {
         // Our own captions follow the "Captions in" setting just like everyone else's.
         display(new CaptionPayload(minecraft.player.getUUID(), line, partial, language, text, english));
 
-        if (!SipherClientConfig.SHARE_MY_CAPTIONS.get() || !serverRelays()) {
+        // Nothing is shared before the player has chosen on the welcome screen.
+        if (!SipherClientConfig.WELCOME_SEEN.get() || !SipherClientConfig.SHARE_MY_CAPTIONS.get() || !serverRelays()) {
             return;
         }
         long now = System.currentTimeMillis();

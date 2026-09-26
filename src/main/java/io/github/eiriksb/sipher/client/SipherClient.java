@@ -6,6 +6,8 @@ import io.github.eiriksb.sipher.config.SipherClientConfig;
 import io.github.eiriksb.sipher.net.SipherNetwork;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -29,7 +31,11 @@ public final class SipherClient {
     private static final KeyMapping OPEN_SETTINGS = new KeyMapping(
             "key.sipher.settings", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_O, "key.categories.sipher");
 
+    /** The welcome screen is offered once per game session at most, even if something else closes it. */
+    private static boolean welcomeOffered;
+
     public SipherClient(IEventBus modBus, ModContainer container) {
+        Diagnostics.install();
         container.registerExtensionPoint(IConfigScreenFactory.class, (mod, parent) -> new SipherSettingsScreen(parent));
         SipherNetwork.setClientHandler(CaptionEngine::remoteCaption);
 
@@ -40,6 +46,11 @@ public final class SipherClient {
         NeoForge.EVENT_BUS.addListener(SipherClient::onClientTick);
         NeoForge.EVENT_BUS.addListener(SipherClient::onRenderNameTag);
         NeoForge.EVENT_BUS.addListener(SipherClient::onLoggingOut);
+        NeoForge.EVENT_BUS.addListener((ScreenEvent.Opening event) -> {
+            if (event.getNewScreen() instanceof TitleScreen title && shouldWelcome()) {
+                event.setNewScreen(new WelcomeScreen(title));
+            }
+        });
         NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre event) -> {
             if (TranscriptOverlay.mousePressed(event.getMouseX(), event.getMouseY(), event.getButton())) {
                 event.setCanceled(true);
@@ -64,7 +75,24 @@ public final class SipherClient {
                 minecraft.setScreen(new SipherSettingsScreen(null));
             }
         }
+        // Players who skip the title screen (quick play, direct connect) see it when the world is ready.
+        if (minecraft.player != null && minecraft.screen == null && shouldWelcome()) {
+            minecraft.setScreen(new WelcomeScreen(null));
+        }
         CaptionStore.prune();
+    }
+
+    private static boolean shouldWelcome() {
+        if (welcomeOffered || SipherClientConfig.WELCOME_SEEN.get()) {
+            return false;
+        }
+        welcomeOffered = true;
+        return true;
+    }
+
+    /** The key that opens Sipher's settings, as the player has bound it. */
+    static Component settingsKey() {
+        return OPEN_SETTINGS.getTranslatedKeyMessage();
     }
 
     private static void onRenderNameTag(RenderNameTagEvent event) {

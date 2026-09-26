@@ -259,6 +259,17 @@ tasks.named('processResources', ProcessResources) {
             onnxruntime_java_version: onnxruntime_java_version,
     ]
     inputs.properties replaceProperties
+
+    // Minecraft falls back to en_us, not to the main language, so regional variants get a copy of the main translation.
+    [es_es: ['es_ar', 'es_cl', 'es_ec', 'es_mx', 'es_uy', 'es_ve'], de_de: ['de_at', 'de_ch'], fr_fr: ['fr_ca', 'fr_ch'],
+     nl_nl: ['nl_be'], pt_br: ['pt_pt'], no_no: ['nn_no']].each { main, variants ->
+        variants.each { variant ->
+            from("src/main/resources/assets/sipher/lang/${main}.json") {
+                into 'assets/sipher/lang'
+                rename { "${variant}.json" }
+            }
+        }
+    }
     filesMatching(['META-INF/neoforge.mods.toml', 'sipher/build.properties']) {
         expand replaceProperties
     }
@@ -283,6 +294,7 @@ tasks.named('test', Test) {
     // Integration tests that need the natives read them from the processed resources.
     dependsOn 'processResources'
     systemProperty 'sipher.test.dir', layout.buildDirectory.dir('test-sipher').get().asFile.absolutePath
+    systemProperty 'sipher.test.lang', file('src/main/resources/assets/sipher/lang').absolutePath
     // Optional: -PmarianTestModel=<dir> runs the translation test against an exported OPUS-MT model.
     if (project.hasProperty('marianTestModel')) {
         systemProperty 'sipher.test.marian', file(project.property('marianTestModel')).absolutePath

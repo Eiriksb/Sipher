@@ -12,6 +12,7 @@ public final class SipherClientConfig {
     public static final ModConfigSpec.IntValue PARTIAL_INTERVAL_MS;
     public static final ModConfigSpec.ConfigValue<String> SPOKEN_LANGUAGE;
     public static final ModConfigSpec.ConfigValue<String> READING_LANGUAGE;
+    public static final ModConfigSpec.BooleanValue WELCOME_SEEN;
 
     public static final ModConfigSpec.BooleanValue SHOW_OWN_BUBBLES;
     public static final ModConfigSpec.BooleanValue SHOW_OTHER_BUBBLES;
@@ -49,6 +50,8 @@ public final class SipherClientConfig {
                 .define("spoken_language", "en");
         READING_LANGUAGE = builder.comment("Language you want to read other players' captions in.")
                 .define("reading_language", "en");
+        WELCOME_SEEN = builder.comment("Whether the welcome screen has been shown. Your captions are never shared before it has. Modpacks may set this to true to skip it.")
+                .define("welcome_seen", false);
         builder.pop();
 
         builder.push("bubbles");

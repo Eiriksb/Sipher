@@ -1,0 +1,56 @@
+name: Bug report
+description: Something doesn't work, crashes or looks wrong.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please don't paste captions or anything private: this issue is public.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we see it happen?
+      placeholder: |
+        1. Join a server with Sipher
+        2. Speak Norwegian with push-to-talk
+        3. ...
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where is Sipher installed?
+      options:
+        - Singleplayer
+        - My client only (server without Sipher)
+        - Client and server
+        - Dedicated server only
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: >
+        In game, press **O** (Sipher settings), click **Copy diagnostics** and paste here. It lists versions, your
+        system, languages and recent Sipher errors, but no captions or player names.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or crash report
+      description: >
+        If the game crashed, attach the crash report from `crash-reports/`. Otherwise `logs/latest.log`, or
+        `logs/debug.log` for speech problems. Drag the file into this box.
+  - type: textarea
+    id: mods
+    attributes:
+      label: Other mods or modpack
+      description: The modpack name and version, or other mods that might be involved (shaders, voice chat add-ons…).

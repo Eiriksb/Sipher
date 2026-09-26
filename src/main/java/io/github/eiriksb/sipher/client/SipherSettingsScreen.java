@@ -6,6 +6,7 @@ import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -55,10 +56,21 @@ public final class SipherSettingsScreen extends Screen {
                 .bounds(right, top + ROW * 4, COLUMN_WIDTH, 20)
                 .tooltip(Tooltip.create(Component.translatable("sipher.settings.languages.tooltip")))
                 .build());
+        addRenderableWidget(Button.builder(Component.translatable("sipher.settings.diagnostics"), button -> copyDiagnostics())
+                .bounds(right, top + ROW * 5, COLUMN_WIDTH, 20)
+                .tooltip(Tooltip.create(Component.translatable("sipher.settings.diagnostics.tooltip")))
+                .build());
 
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> onClose())
                 .bounds(width / 2 - 100, top + ROW * 7 + 6, 200, 20)
                 .build());
+    }
+
+    private void copyDiagnostics() {
+        minecraft.keyboardHandler.setClipboard(Diagnostics.report());
+        SystemToast.addOrUpdate(minecraft.getToasts(), SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
+                Component.translatable("sipher.settings.diagnostics.copied"),
+                Component.translatable("sipher.settings.diagnostics.copied.detail"));
     }
 
     private void toggle(int x, int y, String key, ModConfigSpec.BooleanValue value) {

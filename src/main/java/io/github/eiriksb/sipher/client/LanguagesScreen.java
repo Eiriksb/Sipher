@@ -4,6 +4,7 @@ import io.github.eiriksb.sipher.Sipher;
 import io.github.eiriksb.sipher.config.SipherClientConfig;
 import io.github.eiriksb.sipher.models.Catalog;
 import io.github.eiriksb.sipher.models.LanguagePacks;
+import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -105,22 +106,30 @@ public final class LanguagesScreen extends Screen {
         minecraft.setScreen(parent);
     }
 
-    private static String megabytes(long bytes) {
+    static String megabytes(long bytes) {
         return String.valueOf(Math.max(1, Math.round(bytes / 1_000_000.0)));
     }
 
     private void confirmDownload(Catalog.Language language) {
+        minecraft.setScreen(downloadConfirmation(language, accepted -> minecraft.setScreen(this)));
+    }
+
+    /**
+     * Asks before downloading a pack, showing its size, source and licences, and starts the download if the player
+     * agrees. Every download in Sipher goes through this screen.
+     */
+    static ConfirmScreen downloadConfirmation(Catalog.Language language, BooleanConsumer then) {
         LanguagePacks packs = CaptionEngine.packs();
         String licences = language.components().stream().distinct()
                 .map(id -> packs.catalog().component(id).license()).distinct().collect(Collectors.joining(", "));
-        minecraft.setScreen(new ConfirmScreen(accepted -> {
+        return new ConfirmScreen(accepted -> {
             if (accepted) {
                 packs.install(language, installed -> CaptionEngine.reconfigure());
             }
-            minecraft.setScreen(this);
+            then.accept(accepted);
         }, Component.translatable("sipher.languages.confirm.title", language.name()),
                 Component.translatable("sipher.languages.confirm.body", megabytes(packs.remainingBytes(language)), SOURCE, licences),
-                Component.translatable("sipher.languages.download"), Component.translatable("gui.cancel")));
+                Component.translatable("sipher.languages.download"), Component.translatable("gui.cancel"));
     }
 
     private final class PackList extends ContainerObjectSelectionList<PackEntry> {
