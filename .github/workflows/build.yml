@@ -81,6 +81,13 @@ jobs:
           GH_REPO: ${{ github.repository }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
+          # Runs can finish out of order when several pull requests merge at once. Only the commit that is still the
+          # head of main may replace the build (GitHub also refuses to tag an older commit whose workflows differ).
+          head="$(gh api "repos/$GH_REPO/commits/main" --jq .sha)"
+          if [ "$head" != "$GITHUB_SHA" ]; then
+            echo "main has moved on to ${head::7}; that run publishes the development build."
+            exit 0
+          fi
           short="${GITHUB_SHA::7}"
           for jar in dist/*.jar; do mv "$jar" "${jar%.jar}-${short}.jar"; done
           {
