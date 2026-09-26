@@ -59,8 +59,13 @@ platforms.
 
 On the server, Sipher posts `io.github.eiriksb.sipher.api.PlayerCaptionEvent` on `NeoForge.EVENT_BUS` (server thread)
 for every caption a player shares, live and final. It carries the spoken language, the transcript and its English
-translation. [They Will Talk](https://github.com/Eiriksb/they-will-talk) uses it to let villagers hear players. The event
-stays compatible within a major version; see [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
+translation. [They Will Talk](https://github.com/Eiriksb/they-will-talk) uses it to let villagers hear players.
+
+`io.github.eiriksb.sipher.api.SipherCaptions.show(...)` goes the other way: it shows a caption for any entity (a
+talking NPC) to the players you choose, as a bubble above the entity and in their transcript, translated into each
+player's reading language like a player's caption. They Will Talk uses it for what villagers say.
+
+Both stay compatible within a major version; see [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
 ## Building
 

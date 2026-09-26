@@ -8,7 +8,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -95,25 +95,28 @@ public final class SipherClient {
         return OPEN_SETTINGS.getTranslatedKeyMessage();
     }
 
+    /** Bubbles above players, and above any other entity a server mod sends captions for (SipherCaptions). */
     private static void onRenderNameTag(RenderNameTagEvent event) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (!(event.getEntity() instanceof Player player) || minecraft.player == null || player.isInvisibleTo(minecraft.player)) {
+        Entity entity = event.getEntity();
+        if (minecraft.player == null || entity.isInvisibleTo(minecraft.player)) {
             return;
         }
-        boolean self = player == minecraft.player;
+        boolean self = entity == minecraft.player;
         if (self ? !SipherClientConfig.SHOW_OWN_BUBBLES.get() || minecraft.options.getCameraType().isFirstPerson()
                 : !SipherClientConfig.SHOW_OTHER_BUBBLES.get()) {
             return;
         }
-        double maxDistance = SipherClientConfig.BUBBLE_MAX_DISTANCE.get();
-        if (minecraft.player.distanceToSqr(player) > maxDistance * maxDistance) {
+        List<CaptionStore.View> captions = CaptionStore.lines(entity.getUUID());
+        if (captions.isEmpty()) {
             return;
         }
-        List<CaptionStore.View> captions = CaptionStore.lines(player.getUUID());
-        if (!captions.isEmpty()) {
-            BubbleRenderer.render(event.getPoseStack(), event.getMultiBufferSource(), player, captions,
-                    minecraft.font, event.getPackedLight(), event.getPartialTick());
+        double maxDistance = SipherClientConfig.BUBBLE_MAX_DISTANCE.get();
+        if (minecraft.player.distanceToSqr(entity) > maxDistance * maxDistance) {
+            return;
         }
+        BubbleRenderer.render(event.getPoseStack(), event.getMultiBufferSource(), entity, captions,
+                minecraft.font, event.getPackedLight(), event.getPartialTick());
     }
 
     private static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {

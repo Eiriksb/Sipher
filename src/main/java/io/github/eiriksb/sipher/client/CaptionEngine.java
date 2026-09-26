@@ -17,6 +17,7 @@ import io.github.eiriksb.sipher.voice.SipherVoicechatPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -352,7 +353,7 @@ public final class CaptionEngine {
 
     private static void show(CaptionPayload caption, String text) {
         CaptionStore.put(caption.speaker(), caption.line(), text, caption.partial());
-        CaptionLog.put(caption.speaker(), playerName(caption.speaker()), caption.line(), text, caption.partial());
+        CaptionLog.put(caption.speaker(), speakerName(caption.speaker()), caption.line(), text, caption.partial());
     }
 
     /** What to show right away: the original in the reader's language, otherwise the English pivot. */
@@ -374,10 +375,22 @@ public final class CaptionEngine {
         return caption.language().equals("en") ? caption.text() : null;
     }
 
-    private static String playerName(UUID player) {
-        ClientPacketListener connection = Minecraft.getInstance().getConnection();
-        PlayerInfo info = connection == null ? null : connection.getPlayerInfo(player);
-        return info == null ? "?" : info.getProfile().getName();
+    /** A player's name, or the name of another entity a server mod sends captions for (a talking villager). */
+    private static String speakerName(UUID speaker) {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientPacketListener connection = minecraft.getConnection();
+        PlayerInfo info = connection == null ? null : connection.getPlayerInfo(speaker);
+        if (info != null) {
+            return info.getProfile().getName();
+        }
+        if (minecraft.level != null) {
+            for (Entity entity : minecraft.level.entitiesForRendering()) {
+                if (entity.getUUID().equals(speaker)) {
+                    return entity.getDisplayName().getString();
+                }
+            }
+        }
+        return "?";
     }
 
     private static ExecutorService daemonExecutor(String name) {
