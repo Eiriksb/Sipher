@@ -12,21 +12,17 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Forwards a player's captions to exactly the players who can hear that player on Simple Voice Chat.
- *
- * <ul>
- *     <li>In a group: the group's members. Open groups are also heard by nearby players outside any group.</li>
- *     <li>Otherwise: players in the same dimension within voice range (whisper range while whispering).</li>
- * </ul>
- * Captions are never broadcast to the whole server. Every accepted caption is also posted as a
- * {@link PlayerCaptionEvent} for other server mods.
+ * Forwards a player's captions to exactly the players who can hear that player on Simple Voice Chat (see
+ * {@link CaptionRouting}) and who have Sipher. Captions are never broadcast to the whole server. Every accepted caption
+ * is also posted as a {@link PlayerCaptionEvent} for other server mods.
  */
 public final class CaptionRelay {
     private static final Map<UUID, RateLimiter> LIMITERS = new ConcurrentHashMap<>();
@@ -56,7 +52,10 @@ public final class CaptionRelay {
         CaptionPayload caption = new CaptionPayload(speaker.getUUID(), update.line(), update.partial(), language, text, english);
 
         for (ServerPlayer listener : listeners(speaker)) {
-            PacketDistributor.sendToPlayer(listener, caption);
+            // NeoForge refuses to send a payload to a client without the channel: players without Sipher get nothing.
+            if (listener.connection.hasChannel(CaptionPayload.TYPE)) {
+                PacketDistributor.sendToPlayer(listener, caption);
+            }
         }
     }
 
@@ -66,56 +65,47 @@ public final class CaptionRelay {
     }
 
     static Set<ServerPlayer> listeners(ServerPlayer speaker) {
-        Set<ServerPlayer> listeners = new LinkedHashSet<>();
         VoicechatServerApi api = VoiceState.api();
-        if (api == null) {
-            addNearby(listeners, speaker, SipherServerConfig.FALLBACK_RANGE.get(), false);
-            listeners.remove(speaker);
-            return listeners;
+        List<CaptionRouting.Voice<ServerPlayer>> players = new ArrayList<>();
+        for (ServerPlayer player : speaker.server.getPlayerList().getPlayers()) {
+            players.add(voice(api, player));
         }
+        return CaptionRouting.listeners(voice(api, speaker), players, range(api, speaker));
+    }
 
-        VoicechatConnection connection = api.getConnectionOf(speaker.getUUID());
-        Group group = connection == null ? null : connection.getGroup();
-        if (group != null) {
-            for (ServerPlayer player : speaker.server.getPlayerList().getPlayers()) {
-                VoicechatConnection other = api.getConnectionOf(player.getUUID());
-                Group otherGroup = other == null ? null : other.getGroup();
-                if (otherGroup != null && otherGroup.getId().equals(group.getId())) {
-                    listeners.add(player);
+    private static CaptionRouting.Voice<ServerPlayer> voice(VoicechatServerApi api, ServerPlayer player) {
+        CaptionRouting.Group group = null;
+        // Without the voice chat server (not started yet, or disabled) fall back to plain proximity.
+        boolean listening = api == null;
+        if (api != null) {
+            VoicechatConnection connection = api.getConnectionOf(player.getUUID());
+            if (connection != null) {
+                listening = connection.isConnected() && !connection.isDisabled();
+                Group voiceGroup = connection.getGroup();
+                if (voiceGroup != null) {
+                    group = new CaptionRouting.Group(voiceGroup.getId(), groupType(voiceGroup.getType()));
                 }
             }
-            if (group.getType() == Group.Type.OPEN) {
-                addNearby(listeners, speaker, range(api, speaker), true);
-            }
-        } else {
-            addNearby(listeners, speaker, range(api, speaker), false);
         }
-        listeners.remove(speaker);
-        return listeners;
+        return new CaptionRouting.Voice<>(player, player.level().dimension(), player.getX(), player.getY(), player.getZ(),
+                group, listening);
+    }
+
+    private static CaptionRouting.GroupType groupType(Group.Type type) {
+        if (type == Group.Type.OPEN) {
+            return CaptionRouting.GroupType.OPEN;
+        }
+        return type == Group.Type.ISOLATED ? CaptionRouting.GroupType.ISOLATED : CaptionRouting.GroupType.NORMAL;
     }
 
     private static double range(VoicechatServerApi api, ServerPlayer speaker) {
+        if (api == null) {
+            return SipherServerConfig.FALLBACK_RANGE.get();
+        }
         if (VoiceState.whispering(speaker.getUUID())) {
             return api.getServerConfig().getDouble("whisper_distance", api.getVoiceChatDistance() / 2);
         }
         return api.getVoiceChatDistance();
-    }
-
-    private static void addNearby(Set<ServerPlayer> listeners, ServerPlayer speaker, double range, boolean ungroupedOnly) {
-        VoicechatServerApi api = VoiceState.api();
-        double rangeSquared = range * range;
-        for (ServerPlayer player : speaker.serverLevel().players()) {
-            if (player.distanceToSqr(speaker) > rangeSquared) {
-                continue;
-            }
-            if (ungroupedOnly && api != null) {
-                VoicechatConnection other = api.getConnectionOf(player.getUUID());
-                if (other != null && other.isInGroup()) {
-                    continue;
-                }
-            }
-            listeners.add(player);
-        }
     }
 
     /** Token bucket: a steady {@code perSecond} with bursts of twice that. */
