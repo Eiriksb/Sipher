@@ -6,8 +6,9 @@ Sipher turns what players say on voice chat into captions: bubbles above their h
 runs on your own computer. English works out of the box; other languages are optional packs you download from inside
 the game.
 
-> **Status:** early development (0.1). English captions, translation and 15 downloadable language packs work end to
-> end in tests; in-game testing is ongoing — see [docs/PLAN.md](docs/PLAN.md).
+> **Status:** beta (0.1). English captions, translation and 15 downloadable language packs work end to end in tests;
+> real-world testing is ongoing. What is left before 1.0 is tracked in the
+> [1.0 milestone](https://github.com/Eiriksb/Sipher/milestone/1).
 
 ## Features
 
@@ -58,7 +59,8 @@ platforms.
 
 On the server, Sipher posts `io.github.eiriksb.sipher.api.PlayerCaptionEvent` on `NeoForge.EVENT_BUS` (server thread)
 for every caption a player shares, live and final. It carries the spoken language, the transcript and its English
-translation. [They Will Talk](https://github.com/Eiriksb/they-will-talk) uses it to let villagers hear players.
+translation. [They Will Talk](https://github.com/Eiriksb/they-will-talk) uses it to let villagers hear players. The event
+stays compatible within a major version; see [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
 ## Building
 
@@ -72,6 +74,8 @@ pre-release: CI replaces it after every merge that passes on all six platforms. 
 Gradle downloads JDK 21 if needed. The build fetches sherpa-onnx's release jars and the built-in models, and verifies
 all of them against pinned SHA-256 checksums (`gradle/third-party-checksums.txt` and `build.gradle`). The jar is
 written to `build/libs/`. `./gradlew runClient` starts a development client with Simple Voice Chat.
+
+Releases are published by pushing a version tag; see [docs/RELEASING.md](docs/RELEASING.md).
 
 The ONNX Runtime JNI glue binaries are committed; rebuild them with `natives/onnxruntime4j_jni/build.sh` (needs a JDK
 and [zig](https://ziglang.org) 0.16). CI checks that the committed binaries are reproducible.

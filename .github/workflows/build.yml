@@ -3,6 +3,7 @@ name: Build
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -94,3 +95,96 @@ jobs:
           gh release delete dev --cleanup-tag --yes || true
           gh release create dev dist/*.jar --prerelease --latest=false --target "$GITHUB_SHA" \
             --title "Development build (${short})" --notes-file notes.md
+
+  # Pushing a tag such as v0.1.0 publishes that version, built and tested exactly like every merge to main.
+  # See docs/RELEASING.md. CurseForge and Modrinth are skipped until their project id and token are configured.
+  release:
+    name: Publish release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [build, natives]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: sipher-jar
+          path: dist
+      - name: Check version and changelog
+        id: release
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          declared="$(sed -n 's/^mod_version=//p' gradle.properties)"
+          if [ "$version" != "$declared" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match mod_version=$declared in gradle.properties"
+            exit 1
+          fi
+          changelog="docs/changelogs/${version}.md"
+          if [ ! -f "$changelog" ]; then
+            echo "::error::Write $changelog before tagging"
+            exit 1
+          fi
+          jar="dist/sipher-${version}.jar"
+          if [ ! -f "$jar" ]; then
+            echo "::error::The build did not produce $jar"
+            exit 1
+          fi
+          case "$version" in
+            *-alpha*) type=alpha ;;
+            0.*|*-beta*) type=beta ;;
+            *) type=release ;;
+          esac
+          {
+            echo "version=$version"
+            echo "type=$type"
+            echo "changelog=$changelog"
+            echo "jar=$jar"
+          } >> "$GITHUB_OUTPUT"
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ steps.release.outputs.version }}
+          TYPE: ${{ steps.release.outputs.type }}
+          CHANGELOG: ${{ steps.release.outputs.changelog }}
+          JAR: ${{ steps.release.outputs.jar }}
+        run: |
+          prerelease=()
+          if [ "$TYPE" != release ]; then prerelease=(--prerelease); fi
+          gh release create "$GITHUB_REF_NAME" "$JAR" --verify-tag --title "Sipher $VERSION" \
+            --notes-file "$CHANGELOG" "${prerelease[@]}"
+      - name: CurseForge
+        if: env.CURSEFORGE_TOKEN != '' && vars.CURSEFORGE_PROJECT_ID != ''
+        uses: Kira-NT/mc-publish@v3.3
+        with:
+          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
+          files: ${{ steps.release.outputs.jar }}
+          name: Sipher ${{ steps.release.outputs.version }}
+          version: ${{ steps.release.outputs.version }}
+          version-type: ${{ steps.release.outputs.type }}
+          changelog-file: ${{ steps.release.outputs.changelog }}
+          loaders: neoforge
+          game-versions: 1.21.1
+          java: 21
+          dependencies: simple-voice-chat(required){curseforge:simple-voice-chat}
+      - name: Modrinth
+        if: env.MODRINTH_TOKEN != '' && vars.MODRINTH_PROJECT_ID != ''
+        uses: Kira-NT/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+          modrinth-token: ${{ env.MODRINTH_TOKEN }}
+          files: ${{ steps.release.outputs.jar }}
+          name: Sipher ${{ steps.release.outputs.version }}
+          version: ${{ steps.release.outputs.version }}
+          version-type: ${{ steps.release.outputs.type }}
+          changelog-file: ${{ steps.release.outputs.changelog }}
+          loaders: neoforge
+          game-versions: 1.21.1
+          java: 21
+          # Simple Voice Chat's Modrinth project id.
+          dependencies: simple-voice-chat(required){modrinth:9eGKb6K1}
