@@ -28,6 +28,15 @@ API. The GitHub release has all of them.
 The tag must match `mod_version`, the changelog must exist and there must be a jar for both loaders on every
 Minecraft version in `settings.gradle.kts`, or the job stops before uploading anything.
 
+If an upload to one site fails for a jar (Modrinth sometimes answers `500 database_error`), upload that jar again
+with *Actions → Publish → Run workflow*: the version, the Minecraft version as in `settings.gradle.kts` (for example
+`26.1`), the loader and the site that failed. Re-running the failed job of the release run would upload the jar a
+second time to the site that worked.
+
+```bash
+gh workflow run publish.yml -f version=0.3.0 -f minecraft=26.1 -f loader=neoforge -f sites=modrinth
+```
+
 The release type follows the version: `0.x` and `-beta` versions are **beta**, `-alpha` versions are **alpha**, and
 everything else from `1.0.0` is a **release**. Beta and alpha versions are marked as pre-releases on GitHub.
 

@@ -1,0 +1,136 @@
+name: Publish
+
+# Uploads one jar of a release to CurseForge and Modrinth. The release run in build.yml calls it for every jar. Start
+# it by hand (Actions → Publish → Run workflow) to upload one jar of a release again, for example when a site failed
+# for it: re-running the release's job would upload it a second time to the site that worked.
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      minecraft:
+        type: string
+        required: true
+      loader:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Released version, for example 0.3.0
+        required: true
+      minecraft:
+        description: Minecraft version as in settings.gradle.kts, for example 26.1
+        required: true
+      loader:
+        type: choice
+        options: [fabric, neoforge]
+      sites:
+        type: choice
+        options: [modrinth, curseforge, both]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  publish:
+    name: Publish ${{ inputs.loader }} ${{ inputs.minecraft }}
+    runs-on: ubuntu-latest
+    env:
+      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+      VERSION: ${{ inputs.version }}
+      LOADER: ${{ inputs.loader }}
+      # Called from the release run: both sites. By hand: the chosen one.
+      SITES: ${{ inputs.sites || 'both' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: v${{ inputs.version }}
+      - uses: actions/download-artifact@v5
+        if: github.event_name != 'workflow_dispatch'
+        with:
+          name: sipher-${{ inputs.minecraft }}
+          path: dist
+      - name: Find the release run
+        if: github.event_name == 'workflow_dispatch'
+        id: run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          id="$(gh run list -R "$GITHUB_REPOSITORY" -w build.yml -b "v$VERSION" -e push -L 1 --json databaseId -q '.[0].databaseId')"
+          if [ -z "$id" ]; then
+            echo "::error::No release run for v$VERSION"
+            exit 1
+          fi
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v5
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: sipher-${{ inputs.minecraft }}
+          path: dist
+          run-id: ${{ steps.run.outputs.id }}
+          github-token: ${{ github.token }}
+      - name: Read what the jar is for
+        id: jar
+        run: |
+          info="$(ls dist/sipher-"$LOADER"-"$VERSION"+*.json)"
+          jar="${info%.json}.jar"
+          minecraft="$(jq -r '.minecraft[]' "$info")"
+          case "$VERSION" in
+            *-alpha*) type=alpha ;;
+            0.*|*-beta*) type=beta ;;
+            *) type=release ;;
+          esac
+          {
+            echo "jar=$jar"
+            echo "type=$type"
+            echo "java=$(jq -r .java "$info")"
+            echo "game-versions<<EOF"
+            echo "$minecraft"
+            echo "EOF"
+            echo "label=$(jq -r '.minecraft | if length > 1 then "\(first)–\(last)" else first end' "$info")"
+          } >> "$GITHUB_OUTPUT"
+          # One dependency per line; Fabric builds also need Fabric API.
+          {
+            echo "curseforge-dependencies<<EOF"
+            echo "simple-voice-chat(required){curseforge:simple-voice-chat}"
+            if [ "$LOADER" = fabric ]; then echo "fabric-api(required){curseforge:fabric-api}"; fi
+            echo "EOF"
+            echo "modrinth-dependencies<<EOF"
+            echo "simple-voice-chat(required){modrinth:9eGKb6K1}"
+            if [ "$LOADER" = fabric ]; then echo "fabric-api(required){modrinth:P7dR8mSH}"; fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: CurseForge
+        if: env.SITES != 'modrinth' && env.CURSEFORGE_TOKEN != '' && vars.CURSEFORGE_PROJECT_ID != ''
+        uses: Kira-NT/mc-publish@v3.3
+        with:
+          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
+          files: ${{ steps.jar.outputs.jar }}
+          name: Sipher ${{ env.VERSION }} for ${{ inputs.loader == 'fabric' && 'Fabric' || 'NeoForge' }} ${{ steps.jar.outputs.label }}
+          version: ${{ env.VERSION }}+${{ inputs.loader }}-${{ inputs.minecraft }}
+          version-type: ${{ steps.jar.outputs.type }}
+          changelog-file: docs/changelogs/${{ env.VERSION }}.md
+          loaders: ${{ inputs.loader }}
+          game-versions: ${{ steps.jar.outputs.game-versions }}
+          java: ${{ steps.jar.outputs.java }}
+          dependencies: ${{ steps.jar.outputs.curseforge-dependencies }}
+      - name: Modrinth
+        if: env.SITES != 'curseforge' && env.MODRINTH_TOKEN != '' && vars.MODRINTH_PROJECT_ID != ''
+        uses: Kira-NT/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+          modrinth-token: ${{ env.MODRINTH_TOKEN }}
+          files: ${{ steps.jar.outputs.jar }}
+          name: Sipher ${{ env.VERSION }} for ${{ inputs.loader == 'fabric' && 'Fabric' || 'NeoForge' }} ${{ steps.jar.outputs.label }}
+          version: ${{ env.VERSION }}+${{ inputs.loader }}-${{ inputs.minecraft }}
+          version-type: ${{ steps.jar.outputs.type }}
+          changelog-file: docs/changelogs/${{ env.VERSION }}.md
+          loaders: ${{ inputs.loader }}
+          game-versions: ${{ steps.jar.outputs.game-versions }}
+          java: ${{ steps.jar.outputs.java }}
+          dependencies: ${{ steps.jar.outputs.modrinth-dependencies }}
