@@ -10,7 +10,7 @@ the **Markdown** editor.
 | Logo | [logo.png](logo.png) (512×512 PNG) |
 | Main category | Utility & QoL |
 | Additional categories | Server Utility, Miscellaneous |
-| Game versions | 1.21.1, 1.21.4, 1.21.5, 1.21.6–1.21.8, 1.21.9–1.21.10, 1.21.11, 26.1–26.1.2, 26.2, 26.3 |
+| Game versions | Fabric: 1.21–1.21.1, 1.21.4, 1.21.5, 1.21.6–1.21.8, 1.21.9–1.21.10, 1.21.11, 26.1–26.1.2, 26.2, 26.3 · NeoForge: 1.21.1, 1.21.4, 1.21.5, 1.21.8, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3 (each uploaded file is tagged with its own) |
 | Mod loaders | Fabric, NeoForge |
 | Environment | Client and server (server optional) |
 | Licence | MIT |

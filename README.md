@@ -37,8 +37,8 @@ the game.
 
 ## Requirements
 
-- Minecraft 1.21.1, 1.21.4, 1.21.5, 1.21.6–1.21.8, 1.21.9–1.21.10, 1.21.11, 26.1–26.1.2, 26.2 or 26.3
-- Fabric with Fabric API, or NeoForge
+- Fabric with Fabric API on Minecraft 1.21–1.21.1, 1.21.4, 1.21.5, 1.21.6–1.21.8, 1.21.9–1.21.10, 1.21.11, 26.1–26.1.2, 26.2 or 26.3
+- or NeoForge on Minecraft 1.21.1, 1.21.4, 1.21.5, 1.21.8, 1.21.10, 1.21.11, 26.1.2, 26.2 or 26.3
 - Simple Voice Chat 2.5+ for the same loader
 - 64-bit Windows, macOS 11+ or Linux (x64 or ARM64)
 
