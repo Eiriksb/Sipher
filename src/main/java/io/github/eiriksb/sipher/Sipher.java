@@ -1,41 +1,33 @@
 package io.github.eiriksb.sipher;
 
-import io.github.eiriksb.sipher.config.SipherClientConfig;
-import io.github.eiriksb.sipher.config.SipherServerConfig;
-import io.github.eiriksb.sipher.net.SipherNetwork;
-import io.github.eiriksb.sipher.runtime.NativeRuntime;
+import io.github.eiriksb.sipher.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
-@Mod(Sipher.MOD_ID)
+/** Shared by every loader. The loader's entry point calls {@link #init(Platform)} first. */
 public final class Sipher {
     public static final String MOD_ID = "sipher";
     public static final Logger LOGGER = LoggerFactory.getLogger("Sipher");
 
-    public Sipher(IEventBus modBus, ModContainer container) {
-        container.registerConfig(ModConfig.Type.CLIENT, SipherClientConfig.SPEC);
-        container.registerConfig(ModConfig.Type.SERVER, SipherServerConfig.SPEC);
-        modBus.addListener(SipherNetwork::register);
+    private static Platform platform;
 
-        if (FMLEnvironment.dist.isClient()) {
-            // Point the native loaders at Sipher's directory before anything else can initialise them. Extraction and
-            // loading happen later on a background thread.
-            NativeRuntime.configure(directory());
-        }
+    private Sipher() {
+    }
+
+    public static void init(Platform loader) {
+        platform = loader;
+    }
+
+    public static Platform platform() {
+        return platform;
     }
 
     /** {@code <game>/sipher}: extracted natives, built-in models and downloaded language packs. */
     public static Path directory() {
-        return FMLPaths.GAMEDIR.get().resolve(MOD_ID);
+        return platform.gameDirectory().resolve(MOD_ID);
     }
 
     public static ResourceLocation id(String path) {

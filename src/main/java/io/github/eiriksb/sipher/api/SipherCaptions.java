@@ -1,11 +1,11 @@
 package io.github.eiriksb.sipher.api;
 
+import io.github.eiriksb.sipher.Sipher;
 import io.github.eiriksb.sipher.config.SipherServerConfig;
 import io.github.eiriksb.sipher.net.CaptionPayload;
 import io.github.eiriksb.sipher.net.CaptionText;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * Captions for things that aren't players, such as a talking NPC: shown to the chosen players as a bubble above the
@@ -30,13 +30,14 @@ public final class SipherCaptions {
      */
     public static void show(Entity speaker, int line, boolean partial, String language, String text, String english,
                             Iterable<ServerPlayer> listeners) {
+        SipherServerConfig.refresh();
         int maxLength = SipherServerConfig.MAX_TEXT_LENGTH.get();
         CaptionPayload caption = new CaptionPayload(speaker.getUUID(), line, partial, CaptionText.language(language),
                 CaptionText.sanitize(text, maxLength), CaptionText.sanitize(english, maxLength));
         for (ServerPlayer listener : listeners) {
             // NeoForge refuses to send a payload to a client without the channel.
-            if (listener.connection.hasChannel(CaptionPayload.TYPE)) {
-                PacketDistributor.sendToPlayer(listener, caption);
+            if (Sipher.platform().hasSipher(listener)) {
+                Sipher.platform().send(listener, caption);
             }
         }
     }

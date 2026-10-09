@@ -1,6 +1,7 @@
 # Sipher
 
-Live, private captions for [Simple Voice Chat](https://github.com/henkelmax/simple-voice-chat) on NeoForge 1.21.1.
+Live, private captions for [Simple Voice Chat](https://github.com/henkelmax/simple-voice-chat) on Fabric and NeoForge,
+Minecraft 1.21.1 to 26.3.
 
 Sipher turns what players say on voice chat into captions: bubbles above their heads and a transcript box. Everything
 runs on your own computer. English works out of the box; other languages are optional packs you download from inside
@@ -18,7 +19,8 @@ the game.
 - With Sipher on the server, your captions reach exactly the players who can hear you: your voice chat group, or
   players within voice (or whisper) range. They are never broadcast to the whole server.
 - Works client-only too: without Sipher on the server, captions simply stay on your screen.
-- Settings: press **O** in game, or use the Mods menu → Sipher → Config.
+- Settings: press **O** in game, or use the Mods menu → Sipher → Config (on Fabric with
+  [Mod Menu](https://modrinth.com/mod/modmenu)).
 
 ## Privacy and network use
 
@@ -35,11 +37,14 @@ the game.
 
 ## Requirements
 
-- Minecraft 1.21.1 with NeoForge 21.1+
-- Simple Voice Chat 2.5+ (NeoForge)
+- Minecraft 1.21.1, 1.21.4, 1.21.5, 1.21.6–1.21.8, 1.21.9–1.21.10, 1.21.11, 26.1–26.1.2, 26.2 or 26.3
+- Fabric with Fabric API, or NeoForge
+- Simple Voice Chat 2.5+ for the same loader
 - 64-bit Windows, macOS 11+ or Linux (x64 or ARM64)
 
-Install the same jar on clients and, optionally, on the server. The server never loads the speech models or natives.
+There is one jar per loader and Minecraft version, named like `sipher-fabric-<version>+1.21.1.jar`. Install the one for
+your loader and Minecraft version on clients and, optionally, on the server. The server never loads the speech models
+or natives.
 
 ## How it works
 
@@ -57,8 +62,9 @@ platforms.
 
 ## For mod developers
 
-On the server, Sipher posts `io.github.eiriksb.sipher.api.PlayerCaptionEvent` on `NeoForge.EVENT_BUS` (server thread)
-for every caption a player shares, live and final. It carries the spoken language, the transcript and its English
+On the server, Sipher fires `io.github.eiriksb.sipher.api.PlayerCaptionEvent` (server thread) for every caption a
+player shares, live and final: on NeoForge it is posted on `NeoForge.EVENT_BUS`, on Fabric you register a listener
+with `PlayerCaptionEvent.EVENT.register(event -> ...)`. It carries the spoken language, the transcript and its English
 translation. [They Will Talk](https://github.com/Eiriksb/they-will-talk) uses it to let villagers hear players.
 
 `io.github.eiriksb.sipher.api.SipherCaptions.show(...)` goes the other way: it shows a caption for any entity (a
@@ -73,12 +79,35 @@ The newest jar from `main` is always on the [Development build](https://github.c
 pre-release: CI replaces it after every merge that passes on all six platforms. To build it yourself:
 
 ```bash
-./gradlew build
+./gradlew :1.21.1-fabric:build
 ```
 
-Gradle downloads JDK 21 if needed. The build fetches sherpa-onnx's release jars and the built-in models, and verifies
-all of them against pinned SHA-256 checksums (`gradle/third-party-checksums.txt` and `build.gradle`). The jar is
-written to `build/libs/`. `./gradlew runClient` starts a development client with Simple Voice Chat.
+Every Minecraft version and loader is its own Gradle project, `<minecraft>-<loader>` (listed in `settings.gradle.kts`,
+with their dependencies in `stonecutter.properties.toml`), and writes its jar to `versions/<minecraft>-<loader>/build/libs/`.
+`./gradlew dist` builds all of them into `build/dist/`, which takes a while: each Minecraft version is set up once.
+`./gradlew :1.21.1-neoforge:runClient` starts a development client with Simple Voice Chat (also `runServer`, and
+`runClient2` for a second player). For testing without a microphone, add `-PdebugCaption="Hello there"`: every few
+seconds you say it (shared with the server like real speech), alternating with the nearest mob.
+`-PdebugAudio=core/src/test/resources/audio/jfk.wav` plays a recording as your microphone instead, over and over, through
+real speech recognition, and logs what is recognised and which captions arrive from other players. `-PquickPlay=<world>`
+or `-PquickPlayServer=localhost` joins a world or server right away, `-Pusername=<name>` picks the player's name.
+`runServer -PdebugRelay` logs every caption the server relays and to whom.
+
+`tools/runtime-test/run.sh 1.21.1-fabric` plays one Minecraft version for real without a screen (Linux with `xvfb-run`
+or `gamescope`): a Fabric dedicated server (`1.21.1-neoforge` for NeoForge) must start with Sipher's voice chat plugin,
+then a Fabric and a NeoForge player join it, each with that recording as its microphone. Each must recognise it, the
+server must relay each one's captions to the other, and each must receive and draw the other's. Logs and screenshots
+go to `build/runtime-test/report/`. CI runs it with both servers for every Minecraft version.
+
+The code that doesn't touch Minecraft (speech, translation, language packs, natives, settings) lives in `core/` and is
+tested once with `./gradlew :core:test`. The Minecraft code in `src/` is shared by every version through
+[Stonecutter](https://stonecutter.kikugie.dev/): where Minecraft or a loader changed, the code has `//? if >=1.21.9`
+or `//? if fabric` comments, and `src/` is always written for one active version (`stonecutter.gradle.kts`). Switch it
+with `./gradlew "Set active project to 26.3-fabric"` to work on another version, and back with
+`./gradlew "Reset active project"` before committing.
+
+Gradle downloads JDK 21 and 25 if needed. The build fetches sherpa-onnx's release jars and the built-in models, and
+verifies all of them against pinned SHA-256 checksums (`gradle/third-party-checksums.txt` and `core/build.gradle.kts`).
 
 Releases are published by pushing a version tag; see [docs/RELEASING.md](docs/RELEASING.md).
 

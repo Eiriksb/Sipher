@@ -1,17 +1,40 @@
 package io.github.eiriksb.sipher.api;
 
 import net.minecraft.server.level.ServerPlayer;
+//? if neoforge {
 import net.neoforged.bus.api.Event;
+//?} else {
+/*import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+*///?}
 
 /**
- * A player's caption of their own speech reached the server. Posted on {@code NeoForge.EVENT_BUS}, on the server
- * thread, for every caption the server accepts: after rate limiting and sanitising, and whether or not the relay to
- * other players is enabled. This is Sipher's public API for other mods; it stays compatible within a major version.
+ * A player's caption of their own speech reached the server. Fired on the server thread for every caption the server
+ * accepts: after rate limiting and sanitising, and whether or not the relay to other players is enabled. This is
+ * Sipher's public API for other mods; it stays compatible within a major version.
+ *
+ * <p>On NeoForge it is posted on {@code NeoForge.EVENT_BUS}. On Fabric, register a {@code Listener} on
+ * {@code PlayerCaptionEvent.EVENT}.
  *
  * <p>Live captions ({@link #isPartial()}) may still change; the final caption of an utterance has the same
  * {@link #getLine()}. A final caption with empty text means the utterance turned out to be noise.
  */
+//? if neoforge {
 public final class PlayerCaptionEvent extends Event {
+//?} else {
+/*public final class PlayerCaptionEvent {
+    public static final Event<Listener> EVENT = EventFactory.createArrayBacked(Listener.class, listeners -> event -> {
+        for (Listener listener : listeners) {
+            listener.onPlayerCaption(event);
+        }
+    });
+
+    @FunctionalInterface
+    public interface Listener {
+        void onPlayerCaption(PlayerCaptionEvent event);
+    }
+
+*///?}
     private final ServerPlayer player;
     private final int line;
     private final boolean partial;

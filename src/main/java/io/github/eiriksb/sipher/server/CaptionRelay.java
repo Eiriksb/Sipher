@@ -3,14 +3,13 @@ package io.github.eiriksb.sipher.server;
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
+import io.github.eiriksb.sipher.Sipher;
 import io.github.eiriksb.sipher.api.PlayerCaptionEvent;
 import io.github.eiriksb.sipher.config.SipherServerConfig;
 import io.github.eiriksb.sipher.net.CaptionPayload;
 import io.github.eiriksb.sipher.net.CaptionText;
 import io.github.eiriksb.sipher.net.CaptionUpdatePayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +25,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class CaptionRelay {
     private static final Map<UUID, RateLimiter> LIMITERS = new ConcurrentHashMap<>();
+    /** {@code -Dsipher.debug.relay=true}: logs every finished caption and who it went to, for tests. Never in releases. */
+    private static final boolean LOG_RELAY = Boolean.getBoolean("sipher.debug.relay");
 
     private CaptionRelay() {
     }
 
     public static void handle(ServerPlayer speaker, CaptionUpdatePayload update) {
+        SipherServerConfig.refresh();
         RateLimiter limiter = LIMITERS.computeIfAbsent(speaker.getUUID(), id -> new RateLimiter());
         if (!limiter.tryAcquire(SipherServerConfig.MAX_UPDATES_PER_SECOND.get())) {
             return;
@@ -44,18 +46,23 @@ public final class CaptionRelay {
         }
         String language = CaptionText.language(update.language());
         // Other server mods get every accepted caption, even when relaying to players is switched off.
-        NeoForge.EVENT_BUS.post(new PlayerCaptionEvent(speaker, update.line(), update.partial(), language, text, english));
+        Sipher.platform().post(new PlayerCaptionEvent(speaker, update.line(), update.partial(), language, text, english));
 
         if (!SipherServerConfig.RELAY_ENABLED.get() || (update.partial() && !SipherServerConfig.RELAY_PARTIALS.get())) {
             return;
         }
         CaptionPayload caption = new CaptionPayload(speaker.getUUID(), update.line(), update.partial(), language, text, english);
 
+        List<String> sentTo = new ArrayList<>();
         for (ServerPlayer listener : listeners(speaker)) {
             // NeoForge refuses to send a payload to a client without the channel: players without Sipher get nothing.
-            if (listener.connection.hasChannel(CaptionPayload.TYPE)) {
-                PacketDistributor.sendToPlayer(listener, caption);
+            if (Sipher.platform().hasSipher(listener)) {
+                Sipher.platform().send(listener, caption);
+                sentTo.add(listener.getName().getString());
             }
+        }
+        if (LOG_RELAY && !update.partial()) {
+            Sipher.LOGGER.info("Relayed {}'s caption ({}) to {}: {}", speaker.getName().getString(), language, sentTo, text);
         }
     }
 
@@ -67,7 +74,7 @@ public final class CaptionRelay {
     static Set<ServerPlayer> listeners(ServerPlayer speaker) {
         VoicechatServerApi api = VoiceState.api();
         List<CaptionRouting.Voice<ServerPlayer>> players = new ArrayList<>();
-        for (ServerPlayer player : speaker.server.getPlayerList().getPlayers()) {
+        for (ServerPlayer player : speaker.level().getServer().getPlayerList().getPlayers()) {
             players.add(voice(api, player));
         }
         return CaptionRouting.listeners(voice(api, speaker), players, range(api, speaker));

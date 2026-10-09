@@ -20,5 +20,5 @@ Modrinth needs it:
 | Issue tracker | https://github.com/Eiriksb/Sipher/issues |
 | Content disclosures | Tick **AI functionality** (on-device speech recognition and translation) |
 
-Versions are uploaded by the release workflow (see [../RELEASING.md](../RELEASING.md)), with Simple Voice Chat as a
-required dependency. The project id is in the `MODRINTH_PROJECT_ID` repository variable.
+Versions are uploaded by the release workflow (see [../RELEASING.md](../RELEASING.md)), one per loader and Minecraft
+version, with Simple Voice Chat (and Fabric API for Fabric) as required dependencies. The project id is in the `MODRINTH_PROJECT_ID` repository variable.

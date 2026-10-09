@@ -1,8 +1,14 @@
 # Releasing Sipher
 
-Pushing a version tag builds Sipher, runs the tests on all six platforms, and publishes the jar with its changelog to
-GitHub Releases, CurseForge and Modrinth (the `release` job in `.github/workflows/build.yml`). Nothing is uploaded if
-any build or test fails.
+Pushing a version tag builds Sipher for every loader and Minecraft version, runs the tests on all six platforms, plays
+every build for real (`tools/runtime-test/run.sh`: a Fabric and a NeoForge server start, and on each a Fabric and a
+NeoForge player join, recognise speech from a recording and receive each other's captions), and publishes the jars
+with the changelog to GitHub Releases, CurseForge and Modrinth (the `release` and `publish` jobs in
+`.github/workflows/build.yml`). Nothing is uploaded if any build or test fails.
+
+Each jar is uploaded to CurseForge and Modrinth as its own file, marked with its loader, the Minecraft releases it
+runs on (`mod.mc_releases` in `stonecutter.properties.toml`) and its Java version. Fabric files also require Fabric
+API. The GitHub release has all of them.
 
 ## Each release
 
@@ -19,7 +25,8 @@ any build or test fails.
    git push origin v0.2.0
    ```
 
-The tag must match `mod_version` and the changelog must exist, or the job stops before uploading anything.
+The tag must match `mod_version`, the changelog must exist and there must be a jar for both loaders on every
+Minecraft version in `settings.gradle.kts`, or the job stops before uploading anything.
 
 The release type follows the version: `0.x` and `-beta` versions are **beta**, `-alpha` versions are **alpha**, and
 everything else from `1.0.0` is a **release**. Beta and alpha versions are marked as pre-releases on GitHub.

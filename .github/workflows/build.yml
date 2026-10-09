@@ -11,22 +11,80 @@ permissions:
   contents: read
 
 jobs:
+  # The Minecraft versions in settings.gradle.kts. Each gets its own build job, for Fabric and NeoForge.
+  versions:
+    name: List Minecraft versions
+    runs-on: ubuntu-latest
+    outputs:
+      minecraft: ${{ steps.list.outputs.minecraft }}
+    steps:
+      - uses: actions/checkout@v5
+      - id: list
+        run: |
+          versions="$(grep -oP '^\s*build\("\K[^"]+' settings.gradle.kts | jq -Rcs 'split("\n") | map(select(length > 0))')"
+          echo "Minecraft versions: $versions"
+          echo "minecraft=$versions" >> "$GITHUB_OUTPUT"
+
   build:
-    name: Build jar
+    name: Build and test ${{ matrix.minecraft }}
+    needs: versions
+    strategy:
+      fail-fast: false
+      matrix:
+        minecraft: ${{ fromJSON(needs.versions.outputs.minecraft) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 21
+          # Minecraft before 26.1 builds with Java 21. Gradle runs on the last one, 25, which Fabric Loom needs.
+          java-version: |
+            21
+            25
       - uses: gradle/actions/setup-gradle@v5
-      - run: ./gradlew build
+      - run: ./gradlew ":${{ matrix.minecraft }}-fabric:dist" ":${{ matrix.minecraft }}-neoforge:dist"
       - uses: actions/upload-artifact@v5
         with:
-          name: sipher-jar
-          path: build/libs/*.jar
+          name: sipher-${{ matrix.minecraft }}
+          path: build/dist/
           if-no-files-found: error
+      # Plays the builds for real on virtual screens, rendered in software (OpenGL, or Vulkan for 26.x), once with a
+      # Fabric and once with a NeoForge dedicated server: the server starts, a Fabric and a NeoForge player join it, each
+      # with a recording as the microphone, and each must recognise it and receive the other's captions through the
+      # server. See tools/runtime-test/run.sh.
+      - name: Install a virtual screen
+        run: |
+          sudo apt-get update
+          # libxtst6 for Java's AWT, which NeoForge's loading screen uses
+          sudo apt-get install -y --no-install-recommends xvfb imagemagick libgl1-mesa-dri libglx-mesa0 mesa-vulkan-drivers \
+            libvulkan1 libxtst6
+      - name: Runtime test (Fabric server)
+        run: tools/runtime-test/run.sh "${{ matrix.minecraft }}-fabric"
+      - name: Runtime test (NeoForge server)
+        if: ${{ !cancelled() }}
+        run: tools/runtime-test/run.sh "${{ matrix.minecraft }}-neoforge"
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: runtime-test-${{ matrix.minecraft }}
+          path: build/runtime-test/report/
+
+  # Everything that doesn't need Minecraft: speech, translation, language packs, settings, routing.
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          # Sipher's core builds with Java 21; Gradle runs on the last one, 25, which Fabric Loom needs.
+          java-version: |
+            21
+            25
+      - uses: gradle/actions/setup-gradle@v5
+      - run: ./gradlew :core:test
 
   # The speech and shared ONNX Runtime tests load the real natives, so run them on every platform Sipher ships for.
   natives:
@@ -47,23 +105,26 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 21
+          # Sipher's core builds with Java 21; Gradle runs on the last one, 25, which Fabric Loom needs.
+          java-version: |
+            21
+            25
       - uses: gradle/actions/setup-gradle@v5
-      - run: ./gradlew test --tests '*SpeechPipelineTest' --tests '*SharedOnnxRuntimeTest'
+      - run: ./gradlew :core:test --tests '*SpeechPipelineTest' --tests '*SharedOnnxRuntimeTest'
         env:
           SIPHER_REQUIRE_NATIVES: 'true'
       - uses: actions/upload-artifact@v5
         if: failure()
         with:
           name: test-report-${{ matrix.platform }}
-          path: build/reports/tests
+          path: core/build/reports/tests
 
   # Every push to main (including merged pull requests) that passes on all platforms replaces the rolling
-  # "Development build" pre-release, so the newest jar is always one click away on the Releases page.
+  # "Development build" pre-release, so the newest jars are always one click away on the Releases page.
   dev-release:
     name: Publish development build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [build, natives]
+    needs: [build, test, natives]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -73,7 +134,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v5
         with:
-          name: sipher-jar
+          pattern: sipher-*
+          merge-multiple: true
           path: dist
       - name: Replace the development build release
         env:
@@ -93,7 +155,8 @@ jobs:
           {
             echo "Automatic build of \`main\` at ${GITHUB_SHA}, replaced on every merge. For testing, not a release."
             echo
-            echo "Install the same jar on clients and (optionally) servers, together with Simple Voice Chat."
+            echo "Pick the jar for your loader and Minecraft version (\`sipher-<loader>-<version>+<minecraft>\`) and"
+            echo "install it on clients and (optionally) servers, together with Simple Voice Chat."
             echo
             echo "Latest change:"
             echo
@@ -104,25 +167,28 @@ jobs:
             --title "Development build (${short})" --notes-file notes.md
 
   # Pushing a tag such as v0.1.0 publishes that version, built and tested exactly like every merge to main.
-  # See docs/RELEASING.md. CurseForge and Modrinth are skipped until their project id and token are configured.
+  # See docs/RELEASING.md.
   release:
     name: Publish release
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [build, natives]
+    needs: [versions, build, test, natives]
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      type: ${{ steps.release.outputs.type }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/download-artifact@v5
         with:
-          name: sipher-jar
+          pattern: sipher-*
+          merge-multiple: true
           path: dist
-      - name: Check version and changelog
+      - name: Check version, changelog and jars
         id: release
+        env:
+          MINECRAFT: ${{ needs.versions.outputs.minecraft }}
         run: |
           version="${GITHUB_REF_NAME#v}"
           declared="$(sed -n 's/^mod_version=//p' gradle.properties)"
@@ -135,9 +201,10 @@ jobs:
             echo "::error::Write $changelog before tagging"
             exit 1
           fi
-          jar="dist/sipher-${version}.jar"
-          if [ ! -f "$jar" ]; then
-            echo "::error::The build did not produce $jar"
+          expected=$(( $(jq length <<< "$MINECRAFT") * 2 ))
+          found=$(ls dist/sipher-*-"${version}"+*.jar | wc -l)
+          if [ "$found" != "$expected" ]; then
+            echo "::error::Expected $expected jars for $version (Fabric and NeoForge per Minecraft version), found $found"
             exit 1
           fi
           case "$version" in
@@ -148,8 +215,6 @@ jobs:
           {
             echo "version=$version"
             echo "type=$type"
-            echo "changelog=$changelog"
-            echo "jar=$jar"
           } >> "$GITHUB_OUTPUT"
       - name: GitHub release
         env:
@@ -157,41 +222,87 @@ jobs:
           GH_REPO: ${{ github.repository }}
           VERSION: ${{ steps.release.outputs.version }}
           TYPE: ${{ steps.release.outputs.type }}
-          CHANGELOG: ${{ steps.release.outputs.changelog }}
-          JAR: ${{ steps.release.outputs.jar }}
         run: |
           prerelease=()
           if [ "$TYPE" != release ]; then prerelease=(--prerelease); fi
-          gh release create "$GITHUB_REF_NAME" "$JAR" --verify-tag --title "Sipher $VERSION" \
-            --notes-file "$CHANGELOG" "${prerelease[@]}"
+          gh release create "$GITHUB_REF_NAME" dist/*.jar --verify-tag --title "Sipher $VERSION" \
+            --notes-file "docs/changelogs/${VERSION}.md" "${prerelease[@]}"
+
+  # One CurseForge and Modrinth upload per jar. Each site is skipped until its project id and token are configured.
+  publish:
+    name: Publish ${{ matrix.loader }} ${{ matrix.minecraft }}
+    needs: [versions, release]
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        minecraft: ${{ fromJSON(needs.versions.outputs.minecraft) }}
+        loader: [fabric, neoforge]
+    runs-on: ubuntu-latest
+    env:
+      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+      VERSION: ${{ needs.release.outputs.version }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: sipher-${{ matrix.minecraft }}
+          path: dist
+      - name: Read what the jar is for
+        id: jar
+        env:
+          LOADER: ${{ matrix.loader }}
+        run: |
+          info="$(ls dist/sipher-"$LOADER"-"$VERSION"+*.json)"
+          jar="${info%.json}.jar"
+          minecraft="$(jq -r '.minecraft[]' "$info")"
+          {
+            echo "jar=$jar"
+            echo "java=$(jq -r .java "$info")"
+            echo "game-versions<<EOF"
+            echo "$minecraft"
+            echo "EOF"
+            echo "label=$(jq -r '.minecraft | if length > 1 then "\(first)–\(last)" else first end' "$info")"
+          } >> "$GITHUB_OUTPUT"
+          # One dependency per line; Fabric builds also need Fabric API.
+          {
+            echo "curseforge-dependencies<<EOF"
+            echo "simple-voice-chat(required){curseforge:simple-voice-chat}"
+            if [ "$LOADER" = fabric ]; then echo "fabric-api(required){curseforge:fabric-api}"; fi
+            echo "EOF"
+            echo "modrinth-dependencies<<EOF"
+            echo "simple-voice-chat(required){modrinth:9eGKb6K1}"
+            if [ "$LOADER" = fabric ]; then echo "fabric-api(required){modrinth:P7dR8mSH}"; fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
       - name: CurseForge
         if: env.CURSEFORGE_TOKEN != '' && vars.CURSEFORGE_PROJECT_ID != ''
         uses: Kira-NT/mc-publish@v3.3
         with:
           curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
-          files: ${{ steps.release.outputs.jar }}
-          name: Sipher ${{ steps.release.outputs.version }}
-          version: ${{ steps.release.outputs.version }}
-          version-type: ${{ steps.release.outputs.type }}
-          changelog-file: ${{ steps.release.outputs.changelog }}
-          loaders: neoforge
-          game-versions: 1.21.1
-          java: 21
-          dependencies: simple-voice-chat(required){curseforge:simple-voice-chat}
+          files: ${{ steps.jar.outputs.jar }}
+          name: Sipher ${{ env.VERSION }} for ${{ matrix.loader == 'fabric' && 'Fabric' || 'NeoForge' }} ${{ steps.jar.outputs.label }}
+          version: ${{ env.VERSION }}+${{ matrix.loader }}-${{ matrix.minecraft }}
+          version-type: ${{ needs.release.outputs.type }}
+          changelog-file: docs/changelogs/${{ env.VERSION }}.md
+          loaders: ${{ matrix.loader }}
+          game-versions: ${{ steps.jar.outputs.game-versions }}
+          java: ${{ steps.jar.outputs.java }}
+          dependencies: ${{ steps.jar.outputs.curseforge-dependencies }}
       - name: Modrinth
         if: env.MODRINTH_TOKEN != '' && vars.MODRINTH_PROJECT_ID != ''
         uses: Kira-NT/mc-publish@v3.3
         with:
           modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
           modrinth-token: ${{ env.MODRINTH_TOKEN }}
-          files: ${{ steps.release.outputs.jar }}
-          name: Sipher ${{ steps.release.outputs.version }}
-          version: ${{ steps.release.outputs.version }}
-          version-type: ${{ steps.release.outputs.type }}
-          changelog-file: ${{ steps.release.outputs.changelog }}
-          loaders: neoforge
-          game-versions: 1.21.1
-          java: 21
-          # Simple Voice Chat's Modrinth project id.
-          dependencies: simple-voice-chat(required){modrinth:9eGKb6K1}
+          files: ${{ steps.jar.outputs.jar }}
+          name: Sipher ${{ env.VERSION }} for ${{ matrix.loader == 'fabric' && 'Fabric' || 'NeoForge' }} ${{ steps.jar.outputs.label }}
+          version: ${{ env.VERSION }}+${{ matrix.loader }}-${{ matrix.minecraft }}
+          version-type: ${{ needs.release.outputs.type }}
+          changelog-file: docs/changelogs/${{ env.VERSION }}.md
+          loaders: ${{ matrix.loader }}
+          game-versions: ${{ steps.jar.outputs.game-versions }}
+          java: ${{ steps.jar.outputs.java }}
+          dependencies: ${{ steps.jar.outputs.modrinth-dependencies }}
