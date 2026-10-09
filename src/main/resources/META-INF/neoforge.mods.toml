@@ -20,7 +20,8 @@ config = "sipher.mixins.json"
 modId = "neoforge"
 type = "required"
 versionRange = "${neo_version_range}"
-ordering = "NONE"
+# After NeoForge, so Sipher's login step comes after NeoForge's own (see SipherNeoForge.ServerThreadStep).
+ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]

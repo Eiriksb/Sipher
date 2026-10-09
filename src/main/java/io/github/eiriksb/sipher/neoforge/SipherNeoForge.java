@@ -16,6 +16,13 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+//? if >=1.21.9 {
+/*import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.network.ConfigurationTask;
+import net.neoforged.neoforge.network.event.RegisterConfigurationTasksEvent;
+
+import java.util.function.Consumer;
+*///?}
 
 /** NeoForge entry point. */
 @Mod(Sipher.MOD_ID)
@@ -23,6 +30,9 @@ public final class SipherNeoForge {
     public SipherNeoForge(IEventBus modBus, ModContainer container) {
         Sipher.init(new NeoForgePlatform());
         modBus.addListener(SipherNeoForge::registerPayloads);
+        //? if >=1.21.9 {
+        /*modBus.addListener((RegisterConfigurationTasksEvent event) -> event.register(new ServerThreadStep()));
+        *///?}
         NeoForge.EVENT_BUS.addListener((ServerAboutToStartEvent event) -> SipherServerConfig.load(
                 event.getServer().getWorldPath(LevelResource.ROOT), Sipher.platform().gameDirectory()));
 
@@ -44,5 +54,30 @@ public final class SipherNeoForge {
         registrar.playToClient(CaptionPayload.TYPE, CaptionPayload.STREAM_CODEC,
                 (payload, context) -> SipherNetwork.receivedOnClient(payload));
     }
+
+    //? if >=1.21.9 {
+    /*// Works around a NeoForge bug that can crash the server when a Fabric player joins. NeoForge finishes its
+    // cross-loader login steps (c:version, c:register, which Fabric API answers) on the network thread, so the login
+    // steps after them start there too, including Minecraft's own step that finds the player's spawn and loads chunks.
+    // That races the server thread's chunk updates ("Exception ticking world"). This step, after NeoForge's, finishes
+    // on the next server tick, so everything after it starts on the server thread.
+    private record ServerThreadStep() implements ConfigurationTask {
+        private static final Type TYPE = new Type(Sipher.id("server_thread").toString());
+
+        @Override
+        public void start(Consumer<Packet<?>> sender) {
+        }
+
+        @Override
+        public boolean tick() {
+            return true;
+        }
+
+        @Override
+        public Type type() {
+            return TYPE;
+        }
+    }
+    *///?}
 }
 //?}
