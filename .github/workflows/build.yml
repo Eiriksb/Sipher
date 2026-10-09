@@ -53,6 +53,16 @@ jobs:
       # Fabric and once with a NeoForge dedicated server: the server starts, a Fabric and a NeoForge player join it, each
       # with a recording as the microphone, and each must recognise it and receive the other's captions through the
       # server. See tools/runtime-test/run.sh.
+      # The players need Minecraft's game assets, thousands of small files from Mojang. One dropped download would fail
+      # the runtime test, so fetch them first and try again if it happens.
+      - name: Download Minecraft's game assets
+        run: |
+          for attempt in 1 2 3; do
+            ./gradlew ":${{ matrix.minecraft }}-fabric:downloadAssets" ":${{ matrix.minecraft }}-neoforge:downloadAssets" && exit 0
+            echo "Attempt $attempt failed, trying again in 30 seconds."
+            sleep 30
+          done
+          exit 1
       - name: Install a virtual screen
         run: |
           sudo apt-get update
@@ -98,13 +108,14 @@ jobs:
           - { platform: osx-aarch64, os: macos-latest }
           - { platform: osx-x64, os: macos-15-intel }
           - { platform: win-x64, os: windows-latest }
-          - { platform: win-arm64, os: windows-11-arm }
+          # Temurin has no Java 25 for Windows on ARM; Microsoft's build has both.
+          - { platform: win-arm64, os: windows-11-arm, java: microsoft }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-java@v5
         with:
-          distribution: temurin
+          distribution: ${{ matrix.java || 'temurin' }}
           # Sipher's core builds with Java 21; Gradle runs on the last one, 25, which Fabric Loom needs.
           java-version: |
             21
