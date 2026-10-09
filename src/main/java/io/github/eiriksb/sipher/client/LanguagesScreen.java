@@ -1,6 +1,7 @@
 package io.github.eiriksb.sipher.client;
 
 import io.github.eiriksb.sipher.Sipher;
+import io.github.eiriksb.sipher.config.ConfigSpec;
 import io.github.eiriksb.sipher.config.SipherClientConfig;
 import io.github.eiriksb.sipher.models.Catalog;
 import io.github.eiriksb.sipher.models.LanguagePacks;
@@ -16,7 +17,6 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,12 +61,17 @@ public final class LanguagesScreen extends Screen {
                 .bounds(width / 2 - 100, height - 28, 200, 20).build());
     }
 
-    private CycleButton<String> languagePicker(int x, int y, String key, ModConfigSpec.ConfigValue<String> setting,
+    private CycleButton<String> languagePicker(int x, int y, String key, ConfigSpec.ConfigValue<String> setting,
                                                List<String> codes, Map<String, String> names) {
         String current = codes.contains(setting.get()) ? setting.get() : "en";
+        //? if >=1.21.11 {
+        /*return CycleButton.<String>builder(code -> Component.literal(names.getOrDefault(code, code)), current)
+                .withValues(codes)
+        *///?} else {
         return CycleButton.<String>builder(code -> Component.literal(names.getOrDefault(code, code)))
                 .withValues(codes)
                 .withInitialValue(current)
+        //?}
                 .create(x, y, 200, 20, Component.translatable(key), (button, code) -> {
                     setting.set(code);
                     SipherClientConfig.SPEC.save();
@@ -92,13 +97,13 @@ public final class LanguagesScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(font, title, width / 2, 12, 0xFFFFFF);
+        graphics.drawCenteredString(font, title, width / 2, 12, 0xFFFFFFFF);
         if (CaptionEngine.packs() == null) {
-            graphics.drawCenteredString(font, Component.translatable("sipher.status.starting"), width / 2, height / 2, 0xA0A0A0);
+            graphics.drawCenteredString(font, Component.translatable("sipher.status.starting"), width / 2, height / 2, 0xFFA0A0A0);
             return;
         }
         graphics.drawCenteredString(font, Component.translatable("sipher.languages.footer", SOURCE).withStyle(ChatFormatting.GRAY),
-                width / 2, height - 42, 0xA0A0A0);
+                width / 2, height - 42, 0xFFA0A0A0);
     }
 
     @Override
@@ -217,12 +222,19 @@ public final class LanguagesScreen extends Screen {
         }
 
         @Override
+        //? if >=1.21.9 {
+        /*public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            int left = getContentX();
+            int top = getContentY();
+            int width = getContentWidth();
+        *///?} else {
         public void render(GuiGraphics graphics, int index, int top, int left, int width, int height,
                            int mouseX, int mouseY, boolean hovering, float partialTick) {
-            graphics.drawString(font, Component.literal(language.name()), left + 4, top + 6, 0xFFFFFF, false);
+        //?}
+            graphics.drawString(font, Component.literal(language.name()), left + 4, top + 6, 0xFFFFFFFF, false);
             graphics.drawString(font, Component.literal(language.englishName()).withStyle(ChatFormatting.GRAY),
-                    left + 120, top + 6, 0xA0A0A0, false);
-            graphics.drawString(font, status, left + 210, top + 6, 0xD0D0D0, false);
+                    left + 120, top + 6, 0xFFA0A0A0, false);
+            graphics.drawString(font, status, left + 210, top + 6, 0xFFD0D0D0, false);
             action.setPosition(left + width - 94, top);
             action.render(graphics, mouseX, mouseY, partialTick);
         }

@@ -2,6 +2,9 @@
 .gradle/
 /build/
 /buildSrc/build/
+/core/build/
+# Build output of Stonecutter's per-version projects
+/versions/*/build/
 /out/
 
 # Dev runs

@@ -1,7 +1,8 @@
 # Sipher plan
 
-Sipher replaces the earlier `en_translator` prototype: one NeoForge 1.21.1 jar, English speech recognition built in,
-every other language an opt-in in-game download.
+Sipher replaces the earlier `en_translator` prototype: one jar per loader (Fabric, NeoForge) and Minecraft version
+(1.21.1 to 26.3), all built from the same sources, with English speech recognition built in and every other language an
+opt-in in-game download.
 
 ## Distribution rules we follow (CurseForge and Modrinth, checked 2026-09)
 

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["${mod_authors}"],
+  "contact": {
+    "homepage": "https://github.com/Eiriksb/Sipher",
+    "sources": "https://github.com/Eiriksb/Sipher",
+    "issues": "https://github.com/Eiriksb/Sipher/issues"
+  },
+  "license": "${mod_license}",
+  "icon": "sipher_logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["io.github.eiriksb.sipher.fabric.SipherFabric"],
+    "client": ["io.github.eiriksb.sipher.fabric.SipherFabricClient"],
+    "voicechat": ["io.github.eiriksb.sipher.voice.SipherVoicechatPlugin"],
+    "modmenu": ["io.github.eiriksb.sipher.fabric.SipherModMenu"]
+  },
+  "mixins": ["sipher.mixins.json"],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "${minecraft_version_range}",
+    "java": ">=${java_version}",
+    "fabric-api": "*",
+    "voicechat_api": ">=${voicechat_api_min_version}"
+  },
+  "suggests": {
+    "voicechat": "*"
+  }
+}

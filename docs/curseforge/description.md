@@ -57,11 +57,12 @@ Sipher uses on-device machine-learning models (speech recognition and translatio
 
 ## Requirements
 
-- Minecraft **1.21.1** with **NeoForge**
+- **Fabric** (with Fabric API) on Minecraft **1.21–1.21.1**, **1.21.4**, **1.21.5**, **1.21.6–1.21.8**, **1.21.9–1.21.10**, **1.21.11**, **26.1–26.1.2**, **26.2** or **26.3**
+- or **NeoForge** on Minecraft **1.21.1**, **1.21.4**, **1.21.5**, **1.21.8**, **1.21.10**, **1.21.11**, **26.1.2**, **26.2** or **26.3**
 - **Simple Voice Chat** 2.5 or newer
 - 64-bit **Windows 10/11**, **macOS 11+** (Intel or Apple Silicon) or **Linux** (x64 or ARM64)
 
-The same file works on clients and servers. Dedicated servers never load the speech models.
+Pick the file for your loader and Minecraft version; it works on clients and servers. Dedicated servers never load the speech models.
 
 ## FAQ
 

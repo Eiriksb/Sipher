@@ -56,7 +56,12 @@ public final class TranscriptOverlay {
 
         graphics.fill(x, y, x + width, y + height, editing ? 0xCC101316 : 0x88101316);
         if (editing) {
-            graphics.renderOutline(x, y, width, height, dragging ? 0xFF6CCBFF : 0xAA6CCBFF);
+            // The outline method's name changes between Minecraft versions; four fills draw the same everywhere.
+            int outline = dragging ? 0xFF6CCBFF : 0xAA6CCBFF;
+            graphics.fill(x, y, x + width, y + 1, outline);
+            graphics.fill(x, y + height - 1, x + width, y + height, outline);
+            graphics.fill(x, y + 1, x + 1, y + height - 1, outline);
+            graphics.fill(x + width - 1, y + 1, x + width, y + height - 1, outline);
         }
         graphics.drawString(font, TITLE, x + PADDING, y + 3, 0xFFB8C4D0, false);
 

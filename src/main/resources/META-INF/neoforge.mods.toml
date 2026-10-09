@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "${loader_version_range}"
+loaderVersion = "[1,)"
 license = "${mod_license}"
 issueTrackerURL = "https://github.com/Eiriksb/Sipher/issues"
 
@@ -10,8 +10,11 @@ displayName = "${mod_name}"
 displayURL = "https://github.com/Eiriksb/Sipher"
 authors = "${mod_authors}"
 description = '''${mod_description}'''
-logoFile = "sipher_logo.png"
+${logo_key} = "sipher_logo.png"
 logoBlur = false
+
+[[mixins]]
+config = "sipher.mixins.json"
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"

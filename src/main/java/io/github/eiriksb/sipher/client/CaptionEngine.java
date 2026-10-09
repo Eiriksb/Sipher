@@ -2,6 +2,7 @@ package io.github.eiriksb.sipher.client;
 
 import io.github.eiriksb.sipher.Sipher;
 import io.github.eiriksb.sipher.asr.SpeechDetector;
+import io.github.eiriksb.sipher.audio.DebugAudio;
 import io.github.eiriksb.sipher.audio.MicrophoneProbe;
 import io.github.eiriksb.sipher.asr.SpeechPipeline;
 import io.github.eiriksb.sipher.asr.SpeechRecognizer;
@@ -18,9 +19,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -46,6 +46,13 @@ public final class CaptionEngine {
     private static final int FLUSH_AFTER_SILENCE_MS = 300;
     private static final long MIN_PARTIAL_SEND_INTERVAL_MS = 350;
     private static final int TRANSLATOR_THREADS = 2;
+
+    /**
+     * {@code -Dsipher.debug.audio=<16-bit mono WAV>}: plays the recording as the microphone, over and over, and logs
+     * what is recognised and what other players' captions arrive, to test speech recognition without a microphone.
+     * Never set in releases.
+     */
+    private static final String DEBUG_AUDIO = System.getProperty("sipher.debug.audio");
 
     private static final ExecutorService MODELS = daemonExecutor("Sipher models");
     private static final ExecutorService TRANSLATE = daemonExecutor("Sipher translate");
@@ -121,11 +128,10 @@ public final class CaptionEngine {
                 Sipher.LOGGER.error("Could not read the Sipher language pack catalogue", e);
                 catalog = Catalog.empty();
             }
-            String version = ModList.get().getModContainerById(Sipher.MOD_ID)
-                    .map(mod -> mod.getModInfo().getVersion().toString()).orElse("dev");
+            String version = Sipher.platform().modVersion(Sipher.MOD_ID).orElse("dev");
             packs = new LanguagePacks(catalog, Sipher.directory(), "Sipher/" + version);
             MicrophoneProbe probe = MicrophoneProbe.create(Sipher.directory());
-            SipherVoicechatPlugin.setLocalAudioSink((pcm, whispering) -> {
+            SipherVoicechatPlugin.LocalAudioSink microphone = (pcm, whispering) -> {
                 if (probe != null) {
                     probe.accept(pcm);
                 }
@@ -137,7 +143,12 @@ public final class CaptionEngine {
                 if (current != null && SipherClientConfig.CAPTIONS_ENABLED.get()) {
                     current.pipeline().offer(pcm);
                 }
-            });
+            };
+            SipherVoicechatPlugin.setLocalAudioSink(microphone);
+            if (DEBUG_AUDIO != null) {
+                Sipher.LOGGER.info("Playing {} as the microphone (sipher.debug.audio)", DEBUG_AUDIO);
+                DebugAudio.play(DebugAudio.read(Path.of(DEBUG_AUDIO)), pcm -> microphone.accept(pcm, false));
+            }
             configureSpeech();
             configureReading();
             Sipher.LOGGER.info("Sipher ready in {} ms ({})", (System.nanoTime() - started) / 1_000_000, natives.message());
@@ -254,6 +265,9 @@ public final class CaptionEngine {
 
     /** Speech thread: translate our own caption to English (if needed), then hand it to the main thread. */
     private static void deliver(int line, String text, boolean partial, String language, MarianTranslator toEnglish) {
+        if (DEBUG_AUDIO != null && !partial) {
+            Sipher.LOGGER.info("Recognised ({}): {}", language, text);
+        }
         String english = "";
         if (toEnglish != null && !text.isEmpty()) {
             try {
@@ -268,8 +282,7 @@ public final class CaptionEngine {
 
     /** The server has Sipher installed and relays captions. */
     public static boolean serverRelays() {
-        ClientPacketListener connection = Minecraft.getInstance().getConnection();
-        return connection != null && connection.hasChannel(CaptionUpdatePayload.TYPE);
+        return Minecraft.getInstance().getConnection() != null && SipherClient.platform().serverHasSipher();
     }
 
     private static void localCaption(int line, String text, String english, boolean partial, String language) {
@@ -293,7 +306,7 @@ public final class CaptionEngine {
             lastPartialSentAt = now;
         }
         // An empty final tells listeners to drop the live caption of an utterance that turned out to be noise.
-        PacketDistributor.sendToServer(new CaptionUpdatePayload(line, partial, language, text, english));
+        SipherClient.platform().sendToServer(new CaptionUpdatePayload(line, partial, language, text, english));
     }
 
     /** A caption relayed by the server from another player. Main thread. */
@@ -304,7 +317,22 @@ public final class CaptionEngine {
         }
         Sipher.LOGGER.debug("Caption from {} line {} ({}, {}): {} | {}", caption.speaker(), caption.line(),
                 caption.partial() ? "live" : "final", caption.language(), caption.text(), caption.english());
+        if (DEBUG_AUDIO != null && !caption.partial()) {
+            Sipher.LOGGER.info("Caption from {} ({}): {}", speakerName(caption.speaker()), caption.language(), caption.text());
+        }
         display(caption);
+    }
+
+    /**
+     * A made-up English caption (see SipherClient): the player's own is shared like real speech, another entity's is
+     * shown as if the server had relayed it. Main thread.
+     */
+    static void debugCaption(Entity speaker, int line, String text) {
+        if (speaker == Minecraft.getInstance().player) {
+            localCaption(line, text, "", false, "en");
+        } else {
+            display(new CaptionPayload(speaker.getUUID(), line, false, "en", text, ""));
+        }
     }
 
     /**
@@ -381,6 +409,9 @@ public final class CaptionEngine {
         ClientPacketListener connection = minecraft.getConnection();
         PlayerInfo info = connection == null ? null : connection.getPlayerInfo(speaker);
         if (info != null) {
+            //? if >=1.21.9 {
+            /*return info.getProfile().name();
+            *///?} else
             return info.getProfile().getName();
         }
         if (minecraft.level != null) {

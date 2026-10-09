@@ -1,5 +1,6 @@
 package io.github.eiriksb.sipher.client;
 
+import io.github.eiriksb.sipher.config.ConfigSpec;
 import io.github.eiriksb.sipher.config.SipherClientConfig;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
@@ -9,7 +10,6 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleFunction;
@@ -68,12 +68,15 @@ public final class SipherSettingsScreen extends Screen {
 
     private void copyDiagnostics() {
         minecraft.keyboardHandler.setClipboard(Diagnostics.report());
+        //? if >=1.21.2 {
+        /*SystemToast.addOrUpdate(minecraft.getToastManager(), SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
+        *///?} else
         SystemToast.addOrUpdate(minecraft.getToasts(), SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
                 Component.translatable("sipher.settings.diagnostics.copied"),
                 Component.translatable("sipher.settings.diagnostics.copied.detail"));
     }
 
-    private void toggle(int x, int y, String key, ModConfigSpec.BooleanValue value) {
+    private void toggle(int x, int y, String key, ConfigSpec.BooleanValue value) {
         addRenderableWidget(CycleButton.onOffBuilder(value.get())
                 .create(x, y, COLUMN_WIDTH, 20, Component.translatable(key), (button, enabled) -> value.set(enabled)));
     }
@@ -82,8 +85,8 @@ public final class SipherSettingsScreen extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
         int top = Math.max(32, height / 2 - 90);
-        graphics.drawCenteredString(font, title, width / 2, top - 20, 0xFFFFFF);
-        graphics.drawCenteredString(font, status(), width / 2, top + ROW * 6 + 6, 0xA0A0A0);
+        graphics.drawCenteredString(font, title, width / 2, top - 20, 0xFFFFFFFF);
+        graphics.drawCenteredString(font, status(), width / 2, top + ROW * 6 + 6, 0xFFA0A0A0);
     }
 
     private static Component status() {

@@ -1,9 +1,12 @@
 package sipher.build;
 
+import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.transform.InputArtifact;
 import org.gradle.api.artifacts.transform.TransformAction;
 import org.gradle.api.artifacts.transform.TransformOutputs;
 import org.gradle.api.artifacts.transform.TransformParameters;
+import org.gradle.api.artifacts.type.ArtifactTypeDefinition;
+import org.gradle.api.attributes.Attribute;
 import org.gradle.api.file.FileSystemLocation;
 import org.gradle.api.provider.Provider;
 import org.gradle.work.DisableCachingByDefault;
@@ -24,7 +27,20 @@ import java.util.zip.ZipOutputStream;
  */
 @DisableCachingByDefault(because = "Cheap local zip rewrite")
 public abstract class StripOnnxRuntimeNatives implements TransformAction<TransformParameters.None> {
+    /** Request {@code true} on a configuration to get its jars without ONNX Runtime's natives. */
+    public static final Attribute<Boolean> ATTRIBUTE = Attribute.of("sipher.onnxruntime-natives-stripped", Boolean.class);
+
     private static final String NATIVE_PREFIX = "ai/onnxruntime/native/";
+
+    /** Registers the transform for a project's dependencies. */
+    public static void register(DependencyHandler dependencies) {
+        dependencies.getAttributesSchema().attribute(ATTRIBUTE);
+        dependencies.getArtifactTypes().getByName("jar").getAttributes().attribute(ATTRIBUTE, false);
+        dependencies.registerTransform(StripOnnxRuntimeNatives.class, spec -> {
+            spec.getFrom().attribute(ATTRIBUTE, false).attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, "jar");
+            spec.getTo().attribute(ATTRIBUTE, true).attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, "jar");
+        });
+    }
 
     @InputArtifact
     public abstract Provider<FileSystemLocation> getInputArtifact();

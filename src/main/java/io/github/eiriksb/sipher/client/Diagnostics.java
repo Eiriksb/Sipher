@@ -6,11 +6,11 @@ import io.github.eiriksb.sipher.models.LanguagePacks;
 import io.github.eiriksb.sipher.runtime.NativePlatform;
 import io.github.eiriksb.sipher.runtime.NativeRuntime;
 import net.minecraft.client.Minecraft;
-import net.neoforged.fml.ModList;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.Property;
 
@@ -39,19 +39,26 @@ public final class Diagnostics {
     private Diagnostics() {
     }
 
-    /** Starts remembering Sipher's recent warnings and errors (Minecraft logs through Log4j). */
+    /**
+     * Starts remembering Sipher's recent warnings and errors (Minecraft logs through Log4j). The appender listens on the
+     * root logger: adding it to Sipher's own logger would give that logger a configuration of its own, and Sipher's
+     * lines would no longer reach the log files.
+     */
     public static void install() {
         try {
+            String name = Sipher.LOGGER.getName();
             AbstractAppender appender = new AbstractAppender("SipherDiagnostics", null, null, true, Property.EMPTY_ARRAY) {
                 @Override
                 public void append(LogEvent event) {
-                    if (event.getLevel().isMoreSpecificThan(Level.WARN)) {
+                    if (name.equals(event.getLoggerName())) {
                         remember(event);
                     }
                 }
             };
             appender.start();
-            ((Logger) LogManager.getLogger(Sipher.LOGGER.getName())).addAppender(appender);
+            LoggerContext context = ((Logger) LogManager.getLogger(name)).getContext();
+            context.getConfiguration().getRootLogger().addAppender(appender, Level.WARN, null);
+            context.updateLoggers();
         } catch (RuntimeException | LinkageError e) {
             Sipher.LOGGER.debug("Diagnostics cannot collect recent warnings", e);
         }
@@ -74,8 +81,8 @@ public final class Diagnostics {
 
     public static String report() {
         List<String> lines = new ArrayList<>();
-        lines.add("Sipher " + version(Sipher.MOD_ID) + ", Minecraft " + version("minecraft") + ", NeoForge "
-                + version("neoforge") + ", Simple Voice Chat " + version("voicechat"));
+        lines.add("Sipher " + version(Sipher.MOD_ID) + ", Minecraft " + version("minecraft") + ", "
+                + Sipher.platform().loader() + ", Simple Voice Chat " + version("voicechat"));
         Runtime runtime = Runtime.getRuntime();
         lines.add("Java " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + "), max heap "
                 + runtime.maxMemory() / 1_048_576 + " MB");
@@ -137,7 +144,7 @@ public final class Diagnostics {
     }
 
     private static String version(String modId) {
-        return ModList.get().getModContainerById(modId).map(mod -> mod.getModInfo().getVersion().toString()).orElse("missing");
+        return Sipher.platform().modVersion(modId).orElse("missing");
     }
 
     private static String onOff(boolean value) {

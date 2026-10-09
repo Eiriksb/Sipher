@@ -6,7 +6,9 @@ are the rules every change has to follow within a major version (1.x). Breaking 
 ## Clients and servers on different versions
 
 Sipher's network channel is optional in both directions: players without Sipher can join servers that have it, and
-Sipher players can join servers without it. The same must hold between any two 1.x versions.
+Sipher players can join servers without it. The same must hold between any two 1.x versions, and between Fabric and
+NeoForge: both loaders register the same payload ids with the same codecs, so a Fabric client can share captions
+through a NeoForge server and the other way round.
 
 - **Never change `PROTOCOL` in `SipherNetwork`.** NeoForge's "optional" only covers a channel that is missing. When
   both sides have the channel with different versions, negotiation fails and the player cannot join at all
@@ -14,15 +16,16 @@ Sipher players can join servers without it. The same must hold between any two 1
 - **Never change an existing payload's codec** (`CaptionUpdatePayload`, `CaptionPayload`). An older client or server
   would read the new bytes with the old codec and disconnect.
 - **To change what is sent, add a new payload type** (for example `sipher:caption_v2`), registered as optional next to
-  the old one. Senders check `hasChannel` and use the newest type the other side has, falling back to the old one.
+  the old one on both loaders. Senders check whether the other side has it (`Platform.hasSipher`,
+  `Platform.Client.serverHasSipher`) and use the newest type the other side has, falling back to the old one.
   Old payload types are removed only in a new major version.
 - The server only sends Sipher payloads to players whose connection has the channel (`CaptionRelay`). NeoForge throws
   if a mod sends a payload to a client without it.
 
 ## Language packs
 
-Every released jar carries the pack catalogue (`src/main/resources/sipher/catalog.json`), with the URL and SHA-256
-checksum of every file.
+Every released jar carries the pack catalogue (`core/src/main/resources/sipher/catalog.json`), with the URL and
+SHA-256 checksum of every file.
 
 - **Files on the `models-v1` release are permanent.** They are never deleted or replaced, not even to fix them:
   every jar that points at them would stop working or fail its checksum.
@@ -35,8 +38,10 @@ checksum of every file.
 The `io.github.eiriksb.sipher.api` package is Sipher's public API for server mods (for example
 [They Will Talk](https://github.com/Eiriksb/they-will-talk)).
 
-- Within 1.x, existing methods keep their names, types and meaning. When `PlayerCaptionEvent` is posted also stays the
+- Within 1.x, existing methods keep their names, types and meaning. When `PlayerCaptionEvent` is fired also stays the
   same: on the server thread, for every caption the server accepts, whether or not relaying to players is enabled.
+- The API has the same classes and methods on every loader. Only how you listen for `PlayerCaptionEvent` follows the
+  loader: it is a NeoForge event posted on `NeoForge.EVENT_BUS`, and on Fabric it has a Fabric `EVENT` field.
 - `SipherCaptions.show` sends the existing `CaptionPayload` with the entity as the speaker, so it works with every 1.x
   client: clients before bubbles for non-player entities keep the caption in their transcript only.
 - New information may be added as new methods. Nothing is removed or renamed before 2.0.
@@ -46,9 +51,14 @@ The `io.github.eiriksb.sipher.api` package is Sipher's public API for server mod
 
 - Keys in `sipher-client.toml` and `sipher-server.toml` are not renamed or removed within 1.x, and their defaults don't
   change meaning. A setting that is no longer used is ignored, not deleted, until the next major version.
+- Sipher reads and writes these files itself (`ConfigSpec`) on every loader, in the format NeoForge's config system
+  used, so files written by older NeoForge versions keep working. The client file is `config/sipher-client.toml`, the
+  server file `<world>/serverconfig/sipher-server.toml`, copied from `defaultconfigs/` for new worlds.
 
-## Minecraft and Simple Voice Chat
+## Minecraft, loaders and Simple Voice Chat
 
-- Sipher 1.x targets Minecraft 1.21.1 with NeoForge. Other Minecraft versions get their own build.
-- Simple Voice Chat 2.5 or newer: the oldest API with every event Sipher uses (`voicechat_api_version_range` in
+- Every release has a jar for each loader (Fabric, NeoForge) and Minecraft version in `settings.gradle.kts`, all built
+  from the same sources. Adding a version is a minor change; dropping a Minecraft version or a loader is called out in
+  the changelog.
+- Simple Voice Chat 2.5 or newer: the oldest API with every event Sipher uses (`voicechat_api_min_version` in
   `gradle.properties`). Raising that minimum is called out in the changelog.

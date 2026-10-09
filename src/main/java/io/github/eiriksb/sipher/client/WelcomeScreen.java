@@ -8,10 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
-import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public final class WelcomeScreen extends Screen {
     private boolean picked;
     private boolean packsReady;
     private int rowsTop;
-    private MultiLineLabel text = MultiLineLabel.EMPTY;
+    private List<FormattedCharSequence> text = List.of();
     private Button download;
     private Button done;
 
@@ -69,15 +69,20 @@ public final class WelcomeScreen extends Screen {
             language = "en";
         }
 
-        text = MultiLineLabel.create(font, Component.translatable("sipher.welcome.text"), TEXT_WIDTH);
+        text = font.split(Component.translatable("sipher.welcome.text"), TEXT_WIDTH);
         int top = Math.max(16, height / 2 - 100);
-        rowsTop = top + 20 + text.getLineCount() * 10 + 12;
+        rowsTop = top + 20 + text.size() * 10 + 12;
         int left = width / 2 - WIDTH / 2;
 
         Map<String, String> names = CaptionEngine.languageNames();
+        //? if >=1.21.11 {
+        /*addRenderableWidget(CycleButton.<String>builder(code -> Component.literal(names.getOrDefault(code, code)), language)
+                .withValues(codes)
+        *///?} else {
         addRenderableWidget(CycleButton.<String>builder(code -> Component.literal(names.getOrDefault(code, code)))
                 .withValues(codes)
                 .withInitialValue(language)
+        //?}
                 .withTooltip(code -> Tooltip.create(Component.translatable("sipher.welcome.language.tooltip")))
                 .create(left, rowsTop, WIDTH, 20, Component.translatable("sipher.welcome.language"), (button, code) -> {
                     language = code;
@@ -147,11 +152,13 @@ public final class WelcomeScreen extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
         int top = Math.max(16, height / 2 - 100);
-        graphics.drawCenteredString(font, title, width / 2, top, 0xFFFFFF);
-        text.renderCentered(graphics, width / 2, top + 20);
-        graphics.drawCenteredString(font, status(), width / 2, rowsTop + 54, 0xA0A0A0);
+        graphics.drawCenteredString(font, title, width / 2, top, 0xFFFFFFFF);
+        for (int i = 0; i < text.size(); i++) {
+            graphics.drawCenteredString(font, text.get(i), width / 2, top + 20 + i * 9, 0xFFFFFFFF);
+        }
+        graphics.drawCenteredString(font, status(), width / 2, rowsTop + 54, 0xFFA0A0A0);
         graphics.drawCenteredString(font, Component.translatable("sipher.welcome.footer", SipherClient.settingsKey())
-                .withStyle(ChatFormatting.GRAY), width / 2, rowsTop + 100, 0xA0A0A0);
+                .withStyle(ChatFormatting.GRAY), width / 2, rowsTop + 100, 0xFFA0A0A0);
     }
 
     private Component status() {

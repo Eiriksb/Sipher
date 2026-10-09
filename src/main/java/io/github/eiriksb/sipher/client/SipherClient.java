@@ -4,82 +4,103 @@ import com.mojang.blaze3d.platform.InputConstants;
 import io.github.eiriksb.sipher.Sipher;
 import io.github.eiriksb.sipher.config.SipherClientConfig;
 import io.github.eiriksb.sipher.net.SipherNetwork;
+import io.github.eiriksb.sipher.platform.Platform;
+import io.github.eiriksb.sipher.runtime.NativeRuntime;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.client.event.RenderNameTagEvent;
-import net.neoforged.neoforge.client.event.ScreenEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.common.NeoForge;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
-@Mod(value = Sipher.MOD_ID, dist = Dist.CLIENT)
+/** The client half of Sipher, shared by every loader. The loader's client entry point forwards its events here. */
 public final class SipherClient {
-    private static final KeyMapping OPEN_SETTINGS = new KeyMapping(
-            "key.sipher.settings", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_O, "key.categories.sipher");
+    // Key categories are objects since 1.21.9. Fabric registers them with vanilla, NeoForge in RegisterKeyMappingsEvent.
+    //? if >=1.21.9 && fabric {
+    /*public static final KeyMapping.Category KEY_CATEGORY = KeyMapping.Category.register(Sipher.id("captions"));
+    *///?} elif >=1.21.9 {
+    /*public static final KeyMapping.Category KEY_CATEGORY = new KeyMapping.Category(Sipher.id("captions"));
+    *///?}
+    public static final KeyMapping OPEN_SETTINGS = new KeyMapping(
+            "key.sipher.settings", InputConstants.Type.KEYSYM, InputConstants.KEY_O,
+            //? if >=1.21.9 {
+            /*KEY_CATEGORY);
+            *///?} else
+            "key.categories.sipher");
 
+    /** Render thread only. Snapshots are reused or dropped by Minecraft, so they are weak keys. */
+    private static final Map<Object, BubbleRenderer.Bubble> BUBBLES = new WeakHashMap<>();
+
+    private static Platform.Client platform;
     /** The welcome screen is offered once per game session at most, even if something else closes it. */
     private static boolean welcomeOffered;
 
-    public SipherClient(IEventBus modBus, ModContainer container) {
-        Diagnostics.install();
-        container.registerExtensionPoint(IConfigScreenFactory.class, (mod, parent) -> new SipherSettingsScreen(parent));
-        SipherNetwork.setClientHandler(CaptionEngine::remoteCaption);
+    /**
+     * {@code -Dsipher.debug.caption=<text>}: every few seconds the player says the text (shared with the server like real
+     * speech), alternating with the nearest other entity, to check captions without a microphone. Never set in releases.
+     */
+    private static final String DEBUG_CAPTION = System.getProperty("sipher.debug.caption");
+    private static int debugTicks;
 
-        modBus.addListener((FMLClientSetupEvent event) -> CaptionEngine.start());
-        modBus.addListener((RegisterKeyMappingsEvent event) -> event.register(OPEN_SETTINGS));
-        modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Sipher.id("transcript"), TranscriptOverlay::render));
-
-        NeoForge.EVENT_BUS.addListener(SipherClient::onClientTick);
-        NeoForge.EVENT_BUS.addListener(SipherClient::onRenderNameTag);
-        NeoForge.EVENT_BUS.addListener(SipherClient::onLoggingOut);
-        NeoForge.EVENT_BUS.addListener((ScreenEvent.Opening event) -> {
-            if (event.getNewScreen() instanceof TitleScreen title && shouldWelcome()) {
-                event.setNewScreen(new WelcomeScreen(title));
-            }
-        });
-        NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre event) -> {
-            if (TranscriptOverlay.mousePressed(event.getMouseX(), event.getMouseY(), event.getButton())) {
-                event.setCanceled(true);
-            }
-        });
-        NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseDragged.Pre event) -> {
-            if (TranscriptOverlay.mouseDragged(event.getMouseX(), event.getMouseY())) {
-                event.setCanceled(true);
-            }
-        });
-        NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonReleased.Pre event) -> {
-            if (TranscriptOverlay.mouseReleased()) {
-                event.setCanceled(true);
-            }
-        });
+    private SipherClient() {
     }
 
-    private static void onClientTick(ClientTickEvent.Post event) {
+    /** As the mod is constructed, after {@link Sipher#init}. */
+    public static void init(Platform.Client loader) {
+        platform = loader;
+        // Point the native loaders at Sipher's directory before anything else can initialise them. Extraction and
+        // loading happen later on a background thread.
+        NativeRuntime.configure(Sipher.directory());
+        SipherClientConfig.load(Sipher.platform().configDirectory());
+        Diagnostics.install();
+        SipherNetwork.setClientHandler(CaptionEngine::remoteCaption);
+    }
+
+    public static Platform.Client platform() {
+        return platform;
+    }
+
+    /** Once the game is set up: loads the speech models in the background. */
+    public static void started() {
+        CaptionEngine.start();
+    }
+
+    /** End of every client tick. */
+    public static void tick() {
         Minecraft minecraft = Minecraft.getInstance();
         while (OPEN_SETTINGS.consumeClick()) {
             if (minecraft.screen == null) {
                 minecraft.setScreen(new SipherSettingsScreen(null));
             }
         }
+        if (minecraft.screen instanceof TitleScreen title && shouldWelcome()) {
+            minecraft.setScreen(new WelcomeScreen(title));
+        }
         // Players who skip the title screen (quick play, direct connect) see it when the world is ready.
         if (minecraft.player != null && minecraft.screen == null && shouldWelcome()) {
             minecraft.setScreen(new WelcomeScreen(null));
         }
         CaptionStore.prune();
+        if (DEBUG_CAPTION != null && minecraft.player != null && minecraft.level != null && ++debugTicks % 80 == 0) {
+            int line = debugTicks / 80;
+            Entity speaker = minecraft.player;
+            double nearest = 16 * 16;
+            for (Entity entity : line % 2 == 0 ? List.<Entity>of() : minecraft.level.entitiesForRendering()) {
+                if (entity != minecraft.player && entity.distanceToSqr(minecraft.player) < nearest) {
+                    speaker = entity;
+                    nearest = entity.distanceToSqr(minecraft.player);
+                }
+            }
+            CaptionEngine.debugCaption(speaker, line, DEBUG_CAPTION);
+        }
+    }
+
+    public static void loggedOut() {
+        CaptionStore.clear();
+        CaptionLog.clear();
     }
 
     private static boolean shouldWelcome() {
@@ -95,32 +116,45 @@ public final class SipherClient {
         return OPEN_SETTINGS.getTranslatedKeyMessage();
     }
 
-    /** Bubbles above players, and above any other entity a server mod sends captions for (SipherCaptions). */
-    private static void onRenderNameTag(RenderNameTagEvent event) {
+    /**
+     * The caption bubble above an entity this frame, or null: above players, and above any other entity a server mod
+     * sends captions for (SipherCaptions).
+     */
+    public static BubbleRenderer.Bubble bubble(Entity entity, float partialTick) {
         Minecraft minecraft = Minecraft.getInstance();
-        Entity entity = event.getEntity();
         if (minecraft.player == null || entity.isInvisibleTo(minecraft.player)) {
-            return;
+            return null;
         }
         boolean self = entity == minecraft.player;
         if (self ? !SipherClientConfig.SHOW_OWN_BUBBLES.get() || minecraft.options.getCameraType().isFirstPerson()
                 : !SipherClientConfig.SHOW_OTHER_BUBBLES.get()) {
-            return;
+            return null;
         }
         List<CaptionStore.View> captions = CaptionStore.lines(entity.getUUID());
         if (captions.isEmpty()) {
-            return;
+            return null;
         }
         double maxDistance = SipherClientConfig.BUBBLE_MAX_DISTANCE.get();
         if (minecraft.player.distanceToSqr(entity) > maxDistance * maxDistance) {
-            return;
+            return null;
         }
-        BubbleRenderer.render(event.getPoseStack(), event.getMultiBufferSource(), entity, captions,
-                minecraft.font, event.getPackedLight(), event.getPartialTick());
+        return BubbleRenderer.prepare(entity, captions, minecraft.font, partialTick);
     }
 
-    private static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
-        CaptionStore.clear();
-        CaptionLog.clear();
+    /**
+     * Since 1.21.2 Minecraft renders entities from a snapshot of their state, taken first. The bubble is worked out
+     * from the entity while the snapshot is taken and looked up again when it is drawn.
+     */
+    public static void prepareBubble(Object renderState, Entity entity, float partialTick) {
+        BubbleRenderer.Bubble bubble = bubble(entity, partialTick);
+        if (bubble == null) {
+            BUBBLES.remove(renderState);
+        } else {
+            BUBBLES.put(renderState, bubble);
+        }
+    }
+
+    public static BubbleRenderer.Bubble preparedBubble(Object renderState) {
+        return BUBBLES.get(renderState);
     }
 }
