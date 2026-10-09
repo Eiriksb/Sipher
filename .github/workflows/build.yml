@@ -188,7 +188,6 @@ jobs:
       contents: write
     outputs:
       version: ${{ steps.release.outputs.version }}
-      type: ${{ steps.release.outputs.type }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/download-artifact@v5
@@ -239,81 +238,23 @@ jobs:
           gh release create "$GITHUB_REF_NAME" dist/*.jar --verify-tag --title "Sipher $VERSION" \
             --notes-file "docs/changelogs/${VERSION}.md" "${prerelease[@]}"
 
-  # One CurseForge and Modrinth upload per jar. Each site is skipped until its project id and token are configured.
+  # One CurseForge and Modrinth upload per jar (publish.yml), one jar at a time: Modrinth's database deadlocks on
+  # simultaneous uploads. Each site is skipped until its project id and token are configured.
   publish:
     name: Publish ${{ matrix.loader }} ${{ matrix.minecraft }}
     needs: [versions, release]
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 1
       matrix:
         minecraft: ${{ fromJSON(needs.versions.outputs.minecraft) }}
         loader: [fabric, neoforge]
-    runs-on: ubuntu-latest
-    env:
-      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-      VERSION: ${{ needs.release.outputs.version }}
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v5
-        with:
-          name: sipher-${{ matrix.minecraft }}
-          path: dist
-      - name: Read what the jar is for
-        id: jar
-        env:
-          LOADER: ${{ matrix.loader }}
-        run: |
-          info="$(ls dist/sipher-"$LOADER"-"$VERSION"+*.json)"
-          jar="${info%.json}.jar"
-          minecraft="$(jq -r '.minecraft[]' "$info")"
-          {
-            echo "jar=$jar"
-            echo "java=$(jq -r .java "$info")"
-            echo "game-versions<<EOF"
-            echo "$minecraft"
-            echo "EOF"
-            echo "label=$(jq -r '.minecraft | if length > 1 then "\(first)–\(last)" else first end' "$info")"
-          } >> "$GITHUB_OUTPUT"
-          # One dependency per line; Fabric builds also need Fabric API.
-          {
-            echo "curseforge-dependencies<<EOF"
-            echo "simple-voice-chat(required){curseforge:simple-voice-chat}"
-            if [ "$LOADER" = fabric ]; then echo "fabric-api(required){curseforge:fabric-api}"; fi
-            echo "EOF"
-            echo "modrinth-dependencies<<EOF"
-            echo "simple-voice-chat(required){modrinth:9eGKb6K1}"
-            if [ "$LOADER" = fabric ]; then echo "fabric-api(required){modrinth:P7dR8mSH}"; fi
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-      - name: CurseForge
-        if: env.CURSEFORGE_TOKEN != '' && vars.CURSEFORGE_PROJECT_ID != ''
-        uses: Kira-NT/mc-publish@v3.3
-        with:
-          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
-          curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
-          files: ${{ steps.jar.outputs.jar }}
-          name: Sipher ${{ env.VERSION }} for ${{ matrix.loader == 'fabric' && 'Fabric' || 'NeoForge' }} ${{ steps.jar.outputs.label }}
-          version: ${{ env.VERSION }}+${{ matrix.loader }}-${{ matrix.minecraft }}
-          version-type: ${{ needs.release.outputs.type }}
-          changelog-file: docs/changelogs/${{ env.VERSION }}.md
-          loaders: ${{ matrix.loader }}
-          game-versions: ${{ steps.jar.outputs.game-versions }}
-          java: ${{ steps.jar.outputs.java }}
-          dependencies: ${{ steps.jar.outputs.curseforge-dependencies }}
-      - name: Modrinth
-        if: env.MODRINTH_TOKEN != '' && vars.MODRINTH_PROJECT_ID != ''
-        uses: Kira-NT/mc-publish@v3.3
-        with:
-          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
-          modrinth-token: ${{ env.MODRINTH_TOKEN }}
-          files: ${{ steps.jar.outputs.jar }}
-          name: Sipher ${{ env.VERSION }} for ${{ matrix.loader == 'fabric' && 'Fabric' || 'NeoForge' }} ${{ steps.jar.outputs.label }}
-          version: ${{ env.VERSION }}+${{ matrix.loader }}-${{ matrix.minecraft }}
-          version-type: ${{ needs.release.outputs.type }}
-          changelog-file: docs/changelogs/${{ env.VERSION }}.md
-          loaders: ${{ matrix.loader }}
-          game-versions: ${{ steps.jar.outputs.game-versions }}
-          java: ${{ steps.jar.outputs.java }}
-          dependencies: ${{ steps.jar.outputs.modrinth-dependencies }}
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/publish.yml
+    with:
+      version: ${{ needs.release.outputs.version }}
+      minecraft: ${{ matrix.minecraft }}
+      loader: ${{ matrix.loader }}
+    secrets: inherit
